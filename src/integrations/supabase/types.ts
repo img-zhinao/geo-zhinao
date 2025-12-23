@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          credits_balance: number | null
+          email: string | null
+          full_name: string | null
+          id: string
+          tier_level: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          credits_balance?: number | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          tier_level?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          credits_balance?: number | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          tier_level?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       scan_jobs: {
         Row: {
           brand_name: string
