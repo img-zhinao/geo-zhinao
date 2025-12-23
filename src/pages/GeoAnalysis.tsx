@@ -1,8 +1,104 @@
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { GeoAnalysisContainer } from '@/components/geo/GeoAnalysisContainer';
-import { Cpu, Activity, Zap } from 'lucide-react';
+import { Cpu, Activity, Zap, Loader2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { startOfDay, subDays } from 'date-fns';
 
 export default function GeoAnalysis() {
+  const { user } = useAuth();
+  
+  // Fetch today's scan count
+  const { data: todayScans, isLoading: loadingToday } = useQuery({
+    queryKey: ['today-scans', user?.id],
+    queryFn: async () => {
+      if (!user) return { today: 0, yesterday: 0 };
+      
+      const todayStart = startOfDay(new Date()).toISOString();
+      const yesterdayStart = startOfDay(subDays(new Date(), 1)).toISOString();
+      
+      const [todayResult, yesterdayResult] = await Promise.all([
+        supabase
+          .from('scan_jobs')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .gte('created_at', todayStart),
+        supabase
+          .from('scan_jobs')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .gte('created_at', yesterdayStart)
+          .lt('created_at', todayStart)
+      ]);
+      
+      return {
+        today: todayResult.count || 0,
+        yesterday: yesterdayResult.count || 0
+      };
+    },
+    enabled: !!user,
+  });
+
+  // Fetch total model calls (scan_results count)
+  const { data: modelCalls, isLoading: loadingCalls } = useQuery({
+    queryKey: ['model-calls', user?.id],
+    queryFn: async () => {
+      if (!user) return { total: 0, todayCount: 0 };
+      
+      const todayStart = startOfDay(new Date()).toISOString();
+      
+      const [totalResult, todayResult] = await Promise.all([
+        supabase
+          .from('scan_results')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id),
+        supabase
+          .from('scan_results')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .gte('created_at', todayStart)
+      ]);
+      
+      return {
+        total: totalResult.count || 0,
+        todayCount: todayResult.count || 0
+      };
+    },
+    enabled: !!user,
+  });
+
+  // Calculate average response time (using completed jobs)
+  const { data: avgTime, isLoading: loadingTime } = useQuery({
+    queryKey: ['avg-response-time', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      
+      const { data } = await supabase
+        .from('scan_jobs')
+        .select('created_at, updata_at')
+        .eq('user_id', user.id)
+        .eq('status', 'completed')
+        .not('updata_at', 'is', null)
+        .limit(20);
+      
+      if (!data || data.length === 0) return null;
+      
+      const times = data.map(job => {
+        const created = new Date(job.created_at!).getTime();
+        const updated = new Date(job.updata_at!).getTime();
+        return (updated - created) / 1000; // seconds
+      }).filter(t => t > 0 && t < 600); // filter reasonable times (< 10 min)
+      
+      if (times.length === 0) return null;
+      return times.reduce((a, b) => a + b, 0) / times.length;
+    },
+    enabled: !!user,
+  });
+
+  const todayTrend = todayScans ? todayScans.today - todayScans.yesterday : 0;
+  const callsTrend = modelCalls?.todayCount || 0;
+
   return (
     <DashboardLayout>
       {/* Background effects */}
@@ -41,19 +137,22 @@ export default function GeoAnalysis() {
           <StatsCard 
             icon={Activity} 
             label="今日分析" 
-            value="12" 
-            trend="+3"
+            value={loadingToday ? undefined : String(todayScans?.today || 0)}
+            trend={todayTrend > 0 ? `+${todayTrend}` : undefined}
+            loading={loadingToday}
           />
           <StatsCard 
             icon={Zap} 
             label="平均响应时间" 
-            value="2.3s" 
+            value={loadingTime ? undefined : avgTime ? `${avgTime.toFixed(1)}s` : '-'}
+            loading={loadingTime}
           />
           <StatsCard 
             icon={Cpu} 
             label="AI 模型调用" 
-            value="156" 
-            trend="+24"
+            value={loadingCalls ? undefined : String(modelCalls?.total || 0)}
+            trend={callsTrend > 0 ? `+${callsTrend}` : undefined}
+            loading={loadingCalls}
           />
         </div>
 
@@ -63,17 +162,18 @@ export default function GeoAnalysis() {
     </DashboardLayout>
   );
 }
-
 function StatsCard({ 
   icon: Icon, 
   label, 
   value, 
-  trend 
+  trend,
+  loading 
 }: { 
   icon: React.ComponentType<{ className?: string }>; 
   label: string; 
-  value: string; 
+  value?: string; 
   trend?: string;
+  loading?: boolean;
 }) {
   return (
     <div className="relative group">
@@ -85,9 +185,15 @@ function StatsCard({
         <div className="flex-1">
           <p className="text-sm text-muted-foreground">{label}</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold">{value}</span>
-            {trend && (
-              <span className="text-xs text-green-500 font-medium">{trend}</span>
+            {loading ? (
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            ) : (
+              <>
+                <span className="text-2xl font-bold">{value}</span>
+                {trend && (
+                  <span className="text-xs text-green-500 font-medium">{trend}</span>
+                )}
+              </>
             )}
           </div>
         </div>
