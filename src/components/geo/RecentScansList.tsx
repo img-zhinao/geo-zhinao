@@ -17,6 +17,7 @@ interface ScanJob {
   status: string | null;
   job_type: string | null;
   created_at: string | null;
+  selected_models: string | null;
 }
 
 const statusConfig: Record<
