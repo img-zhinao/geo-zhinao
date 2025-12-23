@@ -6,10 +6,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { startOfDay, subDays } from 'date-fns';
 import { useEffect } from 'react';
+import { useJobNotifications } from '@/hooks/useJobNotifications';
 
 export default function GeoAnalysis() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  
+  // Enable global job completion notifications
+  useJobNotifications();
 
   // Real-time subscription for instant updates
   useEffect(() => {
