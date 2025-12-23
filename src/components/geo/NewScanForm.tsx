@@ -1,38 +1,32 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Rocket, Sparkles, Zap } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
-import { useQueryClient } from '@tanstack/react-query';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Rocket, Sparkles, Zap } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
-  brandName: z.string()
-    .min(1, '请输入品牌名称')
-    .max(200, '品牌名称不能超过200个字符'),
-  searchQuery: z.string()
-    .min(1, '请输入搜索问题')
-    .max(500, '搜索问题不能超过500个字符'),
-  competitors: z.string()
-    .max(1000, '竞品品牌不能超过1000个字符')
-    .optional(),
-  model: z.string().default('deepseek-v3'),
+  brandName: z.string().min(1, "请输入品牌名称").max(200, "品牌名称不能超过200个字符"),
+  searchQuery: z.string().min(1, "请输入搜索问题").max(500, "搜索问题不能超过500个字符"),
+  competitors: z.string().max(1000, "竞品品牌不能超过1000个字符").optional(),
+  model: z.string().default("deepseek-v3"),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const models = [
-  { value: 'deepseek-v3', label: 'DeepSeek-V3', icon: '🧠' },
-  { value: 'doubao-pro', label: 'Doubao-Pro', icon: '🤖' },
-  { value: 'qwen-max', label: 'Qwen-Max', icon: '⚡' },
+  { value: "deepseek-v3", label: "DeepSeek-V3", icon: "🧠" },
+  { value: "doubao-pro", label: "Doubao-Pro", icon: "🤖" },
+  { value: "qwen-max", label: "Qwen-Max", icon: "⚡" },
 ];
 
 interface NewScanFormProps {
@@ -47,54 +41,58 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      brandName: '',
-      searchQuery: '',
-      competitors: '',
-      model: 'deepseek-v3',
+      brandName: "",
+      searchQuery: "",
+      competitors: "",
+      model: "deepseek-v3",
     },
   });
 
   const onSubmit = async (data: FormData) => {
     if (!user) {
       toast({
-        title: '请先登录',
-        description: '您需要登录才能创建分析任务',
-        variant: 'destructive',
+        title: "请先登录",
+        description: "您需要登录才能创建分析任务",
+        variant: "destructive",
       });
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const { data: insertedJob, error } = await supabase.from('scan_jobs').insert({
-        user_id: user.id,
-        brand_name: data.brandName,
-        search_query: data.searchQuery,
-        competitors: data.competitors || null,
-        job_type: data.model,
-        status: 'queued',
-      }).select().single();
+      const { data: insertedJob, error } = await supabase
+        .from("scan_jobs")
+        .insert({
+          user_id: user.id,
+          brand_name: data.brandName,
+          search_query: data.searchQuery,
+          competitors: data.competitors || null,
+          job_type: data.model,
+          status: "queued",
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
       toast({
-        title: '分析任务已创建',
-        description: '正在启动 AI 分析引擎...',
+        title: "分析任务已创建",
+        description: "正在启动 AI 分析引擎...",
       });
 
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ['scan-jobs'] });
+      queryClient.invalidateQueries({ queryKey: ["scan-jobs"] });
 
       // Notify parent about the new job
       if (onJobSubmitted && insertedJob) {
         onJobSubmitted(insertedJob.id, data.brandName, data.searchQuery);
       }
     } catch (error) {
-      console.error('Error creating scan job:', error);
+      console.error("Error creating scan job:", error);
       toast({
-        title: '创建失败',
-        description: '无法创建分析任务，请稍后重试',
-        variant: 'destructive',
+        title: "创建失败",
+        description: "无法创建分析任务，请稍后重试",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -106,7 +104,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
       {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 pointer-events-none" />
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-      
+
       <CardHeader className="relative">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-primary/20 border border-primary/30">
@@ -130,10 +128,10 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
                   <FormItem>
                     <FormLabel className="text-foreground/90">品牌名称</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="例如：小肥羊" 
+                      <Input
+                        placeholder="例如：小肥羊"
                         className="bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20"
-                        {...field} 
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -177,15 +175,13 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
                 <FormItem>
                   <FormLabel className="text-foreground/90">搜索问题</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="例如：深圳最好吃的火锅店是哪家？" 
+                    <Input
+                      placeholder="例如：深圳最好吃的火锅店是哪家？"
                       className="bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-muted-foreground/70">
-                    输入用户可能向 AI 提问的问题
-                  </FormDescription>
+                  <FormDescription className="text-muted-foreground/70">输入用户可能向 AI 提问的问题</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -198,22 +194,20 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
                 <FormItem>
                   <FormLabel className="text-foreground/90">竞品品牌（可选）</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="例如：海底捞, 呷哺呷哺, 捞王"
                       className="bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 min-h-[80px] resize-none"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-muted-foreground/70">
-                    用逗号分隔多个竞品品牌
-                  </FormDescription>
+                  <FormDescription className="text-muted-foreground/70">用逗号分隔多个竞品品牌</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               size="lg"
               disabled={isSubmitting}
               className="w-full relative overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] transition-all duration-300"
@@ -227,7 +221,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
                 ) : (
                   <>
                     <Rocket className="h-5 w-5" />
-                    运行分析
+                    启动分析
                   </>
                 )}
               </span>
