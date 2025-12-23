@@ -1,40 +1,101 @@
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Brain } from 'lucide-react';
+import { NewScanForm } from '@/components/geo/NewScanForm';
+import { RecentScansList } from '@/components/geo/RecentScansList';
+import { Cpu, Activity, Zap } from 'lucide-react';
 
 export default function GeoAnalysis() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">GEO 分析</h1>
-          <p className="text-muted-foreground mt-1">
-            分析您的品牌在各 AI 平台的可见度。
+      {/* Background effects */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px),
+                              linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}
+        />
+      </div>
+
+      <div className="relative space-y-8">
+        {/* Header */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-primary/20 border border-primary/30">
+              <Cpu className="h-6 w-6 text-primary" />
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              GEO 监控中心
+            </h1>
+          </div>
+          <p className="text-muted-foreground ml-[52px]">
+            监控和分析您的品牌在生成式 AI 平台中的可见度表现
           </p>
         </div>
 
-        <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Search className="h-5 w-5 text-primary" />
-              即将推出
-            </CardTitle>
-            <CardDescription>
-              此功能正在开发中
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <div className="p-4 rounded-full bg-primary/10 mb-4">
-              <Brain className="h-12 w-12 text-primary" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">GEO 分析模块</h3>
-            <p className="text-muted-foreground text-center max-w-md">
-              强大的 AI 可见度分析工具即将推出。您将能够追踪您的品牌在
-              ChatGPT、Claude、Gemini 等平台上的提及情况。
-            </p>
-          </CardContent>
-        </Card>
+        {/* Stats Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <StatsCard 
+            icon={Activity} 
+            label="今日分析" 
+            value="12" 
+            trend="+3"
+          />
+          <StatsCard 
+            icon={Zap} 
+            label="平均响应时间" 
+            value="2.3s" 
+          />
+          <StatsCard 
+            icon={Cpu} 
+            label="AI 模型调用" 
+            value="156" 
+            trend="+24"
+          />
+        </div>
+
+        {/* Main Form */}
+        <NewScanForm />
+
+        {/* Recent Jobs */}
+        <RecentScansList />
       </div>
     </DashboardLayout>
+  );
+}
+
+function StatsCard({ 
+  icon: Icon, 
+  label, 
+  value, 
+  trend 
+}: { 
+  icon: React.ComponentType<{ className?: string }>; 
+  label: string; 
+  value: string; 
+  trend?: string;
+}) {
+  return (
+    <div className="relative group">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/5 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="relative flex items-center gap-4 p-4 rounded-xl bg-card/30 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-colors">
+        <div className="p-2.5 rounded-lg bg-primary/10">
+          <Icon className="h-5 w-5 text-primary" />
+        </div>
+        <div className="flex-1">
+          <p className="text-sm text-muted-foreground">{label}</p>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold">{value}</span>
+            {trend && (
+              <span className="text-xs text-green-500 font-medium">{trend}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
