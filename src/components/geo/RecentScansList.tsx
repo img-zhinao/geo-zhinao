@@ -1,14 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
-import { Eye, Clock, CheckCircle2, Loader2, AlertCircle, History } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { zhCN } from "date-fns/locale";
+import { Eye, Clock, CheckCircle2, Loader2, AlertCircle, History } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ScanJob {
   id: string;
@@ -19,11 +19,18 @@ interface ScanJob {
   created_at: string | null;
 }
 
-const statusConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: React.ComponentType<{ className?: string }> }> = {
-  processing: { label: '处理中', variant: 'secondary', icon: Loader2 },
-  completed: { label: '已完成', variant: 'default', icon: CheckCircle2 },
-  failed: { label: '失败', variant: 'destructive', icon: AlertCircle },
-  pending: { label: '等待中', variant: 'outline', icon: Clock },
+const statusConfig: Record<
+  string,
+  {
+    label: string;
+    variant: "default" | "secondary" | "destructive" | "outline";
+    icon: React.ComponentType<{ className?: string }>;
+  }
+> = {
+  processing: { label: "处理中", variant: "secondary", icon: Loader2 },
+  completed: { label: "已完成", variant: "default", icon: CheckCircle2 },
+  failed: { label: "失败", variant: "destructive", icon: AlertCircle },
+  pending: { label: "等待中", variant: "outline", icon: Clock },
 };
 
 interface RecentScansListProps {
@@ -31,24 +38,24 @@ interface RecentScansListProps {
 }
 
 const modelLabels: Record<string, string> = {
-  'deepseek-v3': 'DeepSeek-V3',
-  'doubao-pro': 'Doubao-Pro',
-  'qwen-max': 'Qwen-Max',
-  'deep_reasoning': 'DeepSeek-V3',
+  "deepseek-v3": "DeepSeek-V3",
+  "doubao-pro": "Doubao-Pro",
+  "qwen-max": "Qwen-Max",
+  deep_reasoning: "DeepSeek-V3",
 };
 
 export function RecentScansList({ onViewResult }: RecentScansListProps) {
   const { user } = useAuth();
 
   const { data: scanJobs, isLoading } = useQuery({
-    queryKey: ['scan-jobs', user?.id],
+    queryKey: ["scan-jobs", user?.id],
     queryFn: async () => {
       if (!user) return [];
       const { data, error } = await supabase
-        .from('scan_jobs')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        .from("scan_jobs")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
         .limit(10);
 
       if (error) throw error;
@@ -58,7 +65,7 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
   });
 
   const getStatusInfo = (status: string | null) => {
-    return statusConfig[status || 'pending'] || statusConfig.pending;
+    return statusConfig[status || "pending"] || statusConfig.pending;
   };
 
   return (
@@ -105,41 +112,37 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
                 {scanJobs.map((job) => {
                   const statusInfo = getStatusInfo(job.status);
                   const StatusIcon = statusInfo.icon;
-                  
+
                   return (
                     <TableRow key={job.id} className="border-border/20 hover:bg-muted/20">
-                      <TableCell className="font-medium max-w-[200px] truncate">
-                        {job.search_query}
-                      </TableCell>
+                      <TableCell className="font-medium max-w-[200px] truncate">{job.search_query}</TableCell>
                       <TableCell>
                         <span className="px-2 py-1 rounded-md bg-primary/10 text-primary text-sm">
                           {job.brand_name}
                         </span>
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
-                        {modelLabels[job.job_type || ''] || job.job_type || '-'}
+                        {modelLabels[job.job_type || ""] || job.job_type || "-"}
                       </TableCell>
                       <TableCell>
-                        <Badge 
-                          variant={statusInfo.variant}
-                          className="gap-1.5"
-                        >
-                          <StatusIcon className={`h-3 w-3 ${job.status === 'processing' ? 'animate-spin' : ''}`} />
+                        <Badge variant={statusInfo.variant} className="gap-1.5">
+                          <StatusIcon className={`h-3 w-3 ${job.status === "processing" ? "animate-spin" : ""}`} />
                           {statusInfo.label}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
-                        {job.created_at 
-                          ? format(utcToZonedTime(new Date(job.created_at),SHANGHAI_TIMEZONE) 'MM月dd日 HH:mm', { locale: zhCN })
-                          : '-'
-                        }
+                        {job.created_at
+                          ? format(utcToZonedTime(new Date(job.created_at), SHANGHAI_TIMEZONE), "MM月dd日 HH:mm", {
+                              locale: zhCN,
+                            })
+                          : "-"}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           className="text-primary hover:text-primary hover:bg-primary/10"
-                          disabled={job.status !== 'completed'}
+                          disabled={job.status !== "completed"}
                           onClick={() => onViewResult?.(job.id, job.brand_name, job.search_query)}
                         >
                           <Eye className="h-4 w-4 mr-1.5" />
