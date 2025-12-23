@@ -15,9 +15,15 @@ import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
 
 const formSchema = z.object({
-  brandName: z.string().min(1, '请输入品牌名称'),
-  searchQuery: z.string().min(1, '请输入搜索问题'),
-  competitors: z.string().optional(),
+  brandName: z.string()
+    .min(1, '请输入品牌名称')
+    .max(200, '品牌名称不能超过200个字符'),
+  searchQuery: z.string()
+    .min(1, '请输入搜索问题')
+    .max(500, '搜索问题不能超过500个字符'),
+  competitors: z.string()
+    .max(1000, '竞品品牌不能超过1000个字符')
+    .optional(),
   model: z.string().default('deepseek-v3'),
 });
 

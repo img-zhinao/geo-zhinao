@@ -59,7 +59,7 @@ export type Database = {
           search_query: string
           status: string | null
           updata_at: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           brand_name: string
@@ -72,7 +72,7 @@ export type Database = {
           search_query: string
           status?: string | null
           updata_at?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           brand_name?: string
@@ -85,7 +85,7 @@ export type Database = {
           search_query?: string
           status?: string | null
           updata_at?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -112,7 +112,7 @@ export type Database = {
           simulated_at: string | null
           spi_score: number | null
           status: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           analysis_type?: string | null
@@ -136,7 +136,7 @@ export type Database = {
           simulated_at?: string | null
           spi_score?: number | null
           status?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           analysis_type?: string | null
@@ -160,7 +160,7 @@ export type Database = {
           simulated_at?: string | null
           spi_score?: number | null
           status?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
