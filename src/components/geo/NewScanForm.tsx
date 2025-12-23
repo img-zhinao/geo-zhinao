@@ -76,6 +76,24 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
 
       if (error) throw error;
 
+      // Trigger N8N webhook
+      try {
+        await fetch("https://n8n.zhi-nao.com/webhook/monitoring", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            job_id: insertedJob.id,
+            user_id: user.id,
+            brand_name: data.brandName,
+            search_query: data.searchQuery,
+            competitors: data.competitors || null,
+            model: data.model,
+          }),
+        });
+      } catch (webhookError) {
+        console.error("Webhook trigger failed:", webhookError);
+      }
+
       toast({
         title: "分析任务已创建",
         description: "正在启动 AI 分析引擎...",
