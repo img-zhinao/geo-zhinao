@@ -54,6 +54,7 @@ export type Database = {
           created_at: string | null
           id: string
           job_type: string | null
+          model: string | null
           parent_job_id: string | null
           platforms: string | null
           search_query: string
@@ -67,6 +68,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           job_type?: string | null
+          model?: string | null
           parent_job_id?: string | null
           platforms?: string | null
           search_query: string
@@ -80,6 +82,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           job_type?: string | null
+          model?: string | null
           parent_job_id?: string | null
           platforms?: string | null
           search_query?: string

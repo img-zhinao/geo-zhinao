@@ -67,7 +67,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
           brand_name: data.brandName,
           search_query: data.searchQuery,
           competitors: data.competitors || null,
-          job_type: monitoring,
+          job_type: "monitoring",
           selected_models: data.model,
           status: "queued",
         })
