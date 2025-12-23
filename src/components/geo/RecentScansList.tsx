@@ -26,6 +26,10 @@ const statusConfig: Record<string, { label: string; variant: 'default' | 'second
   pending: { label: '等待中', variant: 'outline', icon: Clock },
 };
 
+interface RecentScansListProps {
+  onViewResult?: (jobId: string, brandName: string, searchQuery: string) => void;
+}
+
 const modelLabels: Record<string, string> = {
   'deepseek-v3': 'DeepSeek-V3',
   'doubao-pro': 'Doubao-Pro',
@@ -33,7 +37,7 @@ const modelLabels: Record<string, string> = {
   'deep_reasoning': 'DeepSeek-V3',
 };
 
-export function RecentScansList() {
+export function RecentScansList({ onViewResult }: RecentScansListProps) {
   const { user } = useAuth();
 
   const { data: scanJobs, isLoading } = useQuery({
@@ -136,6 +140,7 @@ export function RecentScansList() {
                           size="sm"
                           className="text-primary hover:text-primary hover:bg-primary/10"
                           disabled={job.status !== 'completed'}
+                          onClick={() => onViewResult?.(job.id, job.brand_name, job.search_query)}
                         >
                           <Eye className="h-4 w-4 mr-1.5" />
                           查看报告

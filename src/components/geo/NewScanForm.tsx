@@ -29,7 +29,11 @@ const models = [
   { value: 'qwen-max', label: 'Qwen-Max', icon: '⚡' },
 ];
 
-export function NewScanForm() {
+interface NewScanFormProps {
+  onJobSubmitted?: (jobId: string, brandName: string, searchQuery: string) => void;
+}
+
+export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,14 +60,14 @@ export function NewScanForm() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('scan_jobs').insert({
+      const { data: insertedJob, error } = await supabase.from('scan_jobs').insert({
         user_id: user.id,
         brand_name: data.brandName,
         search_query: data.searchQuery,
         competitors: data.competitors || null,
         job_type: data.model,
-        status: 'processing',
-      });
+        status: 'queued',
+      }).select().single();
 
       if (error) throw error;
 
@@ -74,6 +78,11 @@ export function NewScanForm() {
 
       form.reset();
       queryClient.invalidateQueries({ queryKey: ['scan-jobs'] });
+
+      // Notify parent about the new job
+      if (onJobSubmitted && insertedJob) {
+        onJobSubmitted(insertedJob.id, data.brandName, data.searchQuery);
+      }
     } catch (error) {
       console.error('Error creating scan job:', error);
       toast({
