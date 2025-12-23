@@ -6,8 +6,9 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { EvidenceRoom } from '@/components/diagnosis/EvidenceRoom';
 import { DiagnosisHub } from '@/components/diagnosis/DiagnosisHub';
 import { DiagnosisLoading } from '@/components/diagnosis/DiagnosisLoading';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ScanResult {
   id: string;
@@ -111,6 +112,35 @@ export default function Diagnosis() {
     };
   }, [user, jobId, diagnosisInProgress]);
 
+  // Show empty state if no jobId
+  if (!jobId) {
+    return (
+      <DashboardLayout>
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <Stethoscope className="h-6 w-6 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">归因诊断</h1>
+          </div>
+          
+          <Card className="border border-border/50">
+            <CardContent className="py-16">
+              <div className="text-center space-y-4">
+                <Stethoscope className="h-16 w-16 text-muted-foreground/50 mx-auto" />
+                <h3 className="text-lg font-medium text-foreground">请选择要诊断的扫描任务</h3>
+                <p className="text-muted-foreground">
+                  请先在 GEO 分析页面完成扫描，然后点击"查看诊断"进入诊断页面
+                </p>
+                <Button onClick={() => navigate('/dashboard/geo-analysis')}>
+                  前往 GEO 分析
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   if (loading) {
     return (
       <DashboardLayout>
@@ -134,10 +164,13 @@ export default function Diagnosis() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">归因诊断分析</h1>
+            <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <Stethoscope className="h-6 w-6 text-primary" />
+              归因诊断报告
+            </h1>
             {scanJob && (
-              <p className="text-muted-foreground">
-                {scanJob.brand_name} · {scanJob.search_query}
+              <p className="text-muted-foreground mt-1">
+                品牌: {scanJob.brand_name} · 场景: {scanJob.search_query}
               </p>
             )}
           </div>
@@ -150,16 +183,18 @@ export default function Diagnosis() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             {/* Left: Evidence Room (40%) */}
             <div className="lg:col-span-2">
-              <EvidenceRoom
-                rawResponseText={scanResult?.raw_response_text}
-                avsScore={scanResult?.avs_score}
-              />
+              <div className="sticky top-6">
+                <EvidenceRoom
+                  rawResponseText={scanResult?.raw_response_text}
+                  avsScore={scanResult?.avs_score}
+                />
+              </div>
             </div>
 
             {/* Right: Diagnosis Hub (60%) */}
             <div className="lg:col-span-3">
               <DiagnosisHub
-                jobId={jobId!}
+                jobId={jobId}
                 diagReport={scanResult?.diag_attribution_report}
                 reasoningTrace={scanResult?.diag_reasoning_trace}
                 suggestedStrategies={scanResult?.diag_suggested_strategies}

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { FileText, AlertTriangle, CheckCircle } from 'lucide-react';
+import { FileText, AlertTriangle, CheckCircle, ShieldAlert } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 interface EvidenceRoomProps {
@@ -14,80 +14,103 @@ export function EvidenceRoom({ rawResponseText, avsScore }: EvidenceRoomProps) {
   const isLowScore = score < 50;
   const isMediumScore = score >= 50 && score < 70;
 
-  // Calculate gauge rotation (0-100 maps to -90 to 90 degrees)
-  const gaugeRotation = ((score / 100) * 180) - 90;
-
   const getScoreColor = () => {
-    if (isLowScore) return 'text-destructive';
+    if (isLowScore) return 'text-red-500';
     if (isMediumScore) return 'text-yellow-500';
     return 'text-green-500';
   };
 
-  const getScoreBg = () => {
-    if (isLowScore) return 'bg-destructive/10 border-destructive/30';
-    if (isMediumScore) return 'bg-yellow-500/10 border-yellow-500/30';
-    return 'bg-green-500/10 border-green-500/30';
+  const getScoreLabel = () => {
+    if (isLowScore) return '危险';
+    if (isMediumScore) return '警告';
+    return '正常';
   };
+
+  const getScoreBorderColor = () => {
+    if (isLowScore) return 'border-red-500/50';
+    if (isMediumScore) return 'border-yellow-500/50';
+    return 'border-green-500/50';
+  };
+
+  // Calculate the stroke offset for the circular gauge
+  const circumference = 2 * Math.PI * 45;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
 
   const processedText = (rawResponseText || '暂无原始回复数据')
     .replace(/\\n/g, '\n')
     .replace(/\\#/g, '#');
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 h-full flex flex-col">
       {/* AVS Score Gauge */}
-      <Card className={`border ${getScoreBg()}`}>
+      <Card className={`border-2 ${getScoreBorderColor()} bg-card/50 backdrop-blur`}>
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg flex items-center gap-2">
-            {isLowScore ? (
-              <AlertTriangle className="h-5 w-5 text-destructive" />
-            ) : (
-              <CheckCircle className={`h-5 w-5 ${getScoreColor()}`} />
-            )}
+          <CardTitle className="text-base flex items-center gap-2 text-foreground">
+            <ShieldAlert className={`h-5 w-5 ${getScoreColor()}`} />
             品牌可见性评分 (AVS)
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Gauge Display */}
-          <div className="flex flex-col items-center py-4">
-            <div className="relative w-40 h-20 overflow-hidden">
-              {/* Gauge background */}
-              <div className="absolute bottom-0 left-0 right-0 h-40 w-40 rounded-full border-8 border-muted" 
-                   style={{ clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)' }} />
-              
-              {/* Gauge fill */}
-              <div 
-                className={`absolute bottom-0 left-0 right-0 h-40 w-40 rounded-full border-8 ${isLowScore ? 'border-destructive' : isMediumScore ? 'border-yellow-500' : 'border-green-500'}`}
-                style={{ 
-                  clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)',
-                  transform: `rotate(${gaugeRotation}deg)`,
-                  transformOrigin: 'center center'
-                }} 
-              />
-              
-              {/* Score number */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center">
-                <span className={`text-4xl font-bold ${getScoreColor()}`}>{score}</span>
-                <span className="text-muted-foreground text-sm">/100</span>
+          {/* Circular Gauge */}
+          <div className="flex items-center justify-center py-4">
+            <div className="relative">
+              <svg className="w-32 h-32 transform -rotate-90">
+                {/* Background circle */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="45"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  className="text-muted/30"
+                />
+                {/* Progress circle */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="45"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={strokeDashoffset}
+                  className={getScoreColor()}
+                />
+              </svg>
+              {/* Score text in center */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className={`text-3xl font-bold ${getScoreColor()}`}>{score}</span>
+                <span className="text-xs text-muted-foreground">{getScoreLabel()}</span>
               </div>
             </div>
           </div>
 
           {/* Warning message for low scores */}
           {isLowScore && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/20 border border-destructive/30 mt-2">
-              <AlertTriangle className="h-4 w-4 text-destructive flex-shrink-0" />
-              <span className="text-sm text-destructive font-medium">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+              <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0" />
+              <span className="text-sm text-red-400 font-medium">
                 品牌可见性极低，AI 回答中几乎未提及您的品牌
               </span>
             </div>
           )}
 
           {isMediumScore && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-yellow-500/20 border border-yellow-500/30 mt-2">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
               <AlertTriangle className="h-4 w-4 text-yellow-500 flex-shrink-0" />
-              <span className="text-sm text-yellow-600 dark:text-yellow-400 font-medium">
+              <span className="text-sm text-yellow-400 font-medium">
                 品牌可见性中等，仍有较大提升空间
+              </span>
+            </div>
+          )}
+
+          {!isLowScore && !isMediumScore && (
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-green-500/10 border border-green-500/30">
+              <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+              <span className="text-sm text-green-400 font-medium">
+                品牌可见性良好
               </span>
             </div>
           )}
@@ -95,18 +118,18 @@ export function EvidenceRoom({ rawResponseText, avsScore }: EvidenceRoomProps) {
       </Card>
 
       {/* Raw Evidence Card */}
-      <Card className="border border-border/50">
+      <Card className="border border-border/50 bg-card/50 backdrop-blur flex-1 flex flex-col min-h-0">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="text-base flex items-center gap-2 text-foreground">
             <FileText className="h-5 w-5 text-primary" />
             原始语料证据
-            <Badge variant="outline" className="ml-auto text-xs">
-              Raw Evidence
+            <Badge variant="outline" className="ml-auto text-xs font-mono">
+              RAW DATA
             </Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[500px] rounded-lg bg-muted/30 border border-border/30">
+        <CardContent className="flex-1 min-h-0">
+          <ScrollArea className="h-[400px] rounded-lg bg-muted/20 border border-border/30">
             <div className="p-4 font-mono text-sm">
               <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-code:bg-muted prose-code:px-1 prose-code:rounded">
                 <ReactMarkdown>
@@ -115,7 +138,7 @@ export function EvidenceRoom({ rawResponseText, avsScore }: EvidenceRoomProps) {
               </div>
             </div>
           </ScrollArea>
-          <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1">
+          <p className="text-xs text-muted-foreground mt-3">
             💡 提示：可选中文本进行复制
           </p>
         </CardContent>
