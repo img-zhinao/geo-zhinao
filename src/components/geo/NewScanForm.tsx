@@ -67,34 +67,14 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
           brand_name: data.brandName,
           search_query: data.searchQuery,
           competitors: data.competitors || null,
-          job_type: data.model,
+          job_type: monitoring,
+          selected_models: data.model,
           status: "queued",
         })
         .select()
         .single();
 
       if (error) throw error;
-
-      // Trigger N8N webhook
-      try {
-        await fetch("https://n8n.zhi-nao.com/webhook/monitoring", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            job_id: insertedJob.id,
-            user_id: user.id,
-            brand_name: data.brandName,
-            search_query: data.searchQuery,
-            competitors: data.competitors || null,
-            model: data.model,
-          }),
-        });
-      } catch (webhookError) {
-        console.error("Error triggering N8N webhook:", webhookError);
-        // Continue even if webhook fails - job is already in database
-      }
 
       toast({
         title: "分析任务已创建",
@@ -242,7 +222,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
                 ) : (
                   <>
                     <Rocket className="h-5 w-5" />
-                    启动分析
+                    运行分析
                   </>
                 )}
               </span>
