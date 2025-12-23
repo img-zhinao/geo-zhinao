@@ -222,7 +222,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
                 ) : (
                   <>
                     <Rocket className="h-5 w-5" />
-                    运行分析
+                    启动分析
                   </>
                 )}
               </span>
