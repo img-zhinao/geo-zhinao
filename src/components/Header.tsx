@@ -1,10 +1,13 @@
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   const navItems = [
     { label: "服务流程", href: "#services" },
@@ -33,9 +36,24 @@ const Header = () => {
                 {item.label}
               </a>
             ))}
-            <Button asChild>
-              <a href="#contact">获取方案</a>
-            </Button>
+            
+            {user ? (
+              <Button asChild>
+                <Link to="/dashboard">进入控制台</Link>
+              </Button>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Button variant="ghost" asChild>
+                  <Link to="/login">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    登录
+                  </Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/login">免费注册</Link>
+                </Button>
+              </div>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -64,9 +82,20 @@ const Header = () => {
                 {item.label}
               </a>
             ))}
-            <Button asChild className="w-full">
-              <a href="#contact">获取方案</a>
-            </Button>
+            {user ? (
+              <Button asChild className="w-full">
+                <Link to="/dashboard">进入控制台</Link>
+              </Button>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <Button variant="outline" asChild className="w-full">
+                  <Link to="/login">登录</Link>
+                </Button>
+                <Button asChild className="w-full">
+                  <Link to="/login">免费注册</Link>
+                </Button>
+              </div>
+            )}
           </nav>
         )}
       </div>

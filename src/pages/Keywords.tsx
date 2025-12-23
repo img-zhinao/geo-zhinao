@@ -7,9 +7,9 @@ export default function Keywords() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Keyword Discovery</h1>
+          <h1 className="text-3xl font-bold">关键词发现</h1>
           <p className="text-muted-foreground mt-1">
-            Find high-impact keywords for AI optimization.
+            发现高影响力的 AI 优化关键词。
           </p>
         </div>
 
@@ -17,20 +17,20 @@ export default function Keywords() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Compass className="h-5 w-5 text-primary" />
-              Coming Soon
+              即将推出
             </CardTitle>
             <CardDescription>
-              This feature is under development
+              此功能正在开发中
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <div className="p-4 rounded-full bg-secondary/10 mb-4">
               <Sparkles className="h-12 w-12 text-secondary" />
             </div>
-            <h3 className="text-lg font-medium mb-2">Keyword Discovery Engine</h3>
+            <h3 className="text-lg font-medium mb-2">关键词发现引擎</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              Discover the most impactful keywords and phrases that AI models
-              associate with your industry. Optimize your content strategy.
+              发现 AI 模型与您的行业关联度最高的关键词和短语。
+              优化您的内容策略。
             </p>
           </CardContent>
         </Card>

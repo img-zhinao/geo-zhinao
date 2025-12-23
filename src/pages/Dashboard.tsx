@@ -5,35 +5,38 @@ import { Brain, TrendingUp, Search, Zap, ArrowUpRight } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const creditUsageData = [
-  { date: 'Mon', credits: 5 },
-  { date: 'Tue', credits: 8 },
-  { date: 'Wed', credits: 3 },
-  { date: 'Thu', credits: 12 },
-  { date: 'Fri', credits: 7 },
-  { date: 'Sat', credits: 4 },
-  { date: 'Sun', credits: 6 },
+  { date: '周一', credits: 5 },
+  { date: '周二', credits: 8 },
+  { date: '周三', credits: 3 },
+  { date: '周四', credits: 12 },
+  { date: '周五', credits: 7 },
+  { date: '周六', credits: 4 },
+  { date: '周日', credits: 6 },
 ];
 
 const statsCards = [
-  { title: 'Total Scans', value: '24', change: '+12%', icon: Search },
-  { title: 'Brand Mentions', value: '156', change: '+8%', icon: TrendingUp },
-  { title: 'AI Platforms', value: '6', change: 'Active', icon: Brain },
-  { title: 'Credits Used', value: '45', change: 'This month', icon: Zap },
+  { title: '总扫描次数', value: '24', change: '+12%', icon: Search },
+  { title: '品牌提及', value: '156', change: '+8%', icon: TrendingUp },
+  { title: 'AI 平台', value: '6', change: '已激活', icon: Brain },
+  { title: '已用积分', value: '45', change: '本月', icon: Zap },
 ];
 
 export default function Dashboard() {
   const { data: profile } = useProfile();
+
+  const getGreeting = () => {
+    const name = profile?.full_name?.split(' ')[0] || '用户';
+    return `欢迎回来，${name}`;
+  };
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
         {/* Welcome Header */}
         <div>
-          <h1 className="text-3xl font-bold">
-            Welcome back, {profile?.full_name?.split(' ')[0] || 'User'}
-          </h1>
+          <h1 className="text-3xl font-bold">{getGreeting()}</h1>
           <p className="text-muted-foreground mt-1">
-            Here's what's happening with your GEO analytics today.
+            以下是您的 GEO 分析数据概览。
           </p>
         </div>
 
@@ -65,8 +68,8 @@ export default function Dashboard() {
           {/* Credit Usage Chart */}
           <Card className="bg-card/50 backdrop-blur-sm border-border/50">
             <CardHeader>
-              <CardTitle>Credit Usage History</CardTitle>
-              <CardDescription>Your credit consumption over the last 7 days</CardDescription>
+              <CardTitle>积分使用历史</CardTitle>
+              <CardDescription>过去7天的积分消耗情况</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
@@ -111,8 +114,8 @@ export default function Dashboard() {
           {/* Quick Actions */}
           <Card className="bg-card/50 backdrop-blur-sm border-border/50">
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Get started with common tasks</CardDescription>
+              <CardTitle>快捷操作</CardTitle>
+              <CardDescription>开始常用任务</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="flex items-center gap-4 p-4 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors cursor-pointer">
@@ -120,8 +123,8 @@ export default function Dashboard() {
                   <Search className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">New GEO Analysis</h3>
-                  <p className="text-sm text-muted-foreground">Analyze your brand's AI visibility</p>
+                  <h3 className="font-medium">新建 GEO 分析</h3>
+                  <p className="text-sm text-muted-foreground">分析您的品牌在 AI 平台的可见度</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 rounded-lg bg-secondary/5 border border-secondary/20 hover:bg-secondary/10 transition-colors cursor-pointer">
@@ -129,8 +132,8 @@ export default function Dashboard() {
                   <Brain className="h-5 w-5 text-secondary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">Discover Keywords</h3>
-                  <p className="text-sm text-muted-foreground">Find high-impact search terms</p>
+                  <h3 className="font-medium">发现关键词</h3>
+                  <p className="text-sm text-muted-foreground">找到高影响力的搜索词</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 rounded-lg bg-accent/50 border border-accent-foreground/20 hover:bg-accent transition-colors cursor-pointer">
@@ -138,8 +141,8 @@ export default function Dashboard() {
                   <TrendingUp className="h-5 w-5 text-accent-foreground" />
                 </div>
                 <div>
-                  <h3 className="font-medium">View Reports</h3>
-                  <p className="text-sm text-muted-foreground">Access your latest analytics</p>
+                  <h3 className="font-medium">查看报告</h3>
+                  <p className="text-sm text-muted-foreground">访问最新分析报告</p>
                 </div>
               </div>
             </CardContent>
