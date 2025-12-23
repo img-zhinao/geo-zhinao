@@ -130,7 +130,7 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         {job.created_at 
-                          ? format(new Date(job.created_at), 'MM月dd日 HH:mm',SHANGHAI_TIMEZONE), { locale: zhCN })
+                          ? format(utcToZonedTime(new Date(job.created_at),SHANGHAI_TIMEZONE) 'MM月dd日 HH:mm', { locale: zhCN })
                           : '-'
                         }
                       </TableCell>
