@@ -34,13 +34,13 @@ export default function ProfileSettings() {
       });
       
       toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
+        title: "更新成功",
+        description: "您的个人资料已成功更新。",
       });
     } catch (error) {
       toast({
-        title: "Update failed",
-        description: "Failed to update profile. Please try again.",
+        title: "更新失败",
+        description: "无法更新个人资料，请重试。",
         variant: "destructive",
       });
     }
@@ -48,12 +48,7 @@ export default function ProfileSettings() {
 
   const getInitials = (name: string | null) => {
     if (!name) return 'U';
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+    return name.slice(0, 2).toUpperCase();
   };
 
   if (isLoading) {
@@ -70,16 +65,16 @@ export default function ProfileSettings() {
     <DashboardLayout>
       <div className="max-w-2xl space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Profile Settings</h1>
+          <h1 className="text-3xl font-bold">个人设置</h1>
           <p className="text-muted-foreground mt-1">
-            Manage your account settings and preferences.
+            管理您的账户设置和偏好。
           </p>
         </div>
 
         <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>Update your personal details here.</CardDescription>
+            <CardTitle>个人信息</CardTitle>
+            <CardDescription>在此更新您的个人资料。</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -92,7 +87,7 @@ export default function ProfileSettings() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-2">
-                  <Label htmlFor="avatarUrl">Avatar URL</Label>
+                  <Label htmlFor="avatarUrl">头像链接</Label>
                   <div className="flex gap-2">
                     <Input
                       id="avatarUrl"
@@ -106,17 +101,17 @@ export default function ProfileSettings() {
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Enter a URL for your profile picture
+                    输入您的头像图片链接
                   </p>
                 </div>
               </div>
 
               {/* Name Field */}
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
+                <Label htmlFor="fullName">姓名</Label>
                 <Input
                   id="fullName"
-                  placeholder="John Doe"
+                  placeholder="请输入您的姓名"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
@@ -124,7 +119,7 @@ export default function ProfileSettings() {
 
               {/* Email Field (Read Only) */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">邮箱</Label>
                 <Input
                   id="email"
                   value={profile?.email || ''}
@@ -132,7 +127,7 @@ export default function ProfileSettings() {
                   className="opacity-60"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Email cannot be changed
+                  邮箱地址无法修改
                 </p>
               </div>
 
@@ -140,19 +135,19 @@ export default function ProfileSettings() {
               <div className="pt-4 border-t border-border">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Member since</span>
+                    <span className="text-muted-foreground">注册时间</span>
                     <p className="font-medium">
                       {profile?.created_at
-                        ? new Date(profile.created_at).toLocaleDateString()
-                        : 'N/A'}
+                        ? new Date(profile.created_at).toLocaleDateString('zh-CN')
+                        : '未知'}
                     </p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Last updated</span>
+                    <span className="text-muted-foreground">最后更新</span>
                     <p className="font-medium">
                       {profile?.updated_at
-                        ? new Date(profile.updated_at).toLocaleDateString()
-                        : 'N/A'}
+                        ? new Date(profile.updated_at).toLocaleDateString('zh-CN')
+                        : '未知'}
                     </p>
                   </div>
                 </div>
@@ -169,7 +164,7 @@ export default function ProfileSettings() {
                 ) : (
                   <Save className="h-4 w-4 mr-2" />
                 )}
-                Save Changes
+                保存更改
               </Button>
             </form>
           </CardContent>

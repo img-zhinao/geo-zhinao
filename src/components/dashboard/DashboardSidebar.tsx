@@ -20,14 +20,14 @@ import {
 import { cn } from '@/lib/utils';
 
 const mainNavItems = [
-  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
-  { title: 'GEO Analysis', url: '/dashboard/geo-analysis', icon: Search },
-  { title: 'Keyword Discovery', url: '/dashboard/keywords', icon: Compass },
+  { title: '控制台', url: '/dashboard', icon: LayoutDashboard },
+  { title: 'GEO 分析', url: '/dashboard/geo-analysis', icon: Search },
+  { title: '关键词发现', url: '/dashboard/keywords', icon: Compass },
 ];
 
 const settingsNavItems = [
-  { title: 'Profile Settings', url: '/dashboard/settings', icon: Settings },
-  { title: 'Plan & Billing', url: '/dashboard/billing', icon: CreditCard },
+  { title: '个人设置', url: '/dashboard/settings', icon: Settings },
+  { title: '套餐账单', url: '/dashboard/billing', icon: CreditCard },
 ];
 
 export function DashboardSidebar() {
@@ -41,12 +41,16 @@ export function DashboardSidebar() {
 
   const getInitials = (name: string | null) => {
     if (!name) return 'U';
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+    return name.slice(0, 2).toUpperCase();
+  };
+
+  const getTierLabel = (tier: string | undefined) => {
+    switch (tier) {
+      case 'free': return '免费版';
+      case 'pro': return '专业版';
+      case 'enterprise': return '企业版';
+      default: return '免费版';
+    }
   };
 
   return (
@@ -57,14 +61,14 @@ export function DashboardSidebar() {
             <Brain className="h-6 w-6 text-primary" />
           </div>
           {!isCollapsed && (
-            <span className="font-bold text-lg whitespace-nowrap">Smart Mind GEO</span>
+            <span className="font-bold text-lg whitespace-nowrap">智脑时代 GEO</span>
           )}
         </Link>
       </SidebarHeader>
 
       <SidebarContent className="px-2">
         <SidebarGroup>
-          <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
+          <SidebarGroupLabel>主菜单</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainNavItems.map((item) => (
@@ -86,7 +90,7 @@ export function DashboardSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Settings</SidebarGroupLabel>
+          <SidebarGroupLabel>设置</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {settingsNavItems.map((item) => (
@@ -113,7 +117,7 @@ export function DashboardSidebar() {
         {!isCollapsed && (
           <div className="mb-4 p-3 rounded-lg bg-primary/10 border border-primary/20">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Credits</span>
+              <span className="text-muted-foreground">剩余积分</span>
               {profileLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -139,10 +143,10 @@ export function DashboardSidebar() {
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">
-                {profile?.full_name || 'User'}
+                {profile?.full_name || '用户'}
               </p>
               <p className="text-xs text-muted-foreground truncate">
-                {profile?.tier_level === 'free' ? 'Free Plan' : profile?.tier_level}
+                {getTierLabel(profile?.tier_level)}
               </p>
             </div>
           )}
@@ -159,7 +163,7 @@ export function DashboardSidebar() {
           onClick={signOut}
         >
           <LogOut className="h-4 w-4" />
-          {!isCollapsed && <span className="ml-2">Sign Out</span>}
+          {!isCollapsed && <span className="ml-2">退出登录</span>}
         </Button>
       </SidebarFooter>
     </Sidebar>

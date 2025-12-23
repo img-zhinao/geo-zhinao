@@ -8,40 +8,43 @@ import { Loader2, CreditCard, Zap, Check, Crown } from 'lucide-react';
 
 const plans = [
   {
-    name: 'Free',
-    price: '$0',
+    name: '免费版',
+    nameKey: 'free',
+    price: '¥0',
     credits: 50,
     features: [
-      '50 credits/month',
-      'Basic GEO analysis',
-      '3 AI platforms',
-      'Email support',
+      '50 积分/月',
+      '基础 GEO 分析',
+      '3 个 AI 平台',
+      '邮件支持',
     ],
   },
   {
-    name: 'Pro',
-    price: '$29',
+    name: '专业版',
+    nameKey: 'pro',
+    price: '¥199',
     credits: 500,
     popular: true,
     features: [
-      '500 credits/month',
-      'Advanced GEO analysis',
-      '6 AI platforms',
-      'Priority support',
-      'Custom reports',
+      '500 积分/月',
+      '高级 GEO 分析',
+      '6 个 AI 平台',
+      '优先支持',
+      '自定义报告',
     ],
   },
   {
-    name: 'Enterprise',
-    price: '$99',
+    name: '企业版',
+    nameKey: 'enterprise',
+    price: '¥699',
     credits: 2000,
     features: [
-      '2000 credits/month',
-      'Full GEO suite',
-      'All AI platforms',
-      'Dedicated support',
-      'API access',
-      'White-label reports',
+      '2000 积分/月',
+      '完整 GEO 套件',
+      '全部 AI 平台',
+      '专属客服',
+      'API 接入',
+      '白标报告',
     ],
   },
 ];
@@ -50,12 +53,21 @@ export default function Billing() {
   const { data: profile, isLoading } = useProfile();
 
   const currentPlan = plans.find(
-    (p) => p.name.toLowerCase() === profile?.tier_level?.toLowerCase()
+    (p) => p.nameKey === profile?.tier_level?.toLowerCase()
   ) || plans[0];
 
   const maxCredits = currentPlan.credits;
   const usedCredits = maxCredits - (profile?.credits_balance || 0);
   const usagePercentage = (usedCredits / maxCredits) * 100;
+
+  const getTierLabel = (tier: string | undefined) => {
+    switch (tier) {
+      case 'free': return '免费版';
+      case 'pro': return '专业版';
+      case 'enterprise': return '企业版';
+      default: return '免费版';
+    }
+  };
 
   if (isLoading) {
     return (
@@ -71,9 +83,9 @@ export default function Billing() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Plan & Billing</h1>
+          <h1 className="text-3xl font-bold">套餐账单</h1>
           <p className="text-muted-foreground mt-1">
-            Manage your subscription and view usage.
+            管理您的订阅和查看使用情况。
           </p>
         </div>
 
@@ -84,9 +96,9 @@ export default function Billing() {
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Crown className="h-5 w-5 text-secondary" />
-                  Current Plan
+                  当前套餐
                 </CardTitle>
-                <CardDescription>Your current subscription details</CardDescription>
+                <CardDescription>您的订阅详情</CardDescription>
               </div>
               <Badge variant="secondary" className="text-lg px-4 py-1">
                 {currentPlan.name}
@@ -97,18 +109,18 @@ export default function Billing() {
             {/* Credit Usage */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Credit Usage</span>
+                <span className="text-muted-foreground">积分使用</span>
                 <span className="font-medium">
-                  {usedCredits} / {maxCredits} credits used
+                  已用 {usedCredits} / {maxCredits} 积分
                 </span>
               </div>
               <Progress value={usagePercentage} className="h-3" />
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">
-                  Remaining: {profile?.credits_balance || 0} credits
+                  剩余: {profile?.credits_balance || 0} 积分
                 </span>
                 <span className="text-muted-foreground">
-                  Resets monthly
+                  每月重置
                 </span>
               </div>
             </div>
@@ -118,17 +130,17 @@ export default function Billing() {
               <div className="text-center p-4 rounded-lg bg-primary/5">
                 <Zap className="h-5 w-5 text-primary mx-auto mb-2" />
                 <p className="text-2xl font-bold">{profile?.credits_balance || 0}</p>
-                <p className="text-xs text-muted-foreground">Credits Left</p>
+                <p className="text-xs text-muted-foreground">剩余积分</p>
               </div>
               <div className="text-center p-4 rounded-lg bg-secondary/5">
                 <CreditCard className="h-5 w-5 text-secondary mx-auto mb-2" />
                 <p className="text-2xl font-bold">{currentPlan.price}</p>
-                <p className="text-xs text-muted-foreground">Per Month</p>
+                <p className="text-xs text-muted-foreground">每月</p>
               </div>
               <div className="text-center p-4 rounded-lg bg-accent/50">
                 <Crown className="h-5 w-5 text-accent-foreground mx-auto mb-2" />
-                <p className="text-2xl font-bold capitalize">{profile?.tier_level || 'Free'}</p>
-                <p className="text-xs text-muted-foreground">Tier Level</p>
+                <p className="text-2xl font-bold">{getTierLabel(profile?.tier_level)}</p>
+                <p className="text-xs text-muted-foreground">套餐等级</p>
               </div>
             </div>
           </CardContent>
@@ -136,14 +148,14 @@ export default function Billing() {
 
         {/* Available Plans */}
         <div>
-          <h2 className="text-xl font-semibold mb-4">Available Plans</h2>
+          <h2 className="text-xl font-semibold mb-4">可用套餐</h2>
           <div className="grid gap-4 md:grid-cols-3">
             {plans.map((plan) => {
-              const isCurrentPlan = plan.name.toLowerCase() === profile?.tier_level?.toLowerCase();
+              const isCurrentPlan = plan.nameKey === profile?.tier_level?.toLowerCase();
               
               return (
                 <Card
-                  key={plan.name}
+                  key={plan.nameKey}
                   className={`relative bg-card/50 backdrop-blur-sm transition-all hover:scale-[1.02] ${
                     plan.popular
                       ? 'border-primary shadow-lg shadow-primary/10'
@@ -153,7 +165,7 @@ export default function Billing() {
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <Badge className="bg-primary text-primary-foreground">
-                        Most Popular
+                        最受欢迎
                       </Badge>
                     </div>
                   )}
@@ -161,7 +173,7 @@ export default function Billing() {
                     <CardTitle>{plan.name}</CardTitle>
                     <CardDescription>
                       <span className="text-3xl font-bold text-foreground">{plan.price}</span>
-                      <span className="text-muted-foreground">/month</span>
+                      <span className="text-muted-foreground">/月</span>
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -178,7 +190,7 @@ export default function Billing() {
                       variant={isCurrentPlan ? 'outline' : plan.popular ? 'default' : 'secondary'}
                       disabled={isCurrentPlan}
                     >
-                      {isCurrentPlan ? 'Current Plan' : 'Upgrade'}
+                      {isCurrentPlan ? '当前套餐' : '升级'}
                     </Button>
                   </CardContent>
                 </Card>

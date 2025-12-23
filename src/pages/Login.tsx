@@ -38,14 +38,14 @@ export default function Login() {
     
     if (error) {
       toast({
-        title: "Login failed",
-        description: error.message || "Invalid email or password",
+        title: "登录失败",
+        description: error.message || "邮箱或密码错误",
         variant: "destructive",
       });
     } else {
       toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
+        title: "欢迎回来！",
+        description: "您已成功登录。",
       });
       navigate('/dashboard');
     }
@@ -61,14 +61,14 @@ export default function Login() {
     
     if (error) {
       toast({
-        title: "Registration failed",
-        description: error.message || "Could not create account",
+        title: "注册失败",
+        description: error.message || "无法创建账户",
         variant: "destructive",
       });
     } else {
       toast({
-        title: "Account created!",
-        description: "Please check your email to verify your account.",
+        title: "账户创建成功！",
+        description: "请检查您的邮箱以验证账户。",
       });
     }
     
@@ -80,7 +80,7 @@ export default function Login() {
     const { error } = await signInWithGoogle();
     if (error) {
       toast({
-        title: "Google login failed",
+        title: "Google 登录失败",
         description: error.message,
         variant: "destructive",
       });
@@ -93,7 +93,7 @@ export default function Login() {
     const { error } = await signInWithGithub();
     if (error) {
       toast({
-        title: "GitHub login failed",
+        title: "GitHub 登录失败",
         description: error.message,
         variant: "destructive",
       });
@@ -109,7 +109,7 @@ export default function Login() {
         {/* Back to Home */}
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="h-4 w-4" />
-          Back to Home
+          返回首页
         </Link>
 
         {/* Logo */}
@@ -117,25 +117,25 @@ export default function Login() {
           <div className="p-2 rounded-xl bg-primary/10">
             <Brain className="h-8 w-8 text-primary" />
           </div>
-          <span className="text-2xl font-bold">Smart Mind GEO</span>
+          <span className="text-2xl font-bold">智脑时代 GEO</span>
         </div>
 
         <Card className="border-border/50 bg-card/80 backdrop-blur-xl shadow-xl">
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 m-1">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+              <TabsTrigger value="login">登录</TabsTrigger>
+              <TabsTrigger value="register">注册</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
               <form onSubmit={handleSignIn}>
                 <CardHeader>
-                  <CardTitle>Welcome back</CardTitle>
-                  <CardDescription>Sign in to your account to continue</CardDescription>
+                  <CardTitle>欢迎回来</CardTitle>
+                  <CardDescription>登录您的账户以继续</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">邮箱</Label>
                     <Input
                       id="email"
                       type="email"
@@ -146,7 +146,7 @@ export default function Login() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">密码</Label>
                     <Input
                       id="password"
                       type="password"
@@ -160,7 +160,7 @@ export default function Login() {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Mail className="h-4 w-4 mr-2" />}
-                    Sign In with Email
+                    邮箱登录
                   </Button>
                   
                   <div className="relative w-full">
@@ -168,7 +168,7 @@ export default function Login() {
                       <span className="w-full border-t border-border" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                      <span className="bg-card px-2 text-muted-foreground">或使用以下方式</span>
                     </div>
                   </div>
 
@@ -194,22 +194,22 @@ export default function Login() {
             <TabsContent value="register">
               <form onSubmit={handleSignUp}>
                 <CardHeader>
-                  <CardTitle>Create account</CardTitle>
-                  <CardDescription>Get started with your free account</CardDescription>
+                  <CardTitle>创建账户</CardTitle>
+                  <CardDescription>开始使用免费账户</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label htmlFor="fullName">姓名</Label>
                     <Input
                       id="fullName"
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="请输入您的姓名"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="registerEmail">Email</Label>
+                    <Label htmlFor="registerEmail">邮箱</Label>
                     <Input
                       id="registerEmail"
                       type="email"
@@ -220,7 +220,7 @@ export default function Login() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="registerPassword">Password</Label>
+                    <Label htmlFor="registerPassword">密码</Label>
                     <Input
                       id="registerPassword"
                       type="password"
@@ -230,13 +230,13 @@ export default function Login() {
                       required
                       minLength={6}
                     />
-                    <p className="text-xs text-muted-foreground">At least 6 characters</p>
+                    <p className="text-xs text-muted-foreground">密码至少6位</p>
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                    Create Account
+                    创建账户
                   </Button>
                   
                   <div className="relative w-full">
@@ -244,7 +244,7 @@ export default function Login() {
                       <span className="w-full border-t border-border" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                      <span className="bg-card px-2 text-muted-foreground">或使用以下方式</span>
                     </div>
                   </div>
 
@@ -270,7 +270,7 @@ export default function Login() {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          By continuing, you agree to our Terms of Service and Privacy Policy.
+          继续即表示您同意我们的服务条款和隐私政策。
         </p>
       </div>
     </div>
