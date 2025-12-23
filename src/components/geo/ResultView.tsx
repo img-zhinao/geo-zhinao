@@ -219,9 +219,11 @@ export function ResultView({ result, brandName, searchQuery, onBack }: ResultVie
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[400px] rounded-lg bg-muted/30 border border-border/30 p-6">
-            <div className="prose prose-invert prose-sm max-w-none">
+            <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground">
               <ReactMarkdown>
-                {result.raw_response_text || '暂无回复内容'}
+                {(result.raw_response_text || '暂无回复内容')
+                  .replace(/\\n/g, '\n')
+                  .replace(/\\#/g, '#')}
               </ReactMarkdown>
             </div>
           </ScrollArea>
