@@ -1,6 +1,5 @@
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { NewScanForm } from '@/components/geo/NewScanForm';
-import { RecentScansList } from '@/components/geo/RecentScansList';
+import { GeoAnalysisContainer } from '@/components/geo/GeoAnalysisContainer';
 import { Cpu, Activity, Zap } from 'lucide-react';
 
 export default function GeoAnalysis() {
@@ -58,11 +57,8 @@ export default function GeoAnalysis() {
           />
         </div>
 
-        {/* Main Form */}
-        <NewScanForm />
-
-        {/* Recent Jobs */}
-        <RecentScansList />
+        {/* Main Container with real-time visualization */}
+        <GeoAnalysisContainer />
       </div>
     </DashboardLayout>
   );
