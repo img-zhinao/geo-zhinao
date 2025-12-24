@@ -17,7 +17,6 @@ interface ScanJob {
   status: string | null;
   job_type: string | null;
   created_at: string | null;
-  selected_models: string | null;
 }
 
 const statusConfig: Record<
@@ -123,7 +122,7 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
                         </span>
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
-                        {modelLabels[job.selected_models || ""] || job.selected_models || "-"}
+                        {modelLabels[job.job_type || ""] || job.job_type || "-"}
                       </TableCell>
                       <TableCell>
                         <Badge variant={statusInfo.variant} className="gap-1.5">
@@ -132,7 +131,9 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
-                        {job.created_at ? format(new Date(job.created_at), "MM月dd日 HH:mm", { locale: zhCN }) : "-"}
+                        {job.created_at
+                          ? format(new Date(job.created_at), "MM月dd日 HH:mm", { locale: zhCN })
+                          : "-"}
                       </TableCell>
                       <TableCell className="text-right">
                         <Button

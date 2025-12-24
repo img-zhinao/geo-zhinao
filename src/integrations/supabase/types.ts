@@ -96,7 +96,6 @@ export type Database = {
           created_at: string | null
           diag_attribution_report: string | null
           diag_reasoning_trace: string | null
-          diag_suggested_strategies: Json | null
           diagnosed_at: string | null
           exposure_count: number | null
           id: string
@@ -121,7 +120,6 @@ export type Database = {
           created_at?: string | null
           diag_attribution_report?: string | null
           diag_reasoning_trace?: string | null
-          diag_suggested_strategies?: Json | null
           diagnosed_at?: string | null
           exposure_count?: number | null
           id?: string
@@ -146,7 +144,6 @@ export type Database = {
           created_at?: string | null
           diag_attribution_report?: string | null
           diag_reasoning_trace?: string | null
-          diag_suggested_strategies?: Json | null
           diagnosed_at?: string | null
           exposure_count?: number | null
           id?: string

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Brain, LayoutDashboard, Search, Compass, Settings, LogOut, CreditCard, Loader2, Stethoscope } from 'lucide-react';
+import { Brain, LayoutDashboard, Search, Compass, Settings, LogOut, CreditCard, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,7 +22,6 @@ import { cn } from '@/lib/utils';
 const mainNavItems = [
   { title: '控制台', url: '/dashboard', icon: LayoutDashboard },
   { title: 'GEO 分析', url: '/dashboard/geo-analysis', icon: Search },
-  { title: '归因诊断', url: '/dashboard/diagnosis', icon: Stethoscope },
   { title: '关键词发现', url: '/dashboard/keywords', icon: Compass },
 ];
 
