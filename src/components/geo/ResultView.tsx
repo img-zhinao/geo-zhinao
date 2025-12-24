@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, ArrowRight, TrendingUp, Hash, Heart, FileText, FlaskConical, Stethoscope, Loader2 } from 'lucide-react';
+import { Copy, Check, ArrowRight, TrendingUp, Hash, Heart, FileText, FlaskConical } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { supabase } from '@/integrations/supabase/client';
 
 interface ScanResult {
   id: string;
@@ -22,116 +20,15 @@ interface ScanResult {
   created_at: string | null;
 }
 
-interface ScanJob {
-  id: string;
-  brand_name: string;
-  search_query: string;
-  competitors: string | null;
-  selected_models: string | null;
-}
-
 interface ResultViewProps {
   result: ScanResult;
   brandName: string;
   searchQuery: string;
-  currentJob?: ScanJob;
   onBack: () => void;
 }
 
-export function ResultView({ result, brandName, searchQuery, currentJob, onBack }: ResultViewProps) {
+export function ResultView({ result, brandName, searchQuery, onBack }: ResultViewProps) {
   const [copied, setCopied] = useState(false);
-  const [isDiagnosing, setIsDiagnosing] = useState(false);
-  const navigate = useNavigate();
-
-  const handleDiagnose = async () => {
-    if (!currentJob) {
-      toast({
-        title: '错误',
-        description: '无法获取当前任务信息',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsDiagnosing(true);
-
-    try {
-      // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast({
-          title: '未登录',
-          description: '请先登录后再进行诊断',
-          variant: 'destructive',
-        });
-        setIsDiagnosing(false);
-        return;
-      }
-
-      // 1. Insert the diagnosis job
-      const { data, error } = await supabase
-        .from('scan_jobs')
-        .insert({
-          user_id: user.id,
-          job_type: 'diagnosis', // Critical: triggers Link 2 workflow
-          parent_job_id: currentJob.id, // Critical: links to the "Corpse" data
-          brand_name: currentJob.brand_name,
-          search_query: currentJob.search_query,
-          competitors: currentJob.competitors,
-          selected_models: currentJob.selected_models || 'deepseek-reasoner',
-          status: 'queued'
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Failed to create diagnosis job:', error);
-        toast({
-          title: '诊断启动失败',
-          description: error.message,
-          variant: 'destructive',
-        });
-        setIsDiagnosing(false);
-        return;
-      }
-
-      // 2. Trigger N8N webhook
-      try {
-        await fetch('https://n8n.zhi-nao.com/webhook/diagnosis', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            job_id: data.id,
-            parent_job_id: currentJob.id,
-            brand_name: currentJob.brand_name,
-            search_query: currentJob.search_query,
-            competitors: currentJob.competitors,
-          }),
-        });
-      } catch (webhookError) {
-        console.warn('N8N webhook notification failed, but job created:', webhookError);
-        // Continue anyway - the job is in the DB
-      }
-
-      toast({
-        title: '诊断任务已创建',
-        description: 'AI 正在进行深度病理分析...',
-      });
-
-      // 3. Navigate immediately. The target page will listen for the result.
-      navigate(`/dashboard/diagnosis/${data.id}`);
-    } catch (err) {
-      console.error('Diagnosis error:', err);
-      toast({
-        title: '发生错误',
-        description: '请稍后重试',
-        variant: 'destructive',
-      });
-      setIsDiagnosing(false);
-    }
-  };
 
   const avsScore = result.avs_score ?? 0;
   const rankPosition = result.rank_position;
@@ -333,52 +230,7 @@ export function ResultView({ result, brandName, searchQuery, currentJob, onBack 
         </CardContent>
       </Card>
 
-      {/* Diagnosis Action Button */}
-      <Card className="bg-gradient-to-r from-destructive/10 via-orange-500/10 to-yellow-500/10 border-destructive/30">
-        <CardContent className="py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-destructive/20">
-                <Stethoscope className="h-6 w-6 text-destructive" />
-              </div>
-              <div>
-                <h3 className="font-semibold">深度归因诊断</h3>
-                <p className="text-sm text-muted-foreground">
-                  使用 DeepSeek-R1 分析品牌排名低的根本原因
-                </p>
-              </div>
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    onClick={handleDiagnose}
-                    disabled={isDiagnosing}
-                    className="gap-2 bg-gradient-to-r from-destructive to-orange-500 hover:from-destructive/90 hover:to-orange-500/90 text-white border-0"
-                  >
-                    {isDiagnosing ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        分析中...
-                      </>
-                    ) : (
-                      <>
-                        <Stethoscope className="h-4 w-4" />
-                        智能归因诊断
-                      </>
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>使用 DeepSeek-R1 分析为什么您的排名较低</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Strategy Lab Action Button */}
+      {/* Action Button */}
       <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
         <CardContent className="py-6">
           <div className="flex items-center justify-between">

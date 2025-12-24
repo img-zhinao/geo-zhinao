@@ -14,8 +14,6 @@ interface ActiveJob {
   id: string;
   brandName: string;
   searchQuery: string;
-  competitors: string | null;
-  selected_models: string | null;
 }
 
 interface ScanResult {
@@ -38,21 +36,8 @@ export function GeoAnalysisContainer() {
   const [result, setResult] = useState<ScanResult | null>(null);
 
   // Handle new job submission
-  const handleJobSubmitted = async (jobId: string, brandName: string, searchQuery: string) => {
-    // Fetch the full job data including competitors and selected_models
-    const { data: jobData } = await supabase
-      .from('scan_jobs')
-      .select('competitors, selected_models')
-      .eq('id', jobId)
-      .single();
-
-    setActiveJob({ 
-      id: jobId, 
-      brandName, 
-      searchQuery,
-      competitors: jobData?.competitors || null,
-      selected_models: jobData?.selected_models || null,
-    });
+  const handleJobSubmitted = (jobId: string, brandName: string, searchQuery: string) => {
+    setActiveJob({ id: jobId, brandName, searchQuery });
     setViewState('processing');
   };
 
@@ -122,29 +107,15 @@ export function GeoAnalysisContainer() {
 
   // Handle viewing a result from the list
   const handleViewResult = async (jobId: string, brandName: string, searchQuery: string) => {
-    // Fetch both the result and the full job data
-    const [resultResponse, jobResponse] = await Promise.all([
-      supabase
-        .from('scan_results')
-        .select('*')
-        .eq('job_id', jobId)
-        .maybeSingle(),
-      supabase
-        .from('scan_jobs')
-        .select('competitors, selected_models')
-        .eq('id', jobId)
-        .single(),
-    ]);
+    const { data } = await supabase
+      .from('scan_results')
+      .select('*')
+      .eq('job_id', jobId)
+      .maybeSingle();
 
-    if (resultResponse.data) {
-      setActiveJob({ 
-        id: jobId, 
-        brandName, 
-        searchQuery,
-        competitors: jobResponse.data?.competitors || null,
-        selected_models: jobResponse.data?.selected_models || null,
-      });
-      setResult(resultResponse.data);
+    if (data) {
+      setActiveJob({ id: jobId, brandName, searchQuery });
+      setResult(data);
       setViewState('result');
     } else {
       toast({
@@ -176,13 +147,6 @@ export function GeoAnalysisContainer() {
           result={result}
           brandName={activeJob.brandName}
           searchQuery={activeJob.searchQuery}
-          currentJob={{
-            id: activeJob.id,
-            brand_name: activeJob.brandName,
-            search_query: activeJob.searchQuery,
-            competitors: activeJob.competitors,
-            selected_models: activeJob.selected_models,
-          }}
           onBack={handleBackToForm}
         />
       )}
