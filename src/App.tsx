@@ -14,6 +14,8 @@ import ProfileSettings from "./pages/ProfileSettings";
 import Billing from "./pages/Billing";
 import GeoAnalysis from "./pages/GeoAnalysis";
 import Keywords from "./pages/Keywords";
+import Diagnosis from "./pages/Diagnosis";
+import Simulation from "./pages/Simulation";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +34,8 @@ const App = () => (
               <Route path="/dashboard/settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
               <Route path="/dashboard/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
               <Route path="/dashboard/geo-analysis" element={<ProtectedRoute><GeoAnalysis /></ProtectedRoute>} />
+              <Route path="/dashboard/diagnosis/:reportId" element={<ProtectedRoute><Diagnosis /></ProtectedRoute>} />
+              <Route path="/dashboard/simulation/:simulationId" element={<ProtectedRoute><Simulation /></ProtectedRoute>} />
               <Route path="/dashboard/keywords" element={<ProtectedRoute><Keywords /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
