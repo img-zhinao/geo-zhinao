@@ -6,7 +6,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { 
   Stethoscope, 
-  FileSearch, 
   Sparkles, 
   Award, 
   BarChart, 
@@ -16,6 +15,7 @@ import {
   Brain
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { DiagnosisReportCard } from './DiagnosisReportCard';
 
 interface DiagnosisHubProps {
   jobId: string;
@@ -75,14 +75,11 @@ export function DiagnosisHub({ jobId, diagReport, reasoningTrace, suggestedStrat
   };
 
   const coreIssue = extractCoreIssue(diagReport);
+  const isAnalysisComplete = !!diagReport;
 
   const handleStrategyClick = (strategyId: string) => {
     navigate(`/dashboard/strategy-lab?source_job=${jobId}&strategy=${strategyId}`);
   };
-
-  const processedReport = (diagReport || '')
-    .replace(/\\n/g, '\n')
-    .replace(/\\#/g, '#');
 
   const processedReasoning = (reasoningTrace || '')
     .replace(/\\n/g, '\n')
@@ -99,45 +96,28 @@ export function DiagnosisHub({ jobId, diagReport, reasoningTrace, suggestedStrat
         </AlertDescription>
       </Alert>
 
-      {/* Detailed Report */}
-      <Card className="border border-border/50">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <FileSearch className="h-5 w-5 text-primary" />
-            深度诊断报告
-            <Badge variant="secondary" className="ml-auto text-xs">
-              DeepSeek-R1
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-4">
-            <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground">
-              {diagReport ? (
-                <ReactMarkdown>{processedReport}</ReactMarkdown>
-              ) : (
-                <p className="text-muted-foreground">暂无诊断报告</p>
-              )}
-            </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+      {/* Diagnosis Report Card with Edit/Preview/Copy/Download/Save */}
+      <DiagnosisReportCard
+        jobId={jobId}
+        diagReport={diagReport}
+        isAnalysisComplete={isAnalysisComplete}
+      />
 
       {/* Reasoning Trace (Collapsible) */}
       {reasoningTrace && (
-        <Card className="border border-border/50">
+        <Card className="border border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               <Brain className="h-5 w-5 text-muted-foreground" />
               AI 推理过程
-              <Badge variant="outline" className="ml-auto text-xs">
+              <Badge variant="outline" className="ml-auto text-xs border-slate-600">
                 Reasoning Trace
               </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-[200px] rounded-lg bg-muted/50 border border-border/30 p-4">
-              <div className="prose prose-sm max-w-none dark:prose-invert prose-p:text-muted-foreground font-mono text-xs">
+            <ScrollArea className="h-[200px] rounded-lg bg-slate-800/50 border border-slate-700/50 p-4">
+              <div className="prose prose-sm max-w-none prose-invert prose-p:text-slate-400 font-mono text-xs">
                 <ReactMarkdown>{processedReasoning}</ReactMarkdown>
               </div>
             </ScrollArea>
@@ -146,12 +126,12 @@ export function DiagnosisHub({ jobId, diagReport, reasoningTrace, suggestedStrat
       )}
 
       {/* Strategy Recommendations */}
-      <Card className="border border-primary/30 bg-primary/5">
+      <Card className="border border-indigo-500/30 bg-indigo-500/5">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Sparkles className="h-5 w-5 text-indigo-400" />
             智能策略推荐
-            <Badge className="ml-auto bg-primary/20 text-primary hover:bg-primary/30">
+            <Badge className="ml-auto bg-indigo-500/20 text-indigo-400 border-indigo-500/30">
               修复建议
             </Badge>
           </CardTitle>
@@ -190,10 +170,10 @@ export function DiagnosisHub({ jobId, diagReport, reasoningTrace, suggestedStrat
           )}
 
           {/* Direct link to strategy lab */}
-          <div className="mt-4 pt-4 border-t border-border/50">
+          <div className="mt-4 pt-4 border-t border-slate-700/50">
             <Button
               variant="default"
-              className="w-full"
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
               onClick={() => navigate(`/dashboard/strategy-lab?source_job=${jobId}`)}
             >
               <Sparkles className="h-4 w-4 mr-2" />
