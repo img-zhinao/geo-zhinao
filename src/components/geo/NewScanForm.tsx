@@ -82,28 +82,30 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
 
       if (error) throw error;
 
-      // 调用 N8N Webhook 触发监控分析
+      // 调用安全的 Edge Function 代理触发 N8N Webhook
       try {
-        const webhookResponse = await fetch('https://n8n.zhi-nao.com/webhook/monitoring', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            job_id: insertedJob.id,
-            user_id: user.id,
-            brand_name: data.brandName,
-            search_query: data.searchQuery,
-            competitors: competitorsArray,
-            selected_models: [data.model],
-          }),
-        });
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        const webhookResponse = await fetch(
+          'https://kojovraprdezdkoirjoe.supabase.co/functions/v1/n8n-webhook-proxy',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session?.access_token}`,
+            },
+            body: JSON.stringify({
+              webhook_type: 'monitoring',
+              job_id: insertedJob.id,
+            }),
+          }
+        );
 
         if (!webhookResponse.ok) {
-          console.warn('N8N webhook 调用失败:', webhookResponse.status);
+          console.warn('Webhook proxy 调用失败:', webhookResponse.status);
         }
       } catch (webhookError) {
-        console.warn('N8N webhook 调用异常:', webhookError);
+        console.warn('Webhook proxy 调用异常:', webhookError);
         // 不阻塞用户流程，webhook 失败时仅记录日志
       }
 
