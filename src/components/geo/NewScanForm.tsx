@@ -67,8 +67,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
           brand_name: data.brandName,
           search_query: data.searchQuery,
           competitors: data.competitors || null,
-          job_type: "monitoring",
-          selected_models: data.model,
+          job_type: data.model,
           status: "queued",
         })
         .select()
@@ -80,7 +79,9 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
       try {
         await fetch("https://n8n.zhi-nao.com/webhook/monitoring", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             job_id: insertedJob.id,
             user_id: user.id,
@@ -91,7 +92,8 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
           }),
         });
       } catch (webhookError) {
-        console.error("Webhook trigger failed:", webhookError);
+        console.error("Error triggering N8N webhook:", webhookError);
+        // Continue even if webhook fails - job is already in database
       }
 
       toast({

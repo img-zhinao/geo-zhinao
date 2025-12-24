@@ -55,8 +55,8 @@ export type Database = {
           id: string
           job_type: string | null
           parent_job_id: string | null
+          platforms: string | null
           search_query: string
-          selected_models: string | null
           status: string | null
           updata_at: string | null
           user_id: string
@@ -68,8 +68,8 @@ export type Database = {
           id?: string
           job_type?: string | null
           parent_job_id?: string | null
+          platforms?: string | null
           search_query: string
-          selected_models?: string | null
           status?: string | null
           updata_at?: string | null
           user_id: string
@@ -81,8 +81,8 @@ export type Database = {
           id?: string
           job_type?: string | null
           parent_job_id?: string | null
+          platforms?: string | null
           search_query?: string
-          selected_models?: string | null
           status?: string | null
           updata_at?: string | null
           user_id?: string
