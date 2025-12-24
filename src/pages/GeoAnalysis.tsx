@@ -1,49 +1,15 @@
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { GeoAnalysisContainer } from '@/components/geo/GeoAnalysisContainer';
 import { Cpu, Activity, Zap, Loader2 } from 'lucide-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { startOfDay, subDays } from 'date-fns';
-import { useEffect } from 'react';
-import { useJobNotifications } from '@/hooks/useJobNotifications';
 
 export default function GeoAnalysis() {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   
-  // Enable global job completion notifications
-  useJobNotifications();
-
-  // Real-time subscription for instant updates
-  useEffect(() => {
-    if (!user) return;
-
-    const channel = supabase
-      .channel('stats-realtime')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'scan_jobs' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['today-scans', user.id] });
-          queryClient.invalidateQueries({ queryKey: ['avg-response-time', user.id] });
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'scan_results' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['model-calls', user.id] });
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, queryClient]);
-  
-  // Fetch today's scan count with auto-refresh every 30s
+  // Fetch today's scan count
   const { data: todayScans, isLoading: loadingToday } = useQuery({
     queryKey: ['today-scans', user?.id],
     queryFn: async () => {
@@ -72,10 +38,9 @@ export default function GeoAnalysis() {
       };
     },
     enabled: !!user,
-    refetchInterval: 30000,
   });
 
-  // Fetch total model calls with auto-refresh every 30s
+  // Fetch total model calls (scan_results count)
   const { data: modelCalls, isLoading: loadingCalls } = useQuery({
     queryKey: ['model-calls', user?.id],
     queryFn: async () => {
@@ -101,10 +66,9 @@ export default function GeoAnalysis() {
       };
     },
     enabled: !!user,
-    refetchInterval: 30000,
   });
 
-  // Calculate average response time with auto-refresh
+  // Calculate average response time (using completed jobs)
   const { data: avgTime, isLoading: loadingTime } = useQuery({
     queryKey: ['avg-response-time', user?.id],
     queryFn: async () => {
@@ -123,14 +87,13 @@ export default function GeoAnalysis() {
       const times = data.map(job => {
         const created = new Date(job.created_at!).getTime();
         const updated = new Date(job.updata_at!).getTime();
-        return (updated - created) / 1000;
-      }).filter(t => t > 0 && t < 600);
+        return (updated - created) / 1000; // seconds
+      }).filter(t => t > 0 && t < 600); // filter reasonable times (< 10 min)
       
       if (times.length === 0) return null;
       return times.reduce((a, b) => a + b, 0) / times.length;
     },
     enabled: !!user,
-    refetchInterval: 30000,
   });
 
   const todayTrend = todayScans ? todayScans.today - todayScans.yesterday : 0;
