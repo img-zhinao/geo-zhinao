@@ -1,24 +1,13 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Copy, Check, ArrowRight, TrendingUp, Hash, Heart, FileText, FlaskConical } from 'lucide-react';
+import { Copy, Check, ArrowRight, TrendingUp, Hash, Heart, FileText, FlaskConical, Link2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
-
-interface ScanResult {
-  id: string;
-  job_id: string | null;
-  avs_score: number | null;
-  rank_position: number | null;
-  spi_score: number | null;
-  sentiment_score: number | null;
-  raw_response_text: string | null;
-  model_provider: string | null;
-  created_at: string | null;
-}
+import type { ScanResult } from './GeoAnalysisContainer';
 
 interface ResultViewProps {
   result: ScanResult;
@@ -32,7 +21,8 @@ export function ResultView({ result, brandName, searchQuery, onBack }: ResultVie
 
   const avsScore = result.avs_score ?? 0;
   const rankPosition = result.rank_position;
-  const spiScore = result.spi_score ?? 0;
+  const sentimentScore = result.sentiment_score ?? 0;
+  const citations = result.citations || [];
 
   const getScoreColor = (score: number) => {
     if (score <= 40) return 'hsl(0, 84%, 60%)'; // Red
@@ -142,6 +132,9 @@ export function ResultView({ result, brandName, searchQuery, onBack }: ResultVie
                 <p className="text-sm text-muted-foreground">
                   品牌「{brandName}」在搜索「{searchQuery}」时的 AI 可见度评分
                 </p>
+                <p className="text-xs text-muted-foreground">
+                  模型: {result.model_name}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -169,7 +162,7 @@ export function ResultView({ result, brandName, searchQuery, onBack }: ResultVie
             </CardContent>
           </Card>
 
-          {/* SPI Score */}
+          {/* Sentiment Score */}
           <Card className="bg-card/40 backdrop-blur-xl border-border/30">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
@@ -177,14 +170,48 @@ export function ResultView({ result, brandName, searchQuery, onBack }: ResultVie
                   <Heart className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">情感指数 (SPI)</p>
-                  <p className="text-2xl font-bold">{spiScore} / 100</p>
+                  <p className="text-sm text-muted-foreground">情感指数</p>
+                  <p className="text-2xl font-bold">
+                    {sentimentScore > 0 ? '+' : ''}{sentimentScore.toFixed(2)}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
+
+      {/* Citations Section */}
+      {citations.length > 0 && (
+        <Card className="bg-card/40 backdrop-blur-xl border-border/30">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-muted/50">
+                <Link2 className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">引用来源</CardTitle>
+                <CardDescription>AI 回复中引用的链接</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {citations.map((url, index) => (
+                <a
+                  key={index}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-sm text-primary hover:underline truncate"
+                >
+                  {url}
+                </a>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Raw Response Section */}
       <Card className="bg-card/40 backdrop-blur-xl border-border/30">

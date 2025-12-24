@@ -9,33 +9,27 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { Json } from '@/integrations/supabase/types';
 
 interface ScanJob {
   id: string;
   brand_name: string;
   search_query: string;
   status: string | null;
-  job_type: string | null;
+  selected_models: Json;
   created_at: string | null;
 }
 
 const statusConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: React.ComponentType<{ className?: string }> }> = {
+  queued: { label: '排队中', variant: 'outline', icon: Clock },
   processing: { label: '处理中', variant: 'secondary', icon: Loader2 },
   completed: { label: '已完成', variant: 'default', icon: CheckCircle2 },
   failed: { label: '失败', variant: 'destructive', icon: AlertCircle },
-  pending: { label: '等待中', variant: 'outline', icon: Clock },
 };
 
 interface RecentScansListProps {
   onViewResult?: (jobId: string, brandName: string, searchQuery: string) => void;
 }
-
-const modelLabels: Record<string, string> = {
-  'deepseek-v3': 'DeepSeek-V3',
-  'doubao-pro': 'Doubao-Pro',
-  'qwen-max': 'Qwen-Max',
-  'deep_reasoning': 'DeepSeek-V3',
-};
 
 export function RecentScansList({ onViewResult }: RecentScansListProps) {
   const { user } = useAuth();
@@ -46,7 +40,7 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
       if (!user) return [];
       const { data, error } = await supabase
         .from('scan_jobs')
-        .select('*')
+        .select('id, brand_name, search_query, status, selected_models, created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(10);
@@ -58,7 +52,14 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
   });
 
   const getStatusInfo = (status: string | null) => {
-    return statusConfig[status || 'pending'] || statusConfig.pending;
+    return statusConfig[status || 'queued'] || statusConfig.queued;
+  };
+
+  const getModelLabel = (selectedModels: Json): string => {
+    if (Array.isArray(selectedModels) && selectedModels.length > 0) {
+      return String(selectedModels[0]);
+    }
+    return '-';
   };
 
   return (
@@ -117,7 +118,7 @@ export function RecentScansList({ onViewResult }: RecentScansListProps) {
                         </span>
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
-                        {modelLabels[job.job_type || ''] || job.job_type || '-'}
+                        {getModelLabel(job.selected_models)}
                       </TableCell>
                       <TableCell>
                         <Badge 
