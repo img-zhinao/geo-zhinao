@@ -131,35 +131,44 @@ export type Database = {
         Row: {
           avs_score: number | null
           citations: Json | null
+          competitors_mentioned: string | null
           created_at: string | null
           id: string
+          is_visible: boolean | null
           job_id: string
           model_name: string
           rank_position: number | null
           raw_response_text: string | null
           sentiment_score: number | null
+          spi_score: number | null
         }
         Insert: {
           avs_score?: number | null
           citations?: Json | null
+          competitors_mentioned?: string | null
           created_at?: string | null
           id?: string
+          is_visible?: boolean | null
           job_id: string
           model_name: string
           rank_position?: number | null
           raw_response_text?: string | null
           sentiment_score?: number | null
+          spi_score?: number | null
         }
         Update: {
           avs_score?: number | null
           citations?: Json | null
+          competitors_mentioned?: string | null
           created_at?: string | null
           id?: string
+          is_visible?: boolean | null
           job_id?: string
           model_name?: string
           rank_position?: number | null
           raw_response_text?: string | null
           sentiment_score?: number | null
+          spi_score?: number | null
         }
         Relationships: [
           {
