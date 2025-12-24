@@ -1,18 +1,27 @@
-import { Radar, Wifi, Bot, Search } from 'lucide-react';
+import { Radar, Wifi, Bot, Search, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface ProcessingStateProps {
   brandName: string;
   searchQuery: string;
+  onBack?: () => void;
 }
 
-export function ProcessingState({ brandName, searchQuery }: ProcessingStateProps) {
+export function ProcessingState({ brandName, searchQuery, onBack }: ProcessingStateProps) {
   return (
-    <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border-primary/20">
-      {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
-      
-      <CardContent className="relative py-16">
+    <div className="space-y-4">
+      {onBack && (
+        <Button variant="ghost" onClick={onBack} className="text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          取消并返回
+        </Button>
+      )}
+      <Card className="relative overflow-hidden bg-card/40 backdrop-blur-xl border-primary/20">
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
+        
+        <CardContent className="relative py-16">
         <div className="flex flex-col items-center justify-center space-y-8">
           {/* Radar Animation */}
           <div className="relative">
@@ -63,9 +72,10 @@ export function ProcessingState({ brandName, searchQuery }: ProcessingStateProps
               </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
