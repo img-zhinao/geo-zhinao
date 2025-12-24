@@ -16,15 +16,15 @@ interface ActiveJob {
   searchQuery: string;
 }
 
-interface ScanResult {
+export interface ScanResult {
   id: string;
-  job_id: string | null;
-  avs_score: number | null;
-  rank_position: number | null;
-  spi_score: number | null;
-  sentiment_score: number | null;
+  job_id: string;
+  model_name: string;
   raw_response_text: string | null;
-  model_provider: string | null;
+  rank_position: number | null;
+  avs_score: number | null;
+  sentiment_score: number | null;
+  citations: string[];
   created_at: string | null;
 }
 
@@ -60,7 +60,10 @@ export function GeoAnalysisContainer() {
         async (payload) => {
           console.log('Received scan result:', payload);
           const newResult = payload.new as ScanResult;
-          setResult(newResult);
+          setResult({
+            ...newResult,
+            citations: Array.isArray(newResult.citations) ? newResult.citations : [],
+          });
           setViewState('result');
           
           // Invalidate queries to refresh the list
@@ -86,7 +89,10 @@ export function GeoAnalysisContainer() {
 
       if (data) {
         console.log('Found existing result:', data);
-        setResult(data);
+        setResult({
+          ...data,
+          citations: Array.isArray(data.citations) ? (data.citations as string[]) : [],
+        });
         setViewState('result');
       }
     };
@@ -115,7 +121,10 @@ export function GeoAnalysisContainer() {
 
     if (data) {
       setActiveJob({ id: jobId, brandName, searchQuery });
-      setResult(data);
+      setResult({
+        ...data,
+        citations: Array.isArray(data.citations) ? (data.citations as string[]) : [],
+      });
       setViewState('result');
     } else {
       toast({

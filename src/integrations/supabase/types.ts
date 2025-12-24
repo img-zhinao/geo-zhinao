@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      diagnosis_reports: {
+        Row: {
+          created_at: string | null
+          diagnostic_model: string | null
+          id: string
+          report_markdown: string | null
+          root_cause_summary: string | null
+          scan_result_id: string
+          status: string | null
+          suggested_strategy_ids: Json | null
+          tokens_used: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          diagnostic_model?: string | null
+          id?: string
+          report_markdown?: string | null
+          root_cause_summary?: string | null
+          scan_result_id: string
+          status?: string | null
+          suggested_strategy_ids?: Json | null
+          tokens_used?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          diagnostic_model?: string | null
+          id?: string
+          report_markdown?: string | null
+          root_cause_summary?: string | null
+          scan_result_id?: string
+          status?: string | null
+          suggested_strategy_ids?: Json | null
+          tokens_used?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnosis_reports_scan_result_id_fkey"
+            columns: ["scan_result_id"]
+            isOneToOne: false
+            referencedRelation: "scan_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -50,117 +94,72 @@ export type Database = {
       scan_jobs: {
         Row: {
           brand_name: string
-          competitors: string | null
+          competitors: string[] | null
           created_at: string | null
           id: string
-          job_type: string | null
-          parent_job_id: string | null
-          platforms: string | null
           search_query: string
+          selected_models: Json | null
           status: string | null
-          updata_at: string | null
+          target_region: string | null
           user_id: string
         }
         Insert: {
           brand_name: string
-          competitors?: string | null
+          competitors?: string[] | null
           created_at?: string | null
           id?: string
-          job_type?: string | null
-          parent_job_id?: string | null
-          platforms?: string | null
           search_query: string
+          selected_models?: Json | null
           status?: string | null
-          updata_at?: string | null
+          target_region?: string | null
           user_id: string
         }
         Update: {
           brand_name?: string
-          competitors?: string | null
+          competitors?: string[] | null
           created_at?: string | null
           id?: string
-          job_type?: string | null
-          parent_job_id?: string | null
-          platforms?: string | null
           search_query?: string
+          selected_models?: Json | null
           status?: string | null
-          updata_at?: string | null
+          target_region?: string | null
           user_id?: string
         }
         Relationships: []
       }
       scan_results: {
         Row: {
-          analysis_type: string | null
           avs_score: number | null
+          citations: Json | null
           created_at: string | null
-          diag_attribution_report: string | null
-          diag_reasoning_trace: string | null
-          diagnosed_at: string | null
-          exposure_count: number | null
           id: string
-          job_id: string | null
-          job_type: string | null
-          model_provider: string | null
-          platforms: string | null
+          job_id: string
+          model_name: string
           rank_position: number | null
           raw_response_text: string | null
           sentiment_score: number | null
-          sim_avs_score: number | null
-          sim_raw_response_text: string | null
-          sim_reasoning_trace: string | null
-          simulated_at: string | null
-          spi_score: number | null
-          status: string | null
-          user_id: string
         }
         Insert: {
-          analysis_type?: string | null
           avs_score?: number | null
+          citations?: Json | null
           created_at?: string | null
-          diag_attribution_report?: string | null
-          diag_reasoning_trace?: string | null
-          diagnosed_at?: string | null
-          exposure_count?: number | null
           id?: string
-          job_id?: string | null
-          job_type?: string | null
-          model_provider?: string | null
-          platforms?: string | null
+          job_id: string
+          model_name: string
           rank_position?: number | null
           raw_response_text?: string | null
           sentiment_score?: number | null
-          sim_avs_score?: number | null
-          sim_raw_response_text?: string | null
-          sim_reasoning_trace?: string | null
-          simulated_at?: string | null
-          spi_score?: number | null
-          status?: string | null
-          user_id: string
         }
         Update: {
-          analysis_type?: string | null
           avs_score?: number | null
+          citations?: Json | null
           created_at?: string | null
-          diag_attribution_report?: string | null
-          diag_reasoning_trace?: string | null
-          diagnosed_at?: string | null
-          exposure_count?: number | null
           id?: string
-          job_id?: string | null
-          job_type?: string | null
-          model_provider?: string | null
-          platforms?: string | null
+          job_id?: string
+          model_name?: string
           rank_position?: number | null
           raw_response_text?: string | null
           sentiment_score?: number | null
-          sim_avs_score?: number | null
-          sim_raw_response_text?: string | null
-          sim_reasoning_trace?: string | null
-          simulated_at?: string | null
-          spi_score?: number | null
-          status?: string | null
-          user_id?: string
         }
         Relationships: [
           {
@@ -168,6 +167,47 @@ export type Database = {
             columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "scan_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      simulation_results: {
+        Row: {
+          applied_strategy_id: string
+          created_at: string | null
+          diagnosis_id: string
+          id: string
+          improvement_analysis: string | null
+          optimized_content_snippet: string | null
+          predicted_rank_change: number | null
+          status: string | null
+        }
+        Insert: {
+          applied_strategy_id: string
+          created_at?: string | null
+          diagnosis_id: string
+          id?: string
+          improvement_analysis?: string | null
+          optimized_content_snippet?: string | null
+          predicted_rank_change?: number | null
+          status?: string | null
+        }
+        Update: {
+          applied_strategy_id?: string
+          created_at?: string | null
+          diagnosis_id?: string
+          id?: string
+          improvement_analysis?: string | null
+          optimized_content_snippet?: string | null
+          predicted_rank_change?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "simulation_results_diagnosis_id_fkey"
+            columns: ["diagnosis_id"]
+            isOneToOne: false
+            referencedRelation: "diagnosis_reports"
             referencedColumns: ["id"]
           },
         ]

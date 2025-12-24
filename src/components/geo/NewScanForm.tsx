@@ -24,15 +24,15 @@ const formSchema = z.object({
   competitors: z.string()
     .max(1000, '竞品品牌不能超过1000个字符')
     .optional(),
-  model: z.string().default('deepseek-v3'),
+  model: z.string().default('DeepSeek-V3'),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const models = [
-  { value: 'deepseek-v3', label: 'DeepSeek-V3', icon: '🧠' },
-  { value: 'doubao-pro', label: 'Doubao-Pro', icon: '🤖' },
-  { value: 'qwen-max', label: 'Qwen-Max', icon: '⚡' },
+  { value: 'DeepSeek-V3', label: 'DeepSeek-V3', icon: '🧠' },
+  { value: 'Doubao-Pro', label: 'Doubao-Pro', icon: '🤖' },
+  { value: 'Qwen-Max', label: 'Qwen-Max', icon: '⚡' },
 ];
 
 interface NewScanFormProps {
@@ -50,7 +50,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
       brandName: '',
       searchQuery: '',
       competitors: '',
-      model: 'deepseek-v3',
+      model: 'DeepSeek-V3',
     },
   });
 
@@ -66,12 +66,17 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
 
     setIsSubmitting(true);
     try {
+      // Parse competitors from comma-separated string to array
+      const competitorsArray = data.competitors
+        ? data.competitors.split(',').map(c => c.trim()).filter(c => c.length > 0)
+        : null;
+
       const { data: insertedJob, error } = await supabase.from('scan_jobs').insert({
         user_id: user.id,
         brand_name: data.brandName,
         search_query: data.searchQuery,
-        competitors: data.competitors || null,
-        job_type: data.model,
+        competitors: competitorsArray,
+        selected_models: [data.model],
         status: 'queued',
       }).select().single();
 
