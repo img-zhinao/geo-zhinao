@@ -34,7 +34,12 @@ export function MonitorList() {
             model_name,
             rank_position,
             avs_score,
+            spi_score,
             sentiment_score,
+            is_visible,
+            competitors_mentioned,
+            raw_response_text,
+            citations,
             created_at
           )
         `)

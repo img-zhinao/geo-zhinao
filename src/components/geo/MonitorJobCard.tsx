@@ -4,9 +4,6 @@ import { zhCN } from 'date-fns/locale';
 import { 
   ChevronDown, 
   ChevronUp, 
-  Stethoscope, 
-  Hash, 
-  TrendingUp, 
   Loader2,
   CheckCircle2,
   Clock,
@@ -16,16 +13,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScanResultDetail, ScanResultData } from './ScanResultDetail';
 import type { Json } from '@/integrations/supabase/types';
 
-export interface ScanResultItem {
-  id: string;
-  model_name: string;
-  rank_position: number | null;
-  avs_score: number | null;
-  sentiment_score: number | null;
-  created_at: string | null;
-}
+export type ScanResultItem = ScanResultData;
 
 export interface ScanJobWithResults {
   id: string;
@@ -55,13 +47,8 @@ export function MonitorJobCard({ job, onStartDiagnosis, isDiagnosing }: MonitorJ
 
   const statusInfo = statusConfig[job.status || 'queued'] || statusConfig.queued;
   const StatusIcon = statusInfo.icon;
-
-  const getScoreColor = (score: number | null) => {
-    if (score === null) return 'text-muted-foreground';
-    if (score <= 40) return 'text-destructive';
-    if (score <= 70) return 'text-yellow-500';
-    return 'text-green-500';
-  };
+  
+  const firstModel = job.scan_results.length > 0 ? job.scan_results[0].model_name : undefined;
 
   return (
     <Card className="bg-card/40 backdrop-blur-xl border-border/30">
@@ -108,56 +95,31 @@ export function MonitorJobCard({ job, onStartDiagnosis, isDiagnosing }: MonitorJ
               <div className="text-center py-6 text-muted-foreground text-sm">
                 {job.status === 'processing' ? '正在分析中...' : '暂无分析结果'}
               </div>
+            ) : job.scan_results.length === 1 ? (
+              <ScanResultDetail 
+                result={job.scan_results[0]} 
+                onStartDiagnosis={onStartDiagnosis}
+                isDiagnosing={isDiagnosing}
+              />
             ) : (
-              <div className="space-y-3">
+              <Tabs defaultValue={firstModel} className="w-full">
+                <TabsList className="w-full justify-start bg-muted/30 mb-4">
+                  {job.scan_results.map((result) => (
+                    <TabsTrigger key={result.id} value={result.model_name}>
+                      {result.model_name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
                 {job.scan_results.map((result) => (
-                  <div 
-                    key={result.id}
-                    className="flex items-center justify-between p-4 rounded-lg bg-muted/20 border border-border/20"
-                  >
-                    <div className="flex items-center gap-6">
-                      <div className="text-sm">
-                        <span className="text-muted-foreground">模型:</span>{' '}
-                        <span className="font-medium">{result.model_name}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Hash className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          {result.rank_position === null || result.rank_position === 100
-                            ? '未上榜'
-                            : `第 ${result.rank_position} 名`
-                          }
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                        <span className={`text-sm font-medium ${getScoreColor(result.avs_score)}`}>
-                          {result.avs_score !== null ? `${result.avs_score} 分` : '-'}
-                        </span>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onStartDiagnosis(result.id)}
-                      disabled={isDiagnosing === result.id}
-                      className="gap-2"
-                    >
-                      {isDiagnosing === result.id ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          诊断中...
-                        </>
-                      ) : (
-                        <>
-                          <Stethoscope className="h-4 w-4" />
-                          归因诊断
-                        </>
-                      )}
-                    </Button>
-                  </div>
+                  <TabsContent key={result.id} value={result.model_name}>
+                    <ScanResultDetail 
+                      result={result} 
+                      onStartDiagnosis={onStartDiagnosis}
+                      isDiagnosing={isDiagnosing}
+                    />
+                  </TabsContent>
                 ))}
-              </div>
+              </Tabs>
             )}
           </CardContent>
         </CollapsibleContent>
