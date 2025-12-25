@@ -16,63 +16,36 @@ export type Database = {
     Tables: {
       diagnosis_reports: {
         Row: {
-          citation_authority_audit: string | null
-          citations: string | null
           created_at: string | null
           diagnostic_model: string | null
-          faithfulness_score: number | null
           id: string
-          job_id: string | null
-          missing_geo_pillars: string | null
-          optimization_suggestions: string | null
-          reasoning_trace: string | null
-          root_cause_analysis: string | null
+          report_markdown: string | null
+          root_cause_summary: string | null
           scan_result_id: string
           status: string | null
-          tokens_cached: number | null
-          tokens_input: number | null
-          tokens_output: number | null
-          tokens_reasoning: number | null
+          suggested_strategy_ids: Json | null
           tokens_used: number | null
         }
         Insert: {
-          citation_authority_audit?: string | null
-          citations?: string | null
           created_at?: string | null
           diagnostic_model?: string | null
-          faithfulness_score?: number | null
           id?: string
-          job_id?: string | null
-          missing_geo_pillars?: string | null
-          optimization_suggestions?: string | null
-          reasoning_trace?: string | null
-          root_cause_analysis?: string | null
+          report_markdown?: string | null
+          root_cause_summary?: string | null
           scan_result_id: string
           status?: string | null
-          tokens_cached?: number | null
-          tokens_input?: number | null
-          tokens_output?: number | null
-          tokens_reasoning?: number | null
+          suggested_strategy_ids?: Json | null
           tokens_used?: number | null
         }
         Update: {
-          citation_authority_audit?: string | null
-          citations?: string | null
           created_at?: string | null
           diagnostic_model?: string | null
-          faithfulness_score?: number | null
           id?: string
-          job_id?: string | null
-          missing_geo_pillars?: string | null
-          optimization_suggestions?: string | null
-          reasoning_trace?: string | null
-          root_cause_analysis?: string | null
+          report_markdown?: string | null
+          root_cause_summary?: string | null
           scan_result_id?: string
           status?: string | null
-          tokens_cached?: number | null
-          tokens_input?: number | null
-          tokens_output?: number | null
-          tokens_reasoning?: number | null
+          suggested_strategy_ids?: Json | null
           tokens_used?: number | null
         }
         Relationships: [
