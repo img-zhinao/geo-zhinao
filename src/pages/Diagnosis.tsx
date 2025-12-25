@@ -9,8 +9,7 @@ import {
   Loader2,
   FileText,
   Lightbulb,
-  AlertCircle,
-  AlertTriangle
+  AlertCircle
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,20 +27,6 @@ const strategyLabels: Record<string, { label: string; description: string }> = {
   enhance_expertise: { label: '增强专业性', description: '展示行业专业知识和权威性' },
   boost_freshness: { label: '提升时效性', description: '更新内容以反映最新信息' },
 };
-
-// Parse missing_geo_pillars from text to array
-function parseMissingPillars(pillarsText: string | null): string[] {
-  if (!pillarsText) return [];
-  try {
-    // Try JSON parse first
-    const parsed = JSON.parse(pillarsText);
-    if (Array.isArray(parsed)) return parsed;
-    return [];
-  } catch {
-    // If not JSON, split by comma or newline
-    return pillarsText.split(/[,\n]/).map(s => s.trim()).filter(s => s.length > 0);
-  }
-}
 
 export default function Diagnosis() {
   const { reportId } = useParams<{ reportId: string }>();
@@ -135,11 +120,7 @@ export default function Diagnosis() {
     }
   };
 
-  // Parse missing pillars for display
-  const missingPillars = report ? parseMissingPillars(report.missing_geo_pillars) : [];
-  
-  // Default strategies if optimization_suggestions exist
-  const defaultStrategies = ['add_citations', 'optimize_schema', 'improve_content'];
+  const suggestedStrategies = (report?.suggested_strategy_ids as string[]) || [];
 
   return (
     <DashboardLayout>
@@ -153,11 +134,11 @@ export default function Diagnosis() {
         {/* Back button */}
         <Button 
           variant="ghost" 
-          onClick={() => navigate('/dashboard/diagnosis')}
+          onClick={() => navigate('/dashboard/geo-analysis')}
           className="text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          返回诊断列表
+          返回监控中心
         </Button>
 
         {/* Header */}
@@ -218,139 +199,95 @@ export default function Diagnosis() {
         ) : (
           /* Completed State - Show Report */
           <div className="space-y-6">
-            {/* Root Cause Analysis Summary */}
-            {report.root_cause_analysis && (
+            {/* Root Cause Summary */}
+            {report.root_cause_summary && (
               <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-primary/20">
                       <Lightbulb className="h-5 w-5 text-primary" />
                     </div>
-                    <CardTitle className="text-lg">根因分析</CardTitle>
+                    <CardTitle className="text-lg">核心问题摘要</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="prose prose-invert prose-sm max-w-none">
-                    <ReactMarkdown>{report.root_cause_analysis}</ReactMarkdown>
-                  </div>
+                  <p className="text-lg">{report.root_cause_summary}</p>
                 </CardContent>
               </Card>
             )}
 
-            {/* Missing GEO Pillars */}
-            {missingPillars.length > 0 && (
-              <Card className="bg-card/40 backdrop-blur-xl border-destructive/30">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-destructive/20">
-                      <AlertTriangle className="h-5 w-5 text-destructive" />
-                    </div>
-                    <CardTitle className="text-lg">缺失的 GEO 支柱</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {missingPillars.map((pillar, index) => (
-                      <Badge key={index} variant="destructive" className="text-sm">
-                        {pillar}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Optimization Suggestions */}
-            {report.optimization_suggestions && (
-              <Card className="bg-gradient-to-r from-green-500/10 to-green-500/5 border-green-500/20">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-500/20">
-                      <FileText className="h-5 w-5 text-green-500" />
-                    </div>
-                    <CardTitle className="text-lg">优化建议</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="max-h-[300px]">
-                    <div className="prose prose-invert prose-sm max-w-none">
-                      <ReactMarkdown>{report.optimization_suggestions}</ReactMarkdown>
-                    </div>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Reasoning Trace (if available) */}
-            {report.reasoning_trace && (
-              <Card className="bg-card/40 backdrop-blur-xl border-border/30">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-muted/50">
-                      <FileText className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">推理过程</CardTitle>
-                      <CardDescription>
-                        诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-6">
-                    <div className="prose prose-invert prose-sm max-w-none">
-                      <ReactMarkdown>{report.reasoning_trace}</ReactMarkdown>
-                    </div>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Simulation Strategies */}
+            {/* Full Report */}
             <Card className="bg-card/40 backdrop-blur-xl border-border/30">
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-muted/50">
-                    <FlaskConical className="h-5 w-5 text-muted-foreground" />
+                    <FileText className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg">策略模拟</CardTitle>
-                    <CardDescription>点击策略按钮开始模拟优化效果</CardDescription>
+                    <CardTitle className="text-lg">详细诊断报告</CardTitle>
+                    <CardDescription>
+                      诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
+                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {defaultStrategies.map((strategyId) => {
-                    const strategy = strategyLabels[strategyId] || {
-                      label: strategyId,
-                      description: '优化策略',
-                    };
-
-                    return (
-                      <Button
-                        key={strategyId}
-                        variant="outline"
-                        className="h-auto flex-col items-start p-4 text-left hover:bg-primary/10 hover:border-primary/50"
-                        onClick={() => handleSimulation(strategyId)}
-                        disabled={isSimulating === strategyId}
-                      >
-                        {isSimulating === strategyId ? (
-                          <Loader2 className="h-5 w-5 mb-2 animate-spin" />
-                        ) : (
-                          <FlaskConical className="h-5 w-5 mb-2 text-primary" />
-                        )}
-                        <span className="font-semibold">{strategy.label}</span>
-                        <span className="text-xs text-muted-foreground mt-1">
-                          {strategy.description}
-                        </span>
-                      </Button>
-                    );
-                  })}
-                </div>
+                <ScrollArea className="h-[500px] rounded-lg bg-muted/30 border border-border/30 p-6">
+                  <div className="prose prose-invert prose-sm max-w-none">
+                    <ReactMarkdown>
+                      {report.report_markdown || '暂无报告内容'}
+                    </ReactMarkdown>
+                  </div>
+                </ScrollArea>
               </CardContent>
             </Card>
+
+            {/* Suggested Strategies */}
+            {suggestedStrategies.length > 0 && (
+              <Card className="bg-card/40 backdrop-blur-xl border-border/30">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-muted/50">
+                      <FlaskConical className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg">推荐优化策略</CardTitle>
+                      <CardDescription>点击策略按钮开始模拟优化效果</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {suggestedStrategies.map((strategyId) => {
+                      const strategy = strategyLabels[strategyId] || {
+                        label: strategyId,
+                        description: '优化策略',
+                      };
+
+                      return (
+                        <Button
+                          key={strategyId}
+                          variant="outline"
+                          className="h-auto flex-col items-start p-4 text-left hover:bg-primary/10 hover:border-primary/50"
+                          onClick={() => handleSimulation(strategyId)}
+                          disabled={isSimulating === strategyId}
+                        >
+                          {isSimulating === strategyId ? (
+                            <Loader2 className="h-5 w-5 mb-2 animate-spin" />
+                          ) : (
+                            <FlaskConical className="h-5 w-5 mb-2 text-primary" />
+                          )}
+                          <span className="font-semibold">{strategy.label}</span>
+                          <span className="text-xs text-muted-foreground mt-1">
+                            {strategy.description}
+                          </span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         )}
       </div>

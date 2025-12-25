@@ -10,7 +10,7 @@ import {
   Lightbulb,
   AlertCircle,
   CheckCircle2,
-  AlertTriangle,
+  Clock,
   ChevronRight
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,16 +45,16 @@ interface ScanJob {
   }[];
 }
 
-// Parse missing_geo_pillars from text to array
-function parseMissingPillars(pillarsText: string | null): string[] {
-  if (!pillarsText) return [];
-  try {
-    const parsed = JSON.parse(pillarsText);
-    if (Array.isArray(parsed)) return parsed;
-    return [];
-  } catch {
-    return pillarsText.split(/[,\n]/).map(s => s.trim()).filter(s => s.length > 0);
-  }
+interface DiagnosisReport {
+  id: string;
+  scan_result_id: string;
+  status: string;
+  root_cause_summary: string | null;
+  report_markdown: string | null;
+  suggested_strategy_ids: string[];
+  diagnostic_model: string | null;
+  tokens_used: number | null;
+  created_at: string;
 }
 
 export default function DiagnosisList() {
@@ -109,7 +109,7 @@ export default function DiagnosisList() {
         .maybeSingle();
 
       if (error) throw error;
-      return data;
+      return data as DiagnosisReport | null;
     },
     enabled: !!selectedResultId,
     refetchInterval: (query) => {
@@ -162,27 +162,20 @@ export default function DiagnosisList() {
 
       if (insertError) throw insertError;
 
-      // Trigger N8N webhook via secure edge function proxy
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      const webhookResponse = await fetch(
-        'https://kojovraprdezdkoirjoe.supabase.co/functions/v1/n8n-webhook-proxy',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({
-            webhook_type: 'diagnosis',
-            diagnosis_id: diagnosisData.id,
-            scan_result_id: scanResultId,
-          }),
-        }
-      );
+      // Trigger N8N webhook
+      const webhookResponse = await fetch('https://n8n.zhi-nao.com/webhook/diagnosis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          diagnosis_id: diagnosisData.id,
+          scan_result_id: scanResultId,
+        }),
+      });
 
       if (!webhookResponse.ok) {
-        console.warn('Webhook proxy returned non-ok status:', webhookResponse.status);
+        console.warn('N8N webhook returned non-ok status:', webhookResponse.status);
       }
 
       toast({
@@ -234,9 +227,7 @@ export default function DiagnosisList() {
     }
   };
 
-  // Parse missing pillars for display
-  const missingPillars = report ? parseMissingPillars(report.missing_geo_pillars) : [];
-  const defaultStrategies = ['add_citations', 'optimize_schema', 'improve_content'];
+  const suggestedStrategies = (report?.suggested_strategy_ids as string[]) || [];
 
   return (
     <DashboardLayout>
@@ -402,124 +393,99 @@ export default function DiagnosisList() {
             ) : (
               /* Completed State - Show Report */
               <>
-                {/* Root Cause Analysis */}
-                {report.root_cause_analysis && (
+                {/* Root Cause Summary */}
+                {report.root_cause_summary && (
                   <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
                     <CardHeader>
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded-lg bg-primary/20">
                           <Lightbulb className="h-5 w-5 text-primary" />
                         </div>
-                        <CardTitle className="text-lg">根因分析</CardTitle>
+                        <CardTitle className="text-lg">核心问题摘要</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <ReactMarkdown>{report.root_cause_analysis}</ReactMarkdown>
-                      </div>
+                      <p className="text-lg">{report.root_cause_summary}</p>
                     </CardContent>
                   </Card>
                 )}
 
-                {/* Missing GEO Pillars */}
-                {missingPillars.length > 0 && (
-                  <Card className="bg-card/40 backdrop-blur-xl border-destructive/30">
-                    <CardHeader>
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-destructive/20">
-                          <AlertTriangle className="h-5 w-5 text-destructive" />
-                        </div>
-                        <CardTitle className="text-lg">缺失的 GEO 支柱</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex flex-wrap gap-2">
-                        {missingPillars.map((pillar, index) => (
-                          <Badge key={index} variant="destructive" className="text-sm">
-                            {pillar}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Optimization Suggestions */}
-                {report.optimization_suggestions && (
-                  <Card className="bg-gradient-to-r from-green-500/10 to-green-500/5 border-green-500/20">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-green-500/20">
-                            <FileText className="h-5 w-5 text-green-500" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-lg">优化建议</CardTitle>
-                            <CardDescription>
-                              诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
-                            </CardDescription>
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => navigate(`/dashboard/diagnosis/${report.id}`)}
-                        >
-                          查看完整报告
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-6">
-                        <div className="prose prose-invert prose-sm max-w-none">
-                          <ReactMarkdown>
-                            {report.optimization_suggestions || '暂无优化建议'}
-                          </ReactMarkdown>
-                        </div>
-                      </ScrollArea>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Suggested Strategies */}
+                {/* Full Report */}
                 <Card className="bg-card/40 backdrop-blur-xl border-border/30">
                   <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-muted/50">
-                        <FlaskConical className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <FileText className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">详细诊断报告</CardTitle>
+                          <CardDescription>
+                            诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
+                          </CardDescription>
+                        </div>
                       </div>
-                      <div>
-                        <CardTitle className="text-lg">策略模拟</CardTitle>
-                        <CardDescription>点击策略按钮开始模拟优化效果</CardDescription>
-                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate(`/dashboard/diagnosis/${report.id}`)}
+                      >
+                        查看完整报告
+                      </Button>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                      {defaultStrategies.map((strategyId) => {
-                        const strategy = strategyLabels[strategyId] || {
-                          label: strategyId,
-                          description: '优化策略',
-                        };
-
-                        return (
-                          <Button
-                            key={strategyId}
-                            variant="outline"
-                            className="h-auto flex-col items-start p-4 text-left hover:bg-primary/10 hover:border-primary/50"
-                            onClick={() => handleSimulation(strategyId, report.id)}
-                          >
-                            <FlaskConical className="h-5 w-5 mb-2 text-primary" />
-                            <span className="font-semibold">{strategy.label}</span>
-                            <span className="text-xs text-muted-foreground mt-1">
-                              {strategy.description}
-                            </span>
-                          </Button>
-                        );
-                      })}
-                    </div>
+                    <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-6">
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown>
+                          {report.report_markdown || '暂无报告内容'}
+                        </ReactMarkdown>
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
+
+                {/* Suggested Strategies */}
+                {suggestedStrategies.length > 0 && (
+                  <Card className="bg-card/40 backdrop-blur-xl border-border/30">
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <FlaskConical className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">推荐优化策略</CardTitle>
+                          <CardDescription>点击策略按钮开始模拟优化效果</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        {suggestedStrategies.map((strategyId) => {
+                          const strategy = strategyLabels[strategyId] || {
+                            label: strategyId,
+                            description: '优化策略',
+                          };
+
+                          return (
+                            <Button
+                              key={strategyId}
+                              variant="outline"
+                              className="h-auto flex-col items-start p-4 text-left hover:bg-primary/10 hover:border-primary/50"
+                              onClick={() => handleSimulation(strategyId, report.id)}
+                            >
+                              <FlaskConical className="h-5 w-5 mb-2 text-primary" />
+                              <span className="font-semibold">{strategy.label}</span>
+                              <span className="text-xs text-muted-foreground mt-1">
+                                {strategy.description}
+                              </span>
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </>
             )}
           </div>
