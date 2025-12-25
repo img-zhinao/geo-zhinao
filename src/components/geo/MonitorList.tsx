@@ -1,18 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { History, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from '@/hooks/use-toast';
-import { useState } from 'react';
 import { MonitorJobCard, ScanJobWithResults } from './MonitorJobCard';
 
 export function MonitorList() {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const [isDiagnosing, setIsDiagnosing] = useState<string | null>(null);
 
   const { data: scanJobs, isLoading } = useQuery({
     queryKey: ['scan-jobs-with-results', user?.id],
@@ -53,41 +48,6 @@ export function MonitorList() {
     enabled: !!user,
   });
 
-  const handleStartDiagnosis = async (scanResultId: string) => {
-    setIsDiagnosing(scanResultId);
-    
-    try {
-      // Insert a new diagnosis report with status 'queued'
-      const { data, error } = await supabase
-        .from('diagnosis_reports')
-        .insert({
-          scan_result_id: scanResultId,
-          status: 'queued',
-        })
-        .select('id')
-        .single();
-
-      if (error) throw error;
-
-      toast({
-        title: '诊断任务已创建',
-        description: '正在跳转到诊断页面...',
-      });
-
-      // Navigate to the diagnosis page
-      navigate(`/dashboard/diagnosis/${data.id}`);
-    } catch (error) {
-      console.error('Error creating diagnosis:', error);
-      toast({
-        title: '创建诊断失败',
-        description: '请稍后重试',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsDiagnosing(null);
-    }
-  };
-
   return (
     <Card className="bg-card/40 backdrop-blur-xl border-border/30">
       <CardHeader>
@@ -120,8 +80,6 @@ export function MonitorList() {
             <MonitorJobCard
               key={job.id}
               job={job}
-              onStartDiagnosis={handleStartDiagnosis}
-              isDiagnosing={isDiagnosing}
             />
           ))
         )}

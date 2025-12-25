@@ -120,7 +120,19 @@ export default function Diagnosis() {
     }
   };
 
-  const suggestedStrategies = (report?.suggested_strategy_ids as string[]) || [];
+  // Parse missing pillars as suggested strategies
+  const parseMissingPillars = (pillars: string | null | undefined): string[] => {
+    if (!pillars) return [];
+    try {
+      const parsed = JSON.parse(pillars);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      return pillars.split(',').map(p => p.trim()).filter(Boolean);
+    }
+    return [];
+  };
+  
+  const suggestedStrategies = parseMissingPillars(report?.missing_geo_pillars);
 
   return (
     <DashboardLayout>
@@ -199,24 +211,28 @@ export default function Diagnosis() {
         ) : (
           /* Completed State - Show Report */
           <div className="space-y-6">
-            {/* Root Cause Summary */}
-            {report.root_cause_summary && (
+            {/* Root Cause Analysis */}
+            {report.root_cause_analysis && (
               <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-primary/20">
                       <Lightbulb className="h-5 w-5 text-primary" />
                     </div>
-                    <CardTitle className="text-lg">核心问题摘要</CardTitle>
+                    <CardTitle className="text-lg">根因分析</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-lg">{report.root_cause_summary}</p>
+                  <ScrollArea className="max-h-[300px]">
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <ReactMarkdown>{report.root_cause_analysis}</ReactMarkdown>
+                    </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
             )}
 
-            {/* Full Report */}
+            {/* Optimization Suggestions */}
             <Card className="bg-card/40 backdrop-blur-xl border-border/30">
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -224,7 +240,7 @@ export default function Diagnosis() {
                     <FileText className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg">详细诊断报告</CardTitle>
+                    <CardTitle className="text-lg">优化建议</CardTitle>
                     <CardDescription>
                       诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
                     </CardDescription>
@@ -233,9 +249,9 @@ export default function Diagnosis() {
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-[500px] rounded-lg bg-muted/30 border border-border/30 p-6">
-                  <div className="prose prose-invert prose-sm max-w-none">
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown>
-                      {report.report_markdown || '暂无报告内容'}
+                      {report.optimization_suggestions || '暂无优化建议'}
                     </ReactMarkdown>
                   </div>
                 </ScrollArea>

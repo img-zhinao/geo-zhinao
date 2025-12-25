@@ -49,9 +49,9 @@ interface DiagnosisReport {
   id: string;
   scan_result_id: string;
   status: string;
-  root_cause_summary: string | null;
-  report_markdown: string | null;
-  suggested_strategy_ids: string[];
+  root_cause_analysis: string | null;
+  optimization_suggestions: string | null;
+  missing_geo_pillars: string | null;
   diagnostic_model: string | null;
   tokens_used: number | null;
   created_at: string;
@@ -227,7 +227,19 @@ export default function DiagnosisList() {
     }
   };
 
-  const suggestedStrategies = (report?.suggested_strategy_ids as string[]) || [];
+  // Parse missing pillars as suggested strategies for simulation
+  const parseMissingPillars = (pillars: string | null): string[] => {
+    if (!pillars) return [];
+    try {
+      const parsed = JSON.parse(pillars);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {
+      return pillars.split(',').map(p => p.trim()).filter(Boolean);
+    }
+    return [];
+  };
+  
+  const missingPillars = report ? parseMissingPillars(report.missing_geo_pillars) : [];
 
   return (
     <DashboardLayout>
@@ -393,60 +405,66 @@ export default function DiagnosisList() {
             ) : (
               /* Completed State - Show Report */
               <>
-                {/* Root Cause Summary */}
-                {report.root_cause_summary && (
+                {/* Root Cause Analysis */}
+                {report.root_cause_analysis && (
                   <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
                     <CardHeader>
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded-lg bg-primary/20">
                           <Lightbulb className="h-5 w-5 text-primary" />
                         </div>
-                        <CardTitle className="text-lg">核心问题摘要</CardTitle>
+                        <CardTitle className="text-lg">根因分析</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-lg">{report.root_cause_summary}</p>
+                      <ScrollArea className="max-h-[200px]">
+                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                          <ReactMarkdown>{report.root_cause_analysis}</ReactMarkdown>
+                        </div>
+                      </ScrollArea>
                     </CardContent>
                   </Card>
                 )}
 
-                {/* Full Report */}
-                <Card className="bg-card/40 backdrop-blur-xl border-border/30">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-muted/50">
-                          <FileText className="h-5 w-5 text-muted-foreground" />
+                {/* Optimization Suggestions */}
+                {report.optimization_suggestions && (
+                  <Card className="bg-card/40 backdrop-blur-xl border-border/30">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-muted/50">
+                            <FileText className="h-5 w-5 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg">优化建议</CardTitle>
+                            <CardDescription>
+                              诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
+                            </CardDescription>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-lg">详细诊断报告</CardTitle>
-                          <CardDescription>
-                            诊断模型: {report.diagnostic_model} | Token 消耗: {report.tokens_used}
-                          </CardDescription>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => navigate(`/dashboard/diagnosis/${report.id}`)}
+                        >
+                          查看完整报告
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-6">
+                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                          <ReactMarkdown>
+                            {report.optimization_suggestions}
+                          </ReactMarkdown>
                         </div>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate(`/dashboard/diagnosis/${report.id}`)}
-                      >
-                        查看完整报告
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-6">
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <ReactMarkdown>
-                          {report.report_markdown || '暂无报告内容'}
-                        </ReactMarkdown>
-                      </div>
-                    </ScrollArea>
-                  </CardContent>
-                </Card>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
+                )}
 
-                {/* Suggested Strategies */}
-                {suggestedStrategies.length > 0 && (
+                {/* Missing GEO Pillars as Simulation Strategies */}
+                {missingPillars.length > 0 && (
                   <Card className="bg-card/40 backdrop-blur-xl border-border/30">
                     <CardHeader>
                       <div className="flex items-center gap-3">
@@ -454,25 +472,25 @@ export default function DiagnosisList() {
                           <FlaskConical className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">推荐优化策略</CardTitle>
+                          <CardTitle className="text-lg">缺失 GEO 支柱</CardTitle>
                           <CardDescription>点击策略按钮开始模拟优化效果</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="grid gap-4 sm:grid-cols-2">
-                        {suggestedStrategies.map((strategyId) => {
-                          const strategy = strategyLabels[strategyId] || {
-                            label: strategyId,
+                        {missingPillars.map((pillar) => {
+                          const strategy = strategyLabels[pillar] || {
+                            label: pillar,
                             description: '优化策略',
                           };
 
                           return (
                             <Button
-                              key={strategyId}
+                              key={pillar}
                               variant="outline"
                               className="h-auto flex-col items-start p-4 text-left hover:bg-primary/10 hover:border-primary/50"
-                              onClick={() => handleSimulation(strategyId, report.id)}
+                              onClick={() => handleSimulation(pillar, report.id)}
                             >
                               <FlaskConical className="h-5 w-5 mb-2 text-primary" />
                               <span className="font-semibold">{strategy.label}</span>
