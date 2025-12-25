@@ -31,8 +31,6 @@ export interface ScanJobWithResults {
 
 interface MonitorJobCardProps {
   job: ScanJobWithResults;
-  onStartDiagnosis: (scanResultId: string) => void;
-  isDiagnosing: string | null;
 }
 
 const statusConfig: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline'; icon: React.ComponentType<{ className?: string }> }> = {
@@ -42,7 +40,7 @@ const statusConfig: Record<string, { label: string; variant: 'default' | 'second
   failed: { label: '失败', variant: 'destructive', icon: AlertCircle },
 };
 
-export function MonitorJobCard({ job, onStartDiagnosis, isDiagnosing }: MonitorJobCardProps) {
+export function MonitorJobCard({ job }: MonitorJobCardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const statusInfo = statusConfig[job.status || 'queued'] || statusConfig.queued;
@@ -97,9 +95,8 @@ export function MonitorJobCard({ job, onStartDiagnosis, isDiagnosing }: MonitorJ
               </div>
             ) : job.scan_results.length === 1 ? (
               <ScanResultDetail 
-                result={job.scan_results[0]} 
-                onStartDiagnosis={onStartDiagnosis}
-                isDiagnosing={isDiagnosing}
+                result={{ ...job.scan_results[0], job_id: job.id }} 
+                jobContext={{ brand_name: job.brand_name, search_query: job.search_query }}
               />
             ) : (
               <Tabs defaultValue={firstModel} className="w-full">
@@ -113,9 +110,8 @@ export function MonitorJobCard({ job, onStartDiagnosis, isDiagnosing }: MonitorJ
                 {job.scan_results.map((result) => (
                   <TabsContent key={result.id} value={result.model_name}>
                     <ScanResultDetail 
-                      result={result} 
-                      onStartDiagnosis={onStartDiagnosis}
-                      isDiagnosing={isDiagnosing}
+                      result={{ ...result, job_id: job.id }} 
+                      jobContext={{ brand_name: job.brand_name, search_query: job.search_query }}
                     />
                   </TabsContent>
                 ))}

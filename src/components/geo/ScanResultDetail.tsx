@@ -6,19 +6,18 @@ import {
   Users, 
   FileText, 
   Link as LinkIcon,
-  Stethoscope,
-  Loader2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ReactMarkdown from 'react-markdown';
 import type { Json } from '@/integrations/supabase/types';
+import { DiagnosisSection } from './DiagnosisSection';
 
 export interface ScanResultData {
   id: string;
+  job_id?: string;
   model_name: string;
   rank_position: number | null;
   avs_score: number | null;
@@ -31,10 +30,14 @@ export interface ScanResultData {
   created_at: string | null;
 }
 
+export interface ScanJobContext {
+  brand_name: string;
+  search_query: string;
+}
+
 interface ScanResultDetailProps {
   result: ScanResultData;
-  onStartDiagnosis: (scanResultId: string) => void;
-  isDiagnosing: string | null;
+  jobContext?: ScanJobContext;
 }
 
 // Helper to get AVS color based on score
@@ -105,7 +108,7 @@ function RadialProgress({ score, size = 100 }: { score: number | null; size?: nu
   );
 }
 
-export function ScanResultDetail({ result, onStartDiagnosis, isDiagnosing }: ScanResultDetailProps) {
+export function ScanResultDetail({ result, jobContext }: ScanResultDetailProps) {
   const spiInfo = getSPILabel(result.spi_score);
   
   // Parse competitors from string (comma-separated or JSON)
@@ -294,26 +297,17 @@ export function ScanResultDetail({ result, onStartDiagnosis, isDiagnosing }: Sca
         </Card>
       )}
 
-      {/* Diagnosis Action */}
-      <div className="flex justify-end">
-        <Button
-          onClick={() => onStartDiagnosis(result.id)}
-          disabled={isDiagnosing === result.id}
-          className="gap-2"
-        >
-          {isDiagnosing === result.id ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              诊断中...
-            </>
-          ) : (
-            <>
-              <Stethoscope className="h-4 w-4" />
-              归因诊断
-            </>
-          )}
-        </Button>
-      </div>
+      {/* Diagnosis Section */}
+      {result.job_id && jobContext && (
+        <DiagnosisSection
+          scanResultId={result.id}
+          jobId={result.job_id}
+          brandName={jobContext.brand_name}
+          searchQuery={jobContext.search_query}
+          citations={result.citations}
+          rawResponseText={result.raw_response_text}
+        />
+      )}
     </div>
   );
 }
