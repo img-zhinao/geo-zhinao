@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import { 
   Stethoscope, 
   ArrowLeft, 
-  FlaskConical, 
   Loader2,
   FileText,
   Lightbulb,
-  AlertCircle
+  AlertCircle,
+  AlertTriangle
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,40 +17,92 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { StrategySimulator } from '@/components/geo/StrategySimulator';
 
-// Strategy definitions
-const strategyLabels: Record<string, { label: string; description: string }> = {
-  add_citations: { label: '增加引用', description: '添加权威来源引用以提升可信度' },
-  optimize_schema: { label: '优化结构化数据', description: '使用 Schema.org 标记提升语义理解' },
-  improve_content: { label: '内容优化', description: '优化内容结构和关键词布局' },
-  enhance_expertise: { label: '增强专业性', description: '展示行业专业知识和权威性' },
-  boost_freshness: { label: '提升时效性', description: '更新内容以反映最新信息' },
+// Extended report type with related data
+interface DiagnosisReportWithRelations {
+  id: string;
+  scan_result_id: string;
+  job_id: string | null;
+  root_cause_analysis: string | null;
+  missing_geo_pillars: string | null;
+  optimization_suggestions: string | null;
+  status: string | null;
+  diagnostic_model: string | null;
+  tokens_used: number | null;
+  created_at: string | null;
+  scanResult?: {
+    id: string;
+    raw_response_text: string | null;
+    scan_jobs?: {
+      id: string;
+      brand_name: string;
+      search_query: string;
+    };
+  };
+  scanJob?: {
+    id: string;
+    brand_name: string;
+    search_query: string;
+  };
+}
+
+// Parse missing pillars
+const parseMissingPillars = (pillars: string | null | undefined): string[] => {
+  if (!pillars) return [];
+  try {
+    const parsed = JSON.parse(pillars);
+    if (Array.isArray(parsed)) return parsed;
+  } catch {
+    return pillars.split(',').map(p => p.trim()).filter(Boolean);
+  }
+  return [];
 };
 
 export default function Diagnosis() {
   const { reportId } = useParams<{ reportId: string }>();
   const navigate = useNavigate();
-  const [isSimulating, setIsSimulating] = useState<string | null>(null);
 
-  // Fetch diagnosis report
-  const { data: report, isLoading, refetch } = useQuery({
-    queryKey: ['diagnosis-report', reportId],
-    queryFn: async () => {
+  // Fetch diagnosis report with related scan data
+  const { data: report, isLoading, refetch } = useQuery<DiagnosisReportWithRelations | null>({
+    queryKey: ['diagnosis-report-full', reportId],
+    queryFn: async (): Promise<DiagnosisReportWithRelations | null> => {
       if (!reportId) return null;
       
-      const { data, error } = await supabase
+      // Get diagnosis report
+      const { data: diagnosisData, error: diagnosisError } = await supabase
         .from('diagnosis_reports')
         .select('*')
         .eq('id', reportId)
         .single();
 
-      if (error) throw error;
-      return data;
+      if (diagnosisError) throw diagnosisError;
+
+      // Get related scan result and job info
+      if (diagnosisData.scan_result_id) {
+        const { data: scanData } = await supabase
+          .from('scan_results')
+          .select('*, scan_jobs(*)')
+          .eq('id', diagnosisData.scan_result_id)
+          .single();
+
+        const result: DiagnosisReportWithRelations = {
+          ...diagnosisData,
+          scanResult: scanData ? {
+            id: scanData.id,
+            raw_response_text: scanData.raw_response_text,
+            scan_jobs: scanData.scan_jobs as { id: string; brand_name: string; search_query: string } | undefined,
+          } : undefined,
+          scanJob: scanData?.scan_jobs as { id: string; brand_name: string; search_query: string } | undefined,
+        };
+
+        return result;
+      }
+
+      return diagnosisData as DiagnosisReportWithRelations;
     },
     enabled: !!reportId,
     refetchInterval: (query) => {
-      // Poll every 3 seconds if still processing
       const data = query.state.data;
       if (data?.status === 'queued' || data?.status === 'processing') {
         return 3000;
@@ -84,55 +136,7 @@ export default function Diagnosis() {
     };
   }, [reportId, refetch]);
 
-  const handleSimulation = async (strategyId: string) => {
-    if (!reportId) return;
-    
-    setIsSimulating(strategyId);
-
-    try {
-      const { data, error } = await supabase
-        .from('simulation_results')
-        .insert({
-          diagnosis_id: reportId,
-          applied_strategy_id: strategyId,
-          status: 'queued',
-        })
-        .select('id')
-        .single();
-
-      if (error) throw error;
-
-      toast({
-        title: '模拟任务已创建',
-        description: '正在跳转到模拟结果页面...',
-      });
-
-      navigate(`/dashboard/simulation/${data.id}`);
-    } catch (error) {
-      console.error('Error creating simulation:', error);
-      toast({
-        title: '创建模拟失败',
-        description: '请稍后重试',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSimulating(null);
-    }
-  };
-
-  // Parse missing pillars as suggested strategies
-  const parseMissingPillars = (pillars: string | null | undefined): string[] => {
-    if (!pillars) return [];
-    try {
-      const parsed = JSON.parse(pillars);
-      if (Array.isArray(parsed)) return parsed;
-    } catch {
-      return pillars.split(',').map(p => p.trim()).filter(Boolean);
-    }
-    return [];
-  };
-  
-  const suggestedStrategies = parseMissingPillars(report?.missing_geo_pillars);
+  const missingPillars = parseMissingPillars(report?.missing_geo_pillars);
 
   return (
     <DashboardLayout>
@@ -211,6 +215,29 @@ export default function Diagnosis() {
         ) : (
           /* Completed State - Show Report */
           <div className="space-y-6">
+            {/* Missing GEO Pillars Alert */}
+            {missingPillars.length > 0 && (
+              <Card className="bg-destructive/5 border-destructive/20">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-destructive/20">
+                      <AlertTriangle className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-lg text-destructive">缺失 GEO 支柱</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {missingPillars.map((pillar, idx) => (
+                      <Badge key={idx} variant="destructive" className="text-sm">
+                        {pillar}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Root Cause Analysis */}
             {report.root_cause_analysis && (
               <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
@@ -248,7 +275,7 @@ export default function Diagnosis() {
                 </div>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-[500px] rounded-lg bg-muted/30 border border-border/30 p-6">
+                <ScrollArea className="h-[400px] rounded-lg bg-muted/30 border border-border/30 p-6">
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown>
                       {report.optimization_suggestions || '暂无优化建议'}
@@ -258,51 +285,18 @@ export default function Diagnosis() {
               </CardContent>
             </Card>
 
-            {/* Suggested Strategies */}
-            {suggestedStrategies.length > 0 && (
-              <Card className="bg-card/40 backdrop-blur-xl border-border/30">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-muted/50">
-                      <FlaskConical className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">推荐优化策略</CardTitle>
-                      <CardDescription>点击策略按钮开始模拟优化效果</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {suggestedStrategies.map((strategyId) => {
-                      const strategy = strategyLabels[strategyId] || {
-                        label: strategyId,
-                        description: '优化策略',
-                      };
-
-                      return (
-                        <Button
-                          key={strategyId}
-                          variant="outline"
-                          className="h-auto flex-col items-start p-4 text-left hover:bg-primary/10 hover:border-primary/50"
-                          onClick={() => handleSimulation(strategyId)}
-                          disabled={isSimulating === strategyId}
-                        >
-                          {isSimulating === strategyId ? (
-                            <Loader2 className="h-5 w-5 mb-2 animate-spin" />
-                          ) : (
-                            <FlaskConical className="h-5 w-5 mb-2 text-primary" />
-                          )}
-                          <span className="font-semibold">{strategy.label}</span>
-                          <span className="text-xs text-muted-foreground mt-1">
-                            {strategy.description}
-                          </span>
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Strategy Simulator - The New Component */}
+            {report.scan_result_id && (
+              <StrategySimulator
+                diagnosisId={report.id}
+                jobId={report.scanJob?.id || ''}
+                scanResultId={report.scan_result_id}
+                brandName={report.scanJob?.brand_name || ''}
+                searchQuery={report.scanJob?.search_query || ''}
+                rawResponseText={report.scanResult?.raw_response_text || null}
+                missingGeoPillars={report.missing_geo_pillars}
+                rootCauseAnalysis={report.root_cause_analysis}
+              />
             )}
           </div>
         )}
