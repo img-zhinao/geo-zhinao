@@ -19,10 +19,12 @@ export interface SimulationResult {
   diagnosis_id: string;
   applied_strategy_id: string;
   optimized_content_snippet: string | null;
-  predicted_rank_change: number | null;
+  predicted_rank_change: string | null;
   improvement_analysis: string | null;
   status: string | null;
   created_at: string | null;
+  strategies_used: string | null;
+  model_outputs: unknown;
 }
 
 /**
