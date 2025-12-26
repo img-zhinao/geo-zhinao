@@ -214,9 +214,11 @@ export type Database = {
           diagnosis_id: string
           id: string
           improvement_analysis: string | null
+          model_outputs: Json | null
           optimized_content_snippet: string | null
-          predicted_rank_change: number | null
+          predicted_rank_change: string | null
           status: string | null
+          strategies_used: string | null
         }
         Insert: {
           applied_strategy_id: string
@@ -224,9 +226,11 @@ export type Database = {
           diagnosis_id: string
           id?: string
           improvement_analysis?: string | null
+          model_outputs?: Json | null
           optimized_content_snippet?: string | null
-          predicted_rank_change?: number | null
+          predicted_rank_change?: string | null
           status?: string | null
+          strategies_used?: string | null
         }
         Update: {
           applied_strategy_id?: string
@@ -234,9 +238,11 @@ export type Database = {
           diagnosis_id?: string
           id?: string
           improvement_analysis?: string | null
+          model_outputs?: Json | null
           optimized_content_snippet?: string | null
-          predicted_rank_change?: number | null
+          predicted_rank_change?: string | null
           status?: string | null
+          strategies_used?: string | null
         }
         Relationships: [
           {
