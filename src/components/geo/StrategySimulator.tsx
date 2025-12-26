@@ -183,6 +183,8 @@ export function StrategySimulator({
         improvement_analysis: null,
         status: 'queued',
         created_at: new Date().toISOString(),
+        strategies_used: null,
+        model_outputs: null,
       };
       setSimulation(newSimulation);
     } else {
@@ -331,9 +333,7 @@ export function StrategySimulator({
                 <p className="text-sm text-muted-foreground">预测 AI 可见性提升</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-bold bg-gradient-to-r from-green-500 to-emerald-400 bg-clip-text text-transparent">
-                    {simulation?.predicted_rank_change != null
-                      ? `+${Math.abs(simulation.predicted_rank_change)}%`
-                      : '+--'}
+                    {simulation?.predicted_rank_change || '+--'}
                   </span>
                   <TrendingUp className="h-6 w-6 text-green-500" />
                 </div>
