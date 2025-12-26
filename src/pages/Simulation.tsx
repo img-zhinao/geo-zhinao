@@ -171,10 +171,7 @@ export default function Simulation() {
               <CardContent>
                 <div className="flex items-center gap-4">
                   <span className="text-4xl font-bold text-green-500">
-                    {simulation.predicted_rank_change && simulation.predicted_rank_change > 0 
-                      ? `+${simulation.predicted_rank_change}` 
-                      : simulation.predicted_rank_change || '0'
-                    }
+                    {simulation.predicted_rank_change || '0'}
                   </span>
                   <span className="text-xl text-muted-foreground">个位置</span>
                 </div>
