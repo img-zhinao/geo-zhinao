@@ -33,6 +33,13 @@ export async function triggerSimulation(
   strategyId: string = 'geo_optimization'
 ): Promise<string | null> {
   try {
+    // Step 0: Check for existing pending/queued simulation
+    const existing = await checkExistingSimulation(payload.diagnosis_id);
+    if (existing && (existing.status === 'queued' || existing.status === 'processing')) {
+      toast.info('模拟任务进行中', { description: '请等待当前任务完成' });
+      return existing.id;
+    }
+
     // Step 1: Insert new simulation record with pending status
     const { data: simulation, error: insertError } = await supabase
       .from('simulation_results')
