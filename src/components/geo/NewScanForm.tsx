@@ -83,9 +83,14 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
 
       if (error) throw error;
 
-      // 调用 N8N Webhook 触发监控分析（仅传 job_id）
+      // 调用 N8N Webhook 触发监控分析（传入完整参数）
       const webhookResult = await callN8nWebhook('monitoring', {
         job_id: insertedJob.id,
+        user_id: user.id,
+        brand_name: data.brandName,
+        search_query: data.searchQuery,
+        competitors: JSON.stringify(competitorsArray),
+        selected_models: JSON.stringify([data.model]),
       });
 
       if (!webhookResult.success) {
