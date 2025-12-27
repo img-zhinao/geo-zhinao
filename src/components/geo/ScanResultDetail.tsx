@@ -298,14 +298,10 @@ export function ScanResultDetail({ result, jobContext }: ScanResultDetailProps) 
       )}
 
       {/* Diagnosis Section */}
-      {result.job_id && jobContext && (
+      {result.job_id && (
         <DiagnosisSection
           scanResultId={result.id}
           jobId={result.job_id}
-          brandName={jobContext.brand_name}
-          searchQuery={jobContext.search_query}
-          citations={result.citations}
-          rawResponseText={result.raw_response_text}
         />
       )}
     </div>

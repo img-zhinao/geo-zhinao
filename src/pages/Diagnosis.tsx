@@ -289,13 +289,8 @@ export default function Diagnosis() {
             {report.scan_result_id && (
               <StrategySimulator
                 diagnosisId={report.id}
-                jobId={report.scanJob?.id || ''}
-                scanResultId={report.scan_result_id}
-                brandName={report.scanJob?.brand_name || ''}
-                searchQuery={report.scanJob?.search_query || ''}
-                rawResponseText={report.scanResult?.raw_response_text || null}
                 missingGeoPillars={report.missing_geo_pillars}
-                rootCauseAnalysis={report.root_cause_analysis}
+                rawResponseText={report.scanResult?.raw_response_text || null}
               />
             )}
           </div>

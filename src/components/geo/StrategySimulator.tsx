@@ -29,13 +29,8 @@ import {
 
 interface StrategySimulatorProps {
   diagnosisId: string;
-  jobId: string;
-  scanResultId: string;
-  brandName: string;
-  searchQuery: string;
-  rawResponseText: string | null;
   missingGeoPillars: string | null;
-  rootCauseAnalysis: string | null;
+  rawResponseText: string | null;
 }
 
 type SimulatorState = 'idle' | 'processing' | 'result' | 'error';
@@ -85,13 +80,8 @@ function OptimizedContentRenderer({ content }: { content: string }) {
 
 export function StrategySimulator({
   diagnosisId,
-  jobId,
-  scanResultId,
-  brandName,
-  searchQuery,
-  rawResponseText,
   missingGeoPillars,
-  rootCauseAnalysis,
+  rawResponseText,
 }: StrategySimulatorProps) {
   const navigate = useNavigate();
   const [state, setState] = useState<SimulatorState>('idle');
@@ -162,13 +152,6 @@ export function StrategySimulator({
 
     const payload: SimulationTriggerPayload = {
       diagnosis_id: diagnosisId,
-      job_id: jobId,
-      scan_result_id: scanResultId,
-      brand_name: brandName,
-      search_query: searchQuery,
-      raw_response_text: rawResponseText,
-      missing_geo_pillars: missingGeoPillars,
-      root_cause_analysis: rootCauseAnalysis,
     };
 
     const simulationId = await triggerSimulation(payload);
@@ -190,7 +173,7 @@ export function StrategySimulator({
     } else {
       setState('error');
     }
-  }, [diagnosisId, jobId, scanResultId, brandName, searchQuery, rawResponseText, missingGeoPillars, rootCauseAnalysis]);
+  }, [diagnosisId]);
 
   const handleRetry = () => {
     setSimulation(null);

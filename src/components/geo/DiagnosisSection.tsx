@@ -21,15 +21,10 @@ import {
   DiagnosisReport,
   DiagnosisTriggerPayload
 } from '@/lib/diagnosis';
-import type { Json } from '@/integrations/supabase/types';
 
 interface DiagnosisSectionProps {
   scanResultId: string;
   jobId: string;
-  brandName: string;
-  searchQuery: string;
-  citations: Json | null;
-  rawResponseText: string | null;
 }
 
 // GEO keywords for highlighting
@@ -67,10 +62,6 @@ function HighlightedMarkdown({ content }: { content: string }) {
 export function DiagnosisSection({
   scanResultId,
   jobId,
-  brandName,
-  searchQuery,
-  citations,
-  rawResponseText,
 }: DiagnosisSectionProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -110,10 +101,6 @@ export function DiagnosisSection({
     const payload: DiagnosisTriggerPayload = {
       job_id: jobId,
       scan_result_id: scanResultId,
-      brand_name: brandName,
-      search_query: searchQuery,
-      citations: citations,
-      raw_response_text: rawResponseText,
     };
 
     const diagnosisId = await triggerDiagnosis(payload);

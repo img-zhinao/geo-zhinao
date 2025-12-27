@@ -1,15 +1,13 @@
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { callN8nWebhook } from './webhook';
 
-const N8N_DIAGNOSIS_WEBHOOK = 'https://n8n.zhi-nao.com/webhook/diagnosis';
-
+/**
+ * Simplified payload - only IDs, N8N fetches full data from Supabase
+ */
 export interface DiagnosisTriggerPayload {
   job_id: string;
   scan_result_id: string;
-  brand_name: string;
-  search_query: string;
-  citations: unknown;
-  raw_response_text: string | null;
 }
 
 export interface DiagnosisReport {
@@ -45,6 +43,7 @@ export async function checkExistingDiagnosis(scanResultId: string): Promise<Diag
 
 /**
  * Trigger a diagnosis workflow via N8N webhook
+ * Only sends IDs - N8N fetches full data from Supabase
  */
 export async function triggerDiagnosis(payload: DiagnosisTriggerPayload): Promise<string | null> {
   try {
@@ -63,33 +62,15 @@ export async function triggerDiagnosis(payload: DiagnosisTriggerPayload): Promis
       throw new Error(`Failed to create diagnosis record: ${insertError.message}`);
     }
 
-    // Send webhook request to N8N
-    const webhookPayload = {
+    // Send webhook request to N8N with only IDs
+    const result = await callN8nWebhook('diagnosis', {
       diagnosis_id: diagnosisRecord.id,
-      job_id: payload.job_id,
       scan_result_id: payload.scan_result_id,
-      brand_name: payload.brand_name,
-      search_query: payload.search_query,
-      citations: payload.citations,
-      raw_response_text: payload.raw_response_text,
-    };
+    });
 
-    console.log('Sending diagnosis webhook to N8N:', webhookPayload);
-
-    try {
-      const response = await fetch(N8N_DIAGNOSIS_WEBHOOK, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'no-cors', // Handle CORS issues - N8N may not return proper CORS headers
-        body: JSON.stringify(webhookPayload),
-      });
-
-      console.log('N8N webhook response received');
-    } catch (fetchError) {
-      // Even if fetch fails due to CORS, the request might have been received by N8N
-      console.warn('N8N webhook fetch error (may still succeed):', fetchError);
+    if (!result.success) {
+      console.warn('N8N webhook call failed:', result.error);
+      // Don't block user flow, webhook failure is logged
     }
 
     toast.success('诊断任务已提交', {
