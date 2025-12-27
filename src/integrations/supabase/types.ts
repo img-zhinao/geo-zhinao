@@ -16,12 +16,13 @@ export type Database = {
     Tables: {
       diagnosis_reports: {
         Row: {
-          citation_authority_audit: string | null
+          citation_authority_audit: Json | null
           citations: string | null
           created_at: string | null
           diagnostic_model: string | null
           faithfulness_score: number | null
           id: string
+          industry: string | null
           job_id: string | null
           missing_geo_pillars: string | null
           optimization_suggestions: string | null
@@ -36,12 +37,13 @@ export type Database = {
           tokens_used: number | null
         }
         Insert: {
-          citation_authority_audit?: string | null
+          citation_authority_audit?: Json | null
           citations?: string | null
           created_at?: string | null
           diagnostic_model?: string | null
           faithfulness_score?: number | null
           id?: string
+          industry?: string | null
           job_id?: string | null
           missing_geo_pillars?: string | null
           optimization_suggestions?: string | null
@@ -56,12 +58,13 @@ export type Database = {
           tokens_used?: number | null
         }
         Update: {
-          citation_authority_audit?: string | null
+          citation_authority_audit?: Json | null
           citations?: string | null
           created_at?: string | null
           diagnostic_model?: string | null
           faithfulness_score?: number | null
           id?: string
+          industry?: string | null
           job_id?: string | null
           missing_geo_pillars?: string | null
           optimization_suggestions?: string | null
@@ -209,40 +212,58 @@ export type Database = {
       }
       simulation_results: {
         Row: {
+          algorithm: string | null
+          analysis_reasoning_full: string | null
           applied_strategy_id: string
           created_at: string | null
           diagnosis_id: string
+          geo_metrics: Json | null
           id: string
           improvement_analysis: string | null
+          industry: string | null
+          job_id: string | null
           model_outputs: Json | null
           optimized_content_snippet: string | null
           predicted_rank_change: string | null
+          si_scores: Json | null
           status: string | null
-          strategies_used: string | null
+          strategies_used: Json | null
         }
         Insert: {
+          algorithm?: string | null
+          analysis_reasoning_full?: string | null
           applied_strategy_id: string
           created_at?: string | null
           diagnosis_id: string
+          geo_metrics?: Json | null
           id?: string
           improvement_analysis?: string | null
+          industry?: string | null
+          job_id?: string | null
           model_outputs?: Json | null
           optimized_content_snippet?: string | null
           predicted_rank_change?: string | null
+          si_scores?: Json | null
           status?: string | null
-          strategies_used?: string | null
+          strategies_used?: Json | null
         }
         Update: {
+          algorithm?: string | null
+          analysis_reasoning_full?: string | null
           applied_strategy_id?: string
           created_at?: string | null
           diagnosis_id?: string
+          geo_metrics?: Json | null
           id?: string
           improvement_analysis?: string | null
+          industry?: string | null
+          job_id?: string | null
           model_outputs?: Json | null
           optimized_content_snippet?: string | null
           predicted_rank_change?: string | null
+          si_scores?: Json | null
           status?: string | null
-          strategies_used?: string | null
+          strategies_used?: Json | null
         }
         Relationships: [
           {

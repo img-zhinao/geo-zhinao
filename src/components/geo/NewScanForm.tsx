@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
+import { callN8nWebhook } from '@/lib/webhook';
 
 const formSchema = z.object({
   brandName: z.string()
@@ -82,28 +83,13 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
 
       if (error) throw error;
 
-      // 调用 N8N Webhook 触发监控分析
-      try {
-        const webhookResponse = await fetch('https://n8n.zhi-nao.com/webhook/monitoring', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            job_id: insertedJob.id,
-            user_id: user.id,
-            brand_name: data.brandName,
-            search_query: data.searchQuery,
-            competitors: competitorsArray,
-            selected_models: [data.model],
-          }),
-        });
+      // 调用 N8N Webhook 触发监控分析（仅传 job_id）
+      const webhookResult = await callN8nWebhook('monitoring', {
+        job_id: insertedJob.id,
+      });
 
-        if (!webhookResponse.ok) {
-          console.warn('N8N webhook 调用失败:', webhookResponse.status);
-        }
-      } catch (webhookError) {
-        console.warn('N8N webhook 调用异常:', webhookError);
+      if (!webhookResult.success) {
+        console.warn('N8N webhook 调用失败:', webhookResult.error);
         // 不阻塞用户流程，webhook 失败时仅记录日志
       }
 
