@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useProfile } from '@/hooks/useProfile';
 import { Brain, TrendingUp, Search, Zap, ArrowUpRight } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AVSTrendChart } from '@/components/dashboard/AVSTrendChart';
+import { SPIGauge } from '@/components/dashboard/SPIGauge';
+import { useNavigate } from 'react-router-dom';
 
 const creditUsageData = [
   { date: '周一', credits: 5 },
@@ -23,6 +26,7 @@ const statsCards = [
 
 export default function Dashboard() {
   const { data: profile } = useProfile();
+  const navigate = useNavigate();
 
   const getGreeting = () => {
     const name = profile?.full_name?.split(' ')[0] || '用户';
@@ -55,12 +59,22 @@ export default function Dashboard() {
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                  <ArrowUpRight className="h-3 w-3 text-green-500" />
+                  <ArrowUpRight className="h-3 w-3 text-emerald-500" />
                   {stat.change}
                 </p>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* AVS Trend Chart & SPI Gauge */}
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <AVSTrendChart />
+          </div>
+          <div>
+            <SPIGauge />
+          </div>
         </div>
 
         {/* Charts Section */}
@@ -118,7 +132,10 @@ export default function Dashboard() {
               <CardDescription>开始常用任务</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <div className="flex items-center gap-4 p-4 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors cursor-pointer">
+              <div 
+                onClick={() => navigate('/dashboard/geo-analysis')}
+                className="flex items-center gap-4 p-4 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors cursor-pointer"
+              >
                 <div className="p-3 rounded-lg bg-primary/10">
                   <Search className="h-5 w-5 text-primary" />
                 </div>
@@ -127,7 +144,10 @@ export default function Dashboard() {
                   <p className="text-sm text-muted-foreground">分析您的品牌在 AI 平台的可见度</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4 p-4 rounded-lg bg-secondary/5 border border-secondary/20 hover:bg-secondary/10 transition-colors cursor-pointer">
+              <div 
+                onClick={() => navigate('/dashboard/keywords')}
+                className="flex items-center gap-4 p-4 rounded-lg bg-secondary/5 border border-secondary/20 hover:bg-secondary/10 transition-colors cursor-pointer"
+              >
                 <div className="p-3 rounded-lg bg-secondary/10">
                   <Brain className="h-5 w-5 text-secondary" />
                 </div>
@@ -136,7 +156,10 @@ export default function Dashboard() {
                   <p className="text-sm text-muted-foreground">找到高影响力的搜索词</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4 p-4 rounded-lg bg-accent/50 border border-accent-foreground/20 hover:bg-accent transition-colors cursor-pointer">
+              <div 
+                onClick={() => navigate('/dashboard/diagnosis-list')}
+                className="flex items-center gap-4 p-4 rounded-lg bg-accent/50 border border-accent-foreground/20 hover:bg-accent transition-colors cursor-pointer"
+              >
                 <div className="p-3 rounded-lg bg-accent">
                   <TrendingUp className="h-5 w-5 text-accent-foreground" />
                 </div>
