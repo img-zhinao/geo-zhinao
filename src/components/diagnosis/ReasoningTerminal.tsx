@@ -108,27 +108,57 @@ export function ReasoningTerminal({ reasoningTrace, isStreaming = false }: Reaso
           }
         }
 
-        // 关键词高亮
-        const highlightKeywords = (str: string) => {
+        // 关键词高亮 - 使用 React 元素替代 dangerouslySetInnerHTML 防止 XSS
+        const highlightKeywords = (str: string): React.ReactNode => {
           const keywords = ['因此', '所以', '结论', '分析', '发现', '建议', '问题', '原因', '解决'];
-          let result = str;
-          keywords.forEach((keyword) => {
-            result = result.replace(
-              new RegExp(keyword, 'g'),
-              `<span class="text-yellow-400 font-semibold">${keyword}</span>`
-            );
+          const parts: React.ReactNode[] = [];
+          let lastIndex = 0;
+          
+          // 查找所有关键词位置
+          const matches: Array<{index: number, keyword: string, endIndex: number}> = [];
+          keywords.forEach(keyword => {
+            let searchIndex = 0;
+            let index = str.indexOf(keyword, searchIndex);
+            while (index !== -1) {
+              matches.push({index, keyword, endIndex: index + keyword.length});
+              searchIndex = index + 1;
+              index = str.indexOf(keyword, searchIndex);
+            }
           });
-          return result;
+          
+          // 按位置排序并移除重叠
+          matches.sort((a, b) => a.index - b.index);
+          const filteredMatches = matches.filter((match, i) => {
+            if (i === 0) return true;
+            return match.index >= matches[i - 1].endIndex;
+          });
+          
+          // 构建 React 元素
+          filteredMatches.forEach(({index, keyword, endIndex}, i) => {
+            if (index > lastIndex) {
+              parts.push(str.substring(lastIndex, index));
+            }
+            parts.push(
+              <span key={`${index}-${i}`} className="text-yellow-400 font-semibold">
+                {keyword}
+              </span>
+            );
+            lastIndex = endIndex;
+          });
+          
+          if (lastIndex < str.length) {
+            parts.push(str.substring(lastIndex));
+          }
+          
+          return parts.length > 0 ? parts : str;
         };
 
         // 普通行
         if (line.trim()) {
           return (
-            <div 
-              key={idx} 
-              className="text-green-400/80 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: highlightKeywords(line) }}
-            />
+            <div key={idx} className="text-green-400/80 leading-relaxed">
+              {highlightKeywords(line)}
+            </div>
           );
         }
 
