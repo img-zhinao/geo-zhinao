@@ -21,6 +21,7 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { callN8nWebhook } from '@/lib/webhook';
 
 // Strategy definitions
 const strategyLabels: Record<string, { label: string; description: string }> = {
@@ -162,20 +163,14 @@ export default function DiagnosisList() {
 
       if (insertError) throw insertError;
 
-      // Trigger N8N webhook
-      const webhookResponse = await fetch('https://n8n.zhi-nao.com/webhook/diagnosis', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          diagnosis_id: diagnosisData.id,
-          scan_result_id: scanResultId,
-        }),
+      // Trigger N8N webhook through secure proxy
+      const result = await callN8nWebhook('diagnosis', {
+        diagnosis_id: diagnosisData.id,
+        scan_result_id: scanResultId,
       });
 
-      if (!webhookResponse.ok) {
-        console.warn('N8N webhook returned non-ok status:', webhookResponse.status);
+      if (!result.success) {
+        console.warn('N8N webhook call failed:', result.error);
       }
 
       toast({
