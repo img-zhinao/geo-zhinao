@@ -14,16 +14,46 @@ export interface WebhookResponse {
 }
 
 /**
+ * Escape special characters in string for safe JSON transmission
+ */
+export function escapeForJson(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t')
+    .replace(/[\x00-\x1f]/g, (c) => '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4));
+}
+
+/**
+ * Sanitize payload values to prevent JSON parsing issues
+ */
+function sanitizePayload(payload: Record<string, string>): Record<string, string> {
+  const sanitized: Record<string, string> = {};
+  for (const [key, value] of Object.entries(payload)) {
+    // Only escape string values that might contain special characters
+    if (typeof value === 'string' && !key.endsWith('_id')) {
+      sanitized[key] = value.trim();
+    } else {
+      sanitized[key] = value;
+    }
+  }
+  return sanitized;
+}
+
+/**
  * Call N8N webhook with authentication header
- * Only sends IDs, N8N fetches full data from Supabase
+ * Includes special character escaping for safe JSON transmission
  */
 export async function callN8nWebhook(
   endpoint: WebhookEndpoint,
   payload: Record<string, string>
 ): Promise<WebhookResponse> {
   const url = `${N8N_WEBHOOK_BASE}/${endpoint}`;
+  const sanitizedPayload = sanitizePayload(payload);
 
-  console.log(`[Webhook] Calling ${endpoint}:`, payload);
+  console.log(`[Webhook] Calling ${endpoint}:`, sanitizedPayload);
 
   try {
     const response = await fetch(url, {
@@ -32,7 +62,7 @@ export async function callN8nWebhook(
         'Content-Type': 'application/json',
         [WEBHOOK_AUTH_HEADER]: WEBHOOK_AUTH_VALUE,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(sanitizedPayload),
     });
 
     if (!response.ok) {
