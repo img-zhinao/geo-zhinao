@@ -5,17 +5,17 @@ import {
   FlaskConical, 
   ArrowLeft, 
   Loader2,
-  TrendingUp,
   FileText,
-  AlertCircle,
-  Sparkles
+  AlertCircle
 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
+import { PAWCComparisonView } from '@/components/simulation/PAWCComparisonView';
+import { SIRadarChart } from '@/components/simulation/SIRadarChart';
+import { PredictionCard } from '@/components/simulation/PredictionCard';
 
 const strategyLabels: Record<string, string> = {
   add_citations: '增加引用',
@@ -34,14 +34,27 @@ export default function Simulation() {
     queryFn: async () => {
       if (!simulationId) return null;
 
+      // Fetch simulation with related diagnosis data
       const { data, error } = await supabase
         .from('simulation_results')
-        .select('*')
+        .select('*, diagnosis_reports(scan_result_id)')
         .eq('id', simulationId)
         .single();
 
       if (error) throw error;
-      return data;
+
+      // If we have diagnosis, get the original scan result
+      let originalContent: string | null = null;
+      if (data?.diagnosis_reports?.scan_result_id) {
+        const { data: scanResult } = await supabase
+          .from('scan_results')
+          .select('raw_response_text')
+          .eq('id', data.diagnosis_reports.scan_result_id)
+          .single();
+        originalContent = scanResult?.raw_response_text || null;
+      }
+
+      return { ...data, originalContent };
     },
     enabled: !!simulationId,
     refetchInterval: (query) => {
@@ -158,67 +171,38 @@ export default function Simulation() {
         ) : (
           /* Completed State */
           <div className="space-y-6">
-            {/* Predicted Rank Change */}
-            <Card className="bg-gradient-to-r from-green-500/10 to-primary/5 border-green-500/20">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-500/20">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
-                  </div>
-                  <CardTitle className="text-lg">预测排名变化</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-4">
-                  <span className="text-4xl font-bold text-green-500">
-                    {simulation.predicted_rank_change || '0'}
-                  </span>
-                  <span className="text-xl text-muted-foreground">个位置</span>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Prediction Card */}
+            <PredictionCard 
+              predictedRankChange={simulation.predicted_rank_change}
+              algorithm={simulation.algorithm}
+            />
 
-            {/* Optimized Content Snippet */}
-            {simulation.optimized_content_snippet && (
-              <Card className="bg-card/40 backdrop-blur-xl border-border/30">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-muted/50">
-                      <Sparkles className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">优化后的内容示例</CardTitle>
-                      <CardDescription>应用策略后的内容片段</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[200px] rounded-lg bg-muted/30 border border-border/30 p-4">
-                    <p className="text-sm whitespace-pre-wrap">{simulation.optimized_content_snippet}</p>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            )}
+            {/* SI Radar Chart */}
+            <SIRadarChart geoMetrics={simulation.geo_metrics} />
+
+            {/* PAWC Comparison View */}
+            <PAWCComparisonView 
+              originalContent={simulation.originalContent}
+              optimizedContent={simulation.optimized_content_snippet}
+            />
 
             {/* Improvement Analysis */}
             {simulation.improvement_analysis && (
               <Card className="bg-card/40 backdrop-blur-xl border-border/30">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 rounded-lg bg-muted/50">
                       <FileText className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg">优化分析</CardTitle>
-                      <CardDescription>为什么这个策略有效</CardDescription>
+                      <h3 className="text-lg font-semibold">优化分析</h3>
+                      <p className="text-sm text-muted-foreground">为什么这个策略有效</p>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[300px] rounded-lg bg-muted/30 border border-border/30 p-6">
-                    <p className="text-sm whitespace-pre-wrap">{simulation.improvement_analysis}</p>
-                  </ScrollArea>
-                </CardContent>
+                  <div className="rounded-lg bg-muted/30 border border-border/30 p-6">
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{simulation.improvement_analysis}</p>
+                  </div>
+                </div>
               </Card>
             )}
 
