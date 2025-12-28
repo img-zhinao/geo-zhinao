@@ -14,9 +14,17 @@ interface SIScoresDB {
   diversity?: number;
 }
 
+// geo_metrics 嵌套结构
+interface GeoMetricsDB {
+  si_scores?: SIScoresDB;
+  algorithm_version?: string;
+  pawc?: unknown;
+  drivers?: string[];
+}
+
 interface SIRadarChartProps {
   scores?: SIScoresDB | null;
-  geoMetrics?: unknown;
+  geoMetrics?: GeoMetricsDB | null;
 }
 
 // 7维 SI 评分标签 - key 匹配数据库 snake_case 格式
@@ -31,8 +39,11 @@ const SI_DIMENSIONS = [
 ];
 
 export function SIRadarChart({ scores, geoMetrics }: SIRadarChartProps) {
-  // Support both scores prop and geoMetrics prop
-  const resolvedScores: SIScoresDB | null = scores ?? (geoMetrics as SIScoresDB | null);
+  // 按优先级解析 si_scores: scores prop > geoMetrics.si_scores > geoMetrics 本身(兼容旧格式)
+  const resolvedScores: SIScoresDB | null = 
+    scores ?? 
+    geoMetrics?.si_scores ?? 
+    (geoMetrics as unknown as SIScoresDB | null);
   
   // 转换数据格式 - 将 1-5 分制转换为百分制
   const chartData = SI_DIMENSIONS.map((dim) => {

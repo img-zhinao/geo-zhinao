@@ -178,7 +178,10 @@ export default function Simulation() {
             />
 
             {/* SI Radar Chart */}
-            <SIRadarChart geoMetrics={simulation.geo_metrics} />
+            <SIRadarChart 
+              scores={simulation.si_scores as Record<string, number> | null} 
+              geoMetrics={simulation.geo_metrics as Record<string, unknown> | null} 
+            />
 
             {/* PAWC Comparison View */}
             <PAWCComparisonView 
