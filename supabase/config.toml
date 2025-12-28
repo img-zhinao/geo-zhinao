@@ -1,1 +1,4 @@
 project_id = "kojovraprdezdkoirjoe"
+
+[functions.webhook-proxy]
+verify_jwt = true
