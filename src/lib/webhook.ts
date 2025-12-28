@@ -1,10 +1,8 @@
 /**
- * Unified N8N Webhook utility with Header Auth
+ * Unified N8N Webhook utility - Secure proxy through Edge Function
  */
 
-const N8N_WEBHOOK_BASE = 'https://n8n.zhi-nao.com/webhook';
-const WEBHOOK_AUTH_HEADER = 'zhinao-geo-scan';
-const WEBHOOK_AUTH_VALUE = 'lxt123456';
+import { supabase } from "@/integrations/supabase/client";
 
 export type WebhookEndpoint = 'monitoring' | 'diagnosis' | 'simulation';
 
@@ -43,32 +41,33 @@ function sanitizePayload(payload: Record<string, string>): Record<string, string
 }
 
 /**
- * Call N8N webhook with authentication header
- * Includes special character escaping for safe JSON transmission
+ * Call N8N webhook through secure Edge Function proxy
+ * The authentication secret is stored server-side in Supabase secrets
  */
 export async function callN8nWebhook(
   endpoint: WebhookEndpoint,
   payload: Record<string, string>
 ): Promise<WebhookResponse> {
-  const url = `${N8N_WEBHOOK_BASE}/${endpoint}`;
   const sanitizedPayload = sanitizePayload(payload);
 
-  console.log(`[Webhook] Calling ${endpoint}:`, sanitizedPayload);
+  console.log(`[Webhook] Calling ${endpoint} via secure proxy:`, sanitizedPayload);
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        [WEBHOOK_AUTH_HEADER]: WEBHOOK_AUTH_VALUE,
+    const { data, error } = await supabase.functions.invoke('webhook-proxy', {
+      body: {
+        endpoint,
+        payload: sanitizedPayload,
       },
-      body: JSON.stringify(sanitizedPayload),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => 'Unknown error');
-      console.error(`[Webhook] ${endpoint} failed:`, response.status, errorText);
-      return { success: false, error: `HTTP ${response.status}: ${errorText}` };
+    if (error) {
+      console.error(`[Webhook] ${endpoint} proxy error:`, error.message);
+      return { success: false, error: error.message };
+    }
+
+    if (!data?.success) {
+      console.error(`[Webhook] ${endpoint} failed:`, data?.error);
+      return { success: false, error: data?.error || 'Unknown error' };
     }
 
     console.log(`[Webhook] ${endpoint} success`);
