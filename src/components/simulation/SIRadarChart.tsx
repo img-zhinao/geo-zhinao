@@ -3,48 +3,57 @@ import { Badge } from '@/components/ui/badge';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { Hexagon, TrendingUp } from 'lucide-react';
 
-interface SIScores {
-  relevance?: number;        // 相关性
-  influence?: number;        // 影响力
-  uniqueness?: number;       // 独特性
-  subjectivePosition?: number; // 主观位置
-  subjectiveQuantity?: number; // 主观数量
-  followUpProbability?: number; // 追问概率
-  diversity?: number;        // 多样性
+// 数据库字段名格式 (snake_case)
+interface SIScoresDB {
+  relevance?: number;
+  influence?: number;
+  uniqueness?: number;
+  subjective_position?: number;
+  subjective_count?: number;
+  follow_up_probability?: number;
+  diversity?: number;
 }
 
 interface SIRadarChartProps {
-  scores?: SIScores | null;
+  scores?: SIScoresDB | null;
   geoMetrics?: unknown;
 }
 
-// 7维 SI 评分标签
+// 7维 SI 评分标签 - key 匹配数据库 snake_case 格式
 const SI_DIMENSIONS = [
   { key: 'relevance', label: '相关性', fullMark: 100 },
   { key: 'influence', label: '影响力', fullMark: 100 },
   { key: 'uniqueness', label: '独特性', fullMark: 100 },
-  { key: 'subjectivePosition', label: '主观位置', fullMark: 100 },
-  { key: 'subjectiveQuantity', label: '主观数量', fullMark: 100 },
-  { key: 'followUpProbability', label: '追问概率', fullMark: 100 },
+  { key: 'subjective_position', label: '主观位置', fullMark: 100 },
+  { key: 'subjective_count', label: '主观数量', fullMark: 100 },
+  { key: 'follow_up_probability', label: '追问概率', fullMark: 100 },
   { key: 'diversity', label: '多样性', fullMark: 100 },
 ];
 
 export function SIRadarChart({ scores, geoMetrics }: SIRadarChartProps) {
   // Support both scores prop and geoMetrics prop
-  const resolvedScores: SIScores | null = scores ?? (geoMetrics as SIScores | null);
-  // 转换数据格式
-  const chartData = SI_DIMENSIONS.map((dim) => ({
-    dimension: dim.label,
-    value: resolvedScores?.[dim.key as keyof SIScores] ?? 0,
-    fullMark: dim.fullMark,
-  }));
+  const resolvedScores: SIScoresDB | null = scores ?? (geoMetrics as SIScoresDB | null);
+  
+  // 转换数据格式 - 将 1-5 分制转换为百分制
+  const chartData = SI_DIMENSIONS.map((dim) => {
+    const rawValue = resolvedScores?.[dim.key as keyof SIScoresDB] ?? 0;
+    // 数据库存的是 1-5 分，转换为 0-100 分
+    const value = typeof rawValue === 'number' ? rawValue * 20 : 0;
+    return {
+      dimension: dim.label,
+      value,
+      fullMark: dim.fullMark,
+    };
+  });
 
-  // 计算平均分
-  const averageScore = resolvedScores
-    ? Math.round(
-        Object.values(resolvedScores).reduce((sum, val) => sum + (val || 0), 0) /
-          Object.values(resolvedScores).filter((v) => v !== undefined).length
-      )
+  // 计算平均分 (基于百分制)
+  const values = SI_DIMENSIONS.map(dim => {
+    const rawValue = resolvedScores?.[dim.key as keyof SIScoresDB];
+    return typeof rawValue === 'number' ? rawValue * 20 : null;
+  }).filter((v): v is number => v !== null);
+  
+  const averageScore = values.length > 0
+    ? Math.round(values.reduce((sum, val) => sum + val, 0) / values.length)
     : 0;
 
   // 计算提升等级
@@ -136,7 +145,8 @@ export function SIRadarChart({ scores, geoMetrics }: SIRadarChartProps) {
             {/* 维度详情 */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 pt-4 border-t border-border/50">
               {SI_DIMENSIONS.map((dim) => {
-                const value = resolvedScores?.[dim.key as keyof SIScores] ?? 0;
+                const rawValue = resolvedScores?.[dim.key as keyof SIScoresDB] ?? 0;
+                const value = typeof rawValue === 'number' ? rawValue * 20 : 0;
                 const dimLevel = getScoreLevel(value);
                 return (
                   <div 
