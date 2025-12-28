@@ -18,6 +18,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { StrategySimulator } from '@/components/geo/StrategySimulator';
+import { ReasoningTerminal } from '@/components/diagnosis/ReasoningTerminal';
+import { IndustryPathology } from '@/components/diagnosis/IndustryPathology';
 
 // Extended report type with related data
 interface DiagnosisReportWithRelations {
@@ -27,6 +29,8 @@ interface DiagnosisReportWithRelations {
   root_cause_analysis: string | null;
   missing_geo_pillars: string | null;
   optimization_suggestions: string | null;
+  reasoning_trace: string | null;
+  industry: string | null;
   status: string | null;
   diagnostic_model: string | null;
   tokens_used: number | null;
@@ -236,6 +240,19 @@ export default function Diagnosis() {
                   </div>
                 </CardContent>
               </Card>
+            )}
+
+            {/* Industry Pathology */}
+            {report.industry && (
+              <IndustryPathology 
+                industry={report.industry} 
+                missingPillars={missingPillars} 
+              />
+            )}
+
+            {/* R1 Reasoning Terminal */}
+            {report.reasoning_trace && (
+              <ReasoningTerminal reasoningTrace={report.reasoning_trace} />
             )}
 
             {/* Root Cause Analysis */}

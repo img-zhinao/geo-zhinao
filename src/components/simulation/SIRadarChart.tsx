@@ -14,7 +14,8 @@ interface SIScores {
 }
 
 interface SIRadarChartProps {
-  scores: SIScores | null;
+  scores?: SIScores | null;
+  geoMetrics?: unknown;
 }
 
 // 7维 SI 评分标签
@@ -28,19 +29,21 @@ const SI_DIMENSIONS = [
   { key: 'diversity', label: '多样性', fullMark: 100 },
 ];
 
-export function SIRadarChart({ scores }: SIRadarChartProps) {
+export function SIRadarChart({ scores, geoMetrics }: SIRadarChartProps) {
+  // Support both scores prop and geoMetrics prop
+  const resolvedScores: SIScores | null = scores ?? (geoMetrics as SIScores | null);
   // 转换数据格式
   const chartData = SI_DIMENSIONS.map((dim) => ({
     dimension: dim.label,
-    value: scores?.[dim.key as keyof SIScores] ?? 0,
+    value: resolvedScores?.[dim.key as keyof SIScores] ?? 0,
     fullMark: dim.fullMark,
   }));
 
   // 计算平均分
-  const averageScore = scores
+  const averageScore = resolvedScores
     ? Math.round(
-        Object.values(scores).reduce((sum, val) => sum + (val || 0), 0) /
-          Object.values(scores).filter((v) => v !== undefined).length
+        Object.values(resolvedScores).reduce((sum, val) => sum + (val || 0), 0) /
+          Object.values(resolvedScores).filter((v) => v !== undefined).length
       )
     : 0;
 
@@ -79,7 +82,7 @@ export function SIRadarChart({ scores }: SIRadarChartProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {!scores ? (
+        {!resolvedScores ? (
           <div className="h-[350px] flex flex-col items-center justify-center text-muted-foreground">
             <Hexagon className="h-16 w-16 opacity-30 mb-4" />
             <p>暂无 SI 评分数据</p>
@@ -133,7 +136,7 @@ export function SIRadarChart({ scores }: SIRadarChartProps) {
             {/* 维度详情 */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 pt-4 border-t border-border/50">
               {SI_DIMENSIONS.map((dim) => {
-                const value = scores?.[dim.key as keyof SIScores] ?? 0;
+                const value = resolvedScores?.[dim.key as keyof SIScores] ?? 0;
                 const dimLevel = getScoreLevel(value);
                 return (
                   <div 
