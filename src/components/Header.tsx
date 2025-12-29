@@ -21,7 +21,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <a href="#" className="flex items-center gap-3">
-            <img src={logo} alt="智脑时代" className="h-10 w-auto" />
+            <img src={logo} alt="智脑时代" className="h-10 w-auto animate-rotate-y-slow" style={{ transformStyle: 'preserve-3d' }} />
             <span className="text-xl font-bold text-foreground">智脑时代</span>
           </a>
 
