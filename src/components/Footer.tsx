@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.png";
+import wechatQrcode from "@/assets/wechat-qrcode.png";
 
 const Footer = () => {
   return (
@@ -6,8 +6,8 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="智脑时代" className="h-8 w-auto brightness-0 invert" />
-            <span className="text-lg font-bold">智脑时代</span>
+            <img src={wechatQrcode} alt="微信二维码" className="h-16 w-auto rounded" />
+            <span className="text-lg font-bold">扫码添加微信</span>
           </div>
           
           <nav className="flex flex-wrap justify-center gap-6">
