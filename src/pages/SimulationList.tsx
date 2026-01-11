@@ -18,6 +18,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useRealtimeNotification } from '@/hooks/useRealtimeNotification';
 import { formatDistanceToNow } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
@@ -52,6 +53,21 @@ interface SimulationWithDiagnosis {
 export default function SimulationList() {
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Global realtime notification for simulation_results status updates
+  useRealtimeNotification({
+    table: 'simulation_results',
+    userId: user?.id,
+    queryKeysToInvalidate: [['all-simulations']],
+    successMessage: {
+      title: '推演结束',
+      description: '请查看结果。',
+    },
+    failedMessage: {
+      title: '模拟失败',
+      description: '请重试。',
+    },
+  });
 
   // Fetch all simulations for the user
   const { data: simulations, isLoading } = useQuery({

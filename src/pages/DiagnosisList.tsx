@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import { 
   Stethoscope, 
@@ -21,6 +21,7 @@ import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { useRealtimeNotification } from '@/hooks/useRealtimeNotification';
 import { callN8nWebhook } from '@/lib/webhook';
 
 // Strategy definitions
@@ -60,9 +61,25 @@ interface DiagnosisReport {
 
 export default function DiagnosisList() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const [selectedResultId, setSelectedResultId] = useState<string | null>(null);
   const [isDiagnosing, setIsDiagnosing] = useState<string | null>(null);
+
+  // Global realtime notification for diagnosis_reports status updates
+  useRealtimeNotification({
+    table: 'diagnosis_reports',
+    userId: user?.id,
+    queryKeysToInvalidate: [['diagnosis-for-result'], ['scan-jobs-for-diagnosis']],
+    successMessage: {
+      title: '深度诊断报告已生成',
+      description: 'DeepSeek-R1 分析完成。',
+    },
+    failedMessage: {
+      title: '诊断失败',
+      description: '请重试。',
+    },
+  });
 
   // Fetch completed scan jobs with results
   const { data: jobs, isLoading: jobsLoading } = useQuery({

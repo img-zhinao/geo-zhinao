@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import {
   Sparkles,
@@ -18,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from '@/hooks/use-toast';
 import { 
   triggerSimulation, 
   checkExistingSimulation, 
@@ -84,6 +86,7 @@ export function StrategySimulator({
   rawResponseText,
 }: StrategySimulatorProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [state, setState] = useState<SimulatorState>('idle');
   const [simulation, setSimulation] = useState<SimulationResult | null>(null);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
@@ -116,8 +119,20 @@ export function StrategySimulator({
       if (result.status === 'completed') {
         setState('result');
         setTimeoutReached(false);
+        // Invalidate queries and show success toast
+        queryClient.invalidateQueries({ queryKey: ['all-simulations'] });
+        toast({
+          title: '推演结束',
+          description: '请查看结果。',
+          className: 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
+        });
       } else if (result.status === 'failed') {
         setState('error');
+        toast({
+          title: '模拟失败',
+          description: '请重试。',
+          variant: 'destructive',
+        });
       }
     });
 
