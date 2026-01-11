@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import { useRealtimeNotification } from '@/hooks/useRealtimeNotification';
 import { NewScanForm } from './NewScanForm';
 import { ProcessingState } from './ProcessingState';
 import { MonitorList } from './MonitorList';
@@ -16,8 +18,31 @@ interface ActiveJob {
 
 export function GeoAnalysisContainer() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [viewState, setViewState] = useState<ViewState>('form');
   const [activeJob, setActiveJob] = useState<ActiveJob | null>(null);
+
+  // Global realtime notification for scan_jobs status updates
+  useRealtimeNotification({
+    table: 'scan_jobs',
+    userId: user?.id,
+    queryKeysToInvalidate: [['scan-jobs-with-results']],
+    successMessage: {
+      title: '扫描完成！',
+      description: '数据已更新。',
+    },
+    failedMessage: {
+      title: '扫描失败',
+      description: '请重试。',
+    },
+    onStatusChange: (newStatus, recordId) => {
+      // If the active job completed, return to form view
+      if (activeJob?.id === recordId && (newStatus === 'completed' || newStatus === 'failed')) {
+        setViewState('form');
+        setActiveJob(null);
+      }
+    },
+  });
 
   // Handle new job submission
   const handleJobSubmitted = (jobId: string, brandName: string, searchQuery: string) => {
