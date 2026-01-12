@@ -13,12 +13,14 @@ import {
   AlertCircle,
   Zap,
   CheckCircle2,
+  Coins,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from '@/hooks/use-toast';
 import { 
   triggerSimulation, 
@@ -28,6 +30,7 @@ import {
   SimulationResult,
   SimulationTriggerPayload
 } from '@/lib/simulation';
+import { useCreditsBalance, CREDIT_COSTS, hasEnoughCredits } from '@/hooks/useCredits';
 
 interface StrategySimulatorProps {
   diagnosisId: string;
@@ -91,6 +94,10 @@ export function StrategySimulator({
   const [simulation, setSimulation] = useState<SimulationResult | null>(null);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
   const [timeoutReached, setTimeoutReached] = useState(false);
+  const { balance, isLoading: balanceLoading, refetch: refetchBalance } = useCreditsBalance();
+  
+  const simulationCost = CREDIT_COSTS.simulation;
+  const canAfford = hasEnoughCredits(balance, 'simulation');
 
   // Check for existing simulation on mount
   useEffect(() => {
@@ -162,6 +169,15 @@ export function StrategySimulator({
   }, [state, simulation?.id]);
 
   const handleTriggerSimulation = useCallback(async () => {
+    if (!canAfford) {
+      toast({
+        title: '积分不足',
+        description: `策略模拟需要 ${simulationCost} 积分，当前余额 ${balance} 积分`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setState('processing');
     setTimeoutReached(false);
 
@@ -169,11 +185,11 @@ export function StrategySimulator({
       diagnosis_id: diagnosisId,
     };
 
-    const simulationId = await triggerSimulation(payload);
+    const result = await triggerSimulation(payload);
     
-    if (simulationId) {
+    if (result) {
       const newSimulation: SimulationResult = {
-        id: simulationId,
+        id: result,
         diagnosis_id: diagnosisId,
         applied_strategy_id: 'geo_optimization',
         optimized_content_snippet: null,
@@ -185,10 +201,12 @@ export function StrategySimulator({
         model_outputs: null,
       };
       setSimulation(newSimulation);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      refetchBalance();
     } else {
       setState('error');
     }
-  }, [diagnosisId]);
+  }, [diagnosisId, canAfford, balance, simulationCost, queryClient, refetchBalance]);
 
   const handleRetry = () => {
     setSimulation(null);
@@ -222,10 +240,33 @@ export function StrategySimulator({
                 让 AI 自动注入缺失的数据与权威语录，预览排名提升效果
               </p>
             </div>
+            
+            {/* Credit Info */}
+            {!balanceLoading && (
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Coins className="h-4 w-4 text-primary" />
+                <span>消耗 <span className="font-medium text-foreground">{simulationCost} 积分</span></span>
+                <span className="text-border">|</span>
+                <span>余额 <span className={`font-medium ${canAfford ? 'text-foreground' : 'text-destructive'}`}>{balance} 积分</span></span>
+              </div>
+            )}
+
+            {/* Insufficient Credits Alert */}
+            {!balanceLoading && !canAfford && (
+              <Alert variant="destructive" className="max-w-md mx-auto">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>积分不足</AlertTitle>
+                <AlertDescription>
+                  策略模拟需要 {simulationCost} 积分，当前余额 {balance} 积分。
+                </AlertDescription>
+              </Alert>
+            )}
+
             <Button
               onClick={handleTriggerSimulation}
               size="lg"
               className="gap-2 px-8"
+              disabled={!canAfford || balanceLoading}
             >
               <Zap className="h-4 w-4" />
               开始模拟优化

@@ -11,18 +11,21 @@ import {
   AlertCircle,
   CheckCircle2,
   Clock,
-  ChevronRight
+  ChevronRight,
+  Coins
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useRealtimeNotification } from '@/hooks/useRealtimeNotification';
 import { callN8nWebhook } from '@/lib/webhook';
+import { useCreditsBalance, CREDIT_COSTS, hasEnoughCredits } from '@/hooks/useCredits';
 
 // Strategy definitions
 const strategyLabels: Record<string, { label: string; description: string }> = {
@@ -65,6 +68,10 @@ export default function DiagnosisList() {
   const { user } = useAuth();
   const [selectedResultId, setSelectedResultId] = useState<string | null>(null);
   const [isDiagnosing, setIsDiagnosing] = useState<string | null>(null);
+  const { balance, isLoading: balanceLoading, refetch: refetchBalance } = useCreditsBalance();
+  
+  const diagnosisCost = CREDIT_COSTS.diagnosis;
+  const canAffordDiagnosis = hasEnoughCredits(balance, 'diagnosis');
 
   // Global realtime notification for diagnosis_reports status updates
   useRealtimeNotification({
@@ -165,6 +172,15 @@ export default function DiagnosisList() {
   }, [selectedResultId, refetchReport]);
 
   const handleStartDiagnosis = async (scanResultId: string) => {
+    if (!canAffordDiagnosis) {
+      toast({
+        title: '积分不足',
+        description: `归因诊断需要 ${diagnosisCost} 积分，当前余额 ${balance} 积分`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsDiagnosing(scanResultId);
 
     try {
@@ -187,15 +203,28 @@ export default function DiagnosisList() {
       });
 
       if (!result.success) {
+        // Check if it's an insufficient credits error
+        if (result.error === 'insufficient_credits') {
+          toast({
+            title: '积分不足',
+            description: `需要 ${diagnosisCost} 积分，当前余额不足`,
+            variant: 'destructive',
+          });
+          // Delete the created diagnosis record
+          await supabase.from('diagnosis_reports').delete().eq('id', diagnosisData.id);
+          return;
+        }
         console.warn('N8N webhook call failed:', result.error);
       }
 
       toast({
         title: '诊断任务已创建',
-        description: 'DeepSeek-R1 正在进行病理分析...',
+        description: `DeepSeek-R1 正在进行病理分析... (消耗 ${diagnosisCost} 积分)`,
       });
 
       setSelectedResultId(scanResultId);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      refetchBalance();
       refetchReport();
     } catch (error) {
       console.error('Error starting diagnosis:', error);
@@ -361,13 +390,35 @@ export default function DiagnosisList() {
                     <Stethoscope className="h-10 w-10 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold mb-2">尚未诊断</h3>
-                  <p className="text-muted-foreground mb-6 max-w-md">
+                  <p className="text-muted-foreground mb-4 max-w-md">
                     该扫描结果尚未进行归因诊断。点击下方按钮开始使用 DeepSeek-R1 进行深度分析。
                   </p>
+                  
+                  {/* Credit Info */}
+                  {!balanceLoading && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                      <Coins className="h-4 w-4 text-primary" />
+                      <span>消耗 <span className="font-medium text-foreground">{diagnosisCost} 积分</span></span>
+                      <span className="text-border">|</span>
+                      <span>余额 <span className={`font-medium ${canAffordDiagnosis ? 'text-foreground' : 'text-destructive'}`}>{balance} 积分</span></span>
+                    </div>
+                  )}
+
+                  {/* Insufficient Credits Alert */}
+                  {!balanceLoading && !canAffordDiagnosis && (
+                    <Alert variant="destructive" className="mb-4 max-w-md">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertTitle>积分不足</AlertTitle>
+                      <AlertDescription>
+                        归因诊断需要 {diagnosisCost} 积分，当前余额 {balance} 积分。
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
                   <Button
                     size="lg"
                     onClick={() => handleStartDiagnosis(selectedResultId)}
-                    disabled={isDiagnosing === selectedResultId}
+                    disabled={isDiagnosing === selectedResultId || !canAffordDiagnosis || balanceLoading}
                   >
                     {isDiagnosing === selectedResultId ? (
                       <>
