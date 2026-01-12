@@ -8,8 +8,7 @@ import {
   Loader2,
   FileText,
   Lightbulb,
-  AlertCircle,
-  AlertTriangle
+  AlertCircle
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -219,28 +218,6 @@ export default function Diagnosis() {
         ) : (
           /* Completed State - Show Report */
           <div className="space-y-6">
-            {/* Missing GEO Pillars Alert */}
-            {missingPillars.length > 0 && (
-              <Card className="bg-destructive/5 border-destructive/20">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-destructive/20">
-                      <AlertTriangle className="h-5 w-5 text-destructive" />
-                    </div>
-                    <CardTitle className="text-lg text-destructive">缺失 GEO 支柱</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {missingPillars.map((pillar, idx) => (
-                      <Badge key={idx} variant="destructive" className="text-sm">
-                        {pillar}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
 
             {/* Industry Pathology */}
             {report.industry && (
