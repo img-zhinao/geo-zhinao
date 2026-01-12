@@ -1,32 +1,52 @@
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useProfile } from '@/hooks/useProfile';
-import { Brain, TrendingUp, Search, Zap, ArrowUpRight } from 'lucide-react';
+import { useMonthlyUsage, useCreditsBalance } from '@/hooks/useCredits';
+import { Brain, TrendingUp, Search, Zap, ArrowUpRight, Coins } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AVSTrendChart } from '@/components/dashboard/AVSTrendChart';
 import { SPIGauge } from '@/components/dashboard/SPIGauge';
 import { useNavigate } from 'react-router-dom';
-
-const creditUsageData = [
-  { date: '周一', credits: 5 },
-  { date: '周二', credits: 8 },
-  { date: '周三', credits: 3 },
-  { date: '周四', credits: 12 },
-  { date: '周五', credits: 7 },
-  { date: '周六', credits: 4 },
-  { date: '周日', credits: 6 },
-];
-
-const statsCards = [
-  { title: '总扫描次数', value: '24', change: '+12%', icon: Search },
-  { title: '品牌提及', value: '156', change: '+8%', icon: TrendingUp },
-  { title: 'AI 平台', value: '6', change: '已激活', icon: Brain },
-  { title: '已用积分', value: '45', change: '本月', icon: Zap },
-];
+import { useCreditTransactions } from '@/hooks/useCredits';
 
 export default function Dashboard() {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
+  const { data: monthlyUsage = 0 } = useMonthlyUsage();
+  const { balance } = useCreditsBalance();
+  const { data: transactions = [] } = useCreditTransactions(7);
+
+  // Generate credit usage data from recent transactions
+  const creditUsageData = (() => {
+    const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const today = new Date();
+    const data = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      const dayName = days[date.getDay()];
+      
+      // Sum up credits used on this day
+      const dayCredits = transactions
+        .filter(t => {
+          const tDate = new Date(t.created_at);
+          return tDate.toDateString() === date.toDateString() && t.amount < 0;
+        })
+        .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+      
+      data.push({ date: dayName, credits: dayCredits });
+    }
+    
+    return data;
+  })();
+
+  const statsCards = [
+    { title: '总扫描次数', value: '24', change: '+12%', icon: Search },
+    { title: '品牌提及', value: '156', change: '+8%', icon: TrendingUp },
+    { title: '剩余积分', value: String(balance), change: '可用', icon: Coins },
+    { title: '本月已用', value: String(monthlyUsage), change: '积分', icon: Zap },
+  ];
 
   const getGreeting = () => {
     const name = profile?.full_name?.split(' ')[0] || '用户';

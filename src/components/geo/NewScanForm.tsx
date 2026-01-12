@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Rocket, Sparkles, Zap } from 'lucide-react';
+import { Rocket, Sparkles, Zap, Coins, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { callN8nWebhook } from '@/lib/webhook';
+import { useCreditsBalance, CREDIT_COSTS, calculateCreditCost, hasEnoughCredits } from '@/hooks/useCredits';
 
 const formSchema = z.object({
   brandName: z.string()
@@ -44,6 +46,11 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { balance, isLoading: balanceLoading, refetch: refetchBalance } = useCreditsBalance();
+
+  // Calculate cost for 1 model
+  const creditCost = calculateCreditCost('monitoring', 1);
+  const canAfford = hasEnoughCredits(balance, 'monitoring', 1);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -60,6 +67,15 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
       toast({
         title: '请先登录',
         description: '您需要登录才能创建分析任务',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!canAfford) {
+      toast({
+        title: '积分不足',
+        description: `本次操作需要 ${creditCost} 积分，当前余额 ${balance} 积分`,
         variant: 'destructive',
       });
       return;
@@ -94,17 +110,29 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
       });
 
       if (!webhookResult.success) {
+        // Check if it's an insufficient credits error
+        if (webhookResult.error === 'insufficient_credits') {
+          toast({
+            title: '积分不足',
+            description: `需要 ${creditCost} 积分，当前余额不足`,
+            variant: 'destructive',
+          });
+          // Delete the created job since it can't proceed
+          await supabase.from('scan_jobs').delete().eq('id', insertedJob.id);
+          return;
+        }
         console.warn('N8N webhook 调用失败:', webhookResult.error);
-        // 不阻塞用户流程，webhook 失败时仅记录日志
       }
 
       toast({
         title: '分析任务已创建',
-        description: '正在启动 AI 分析引擎...',
+        description: `正在启动 AI 分析引擎... (消耗 ${creditCost} 积分)`,
       });
 
       form.reset();
       queryClient.invalidateQueries({ queryKey: ['scan-jobs'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      refetchBalance();
 
       // Notify parent about the new job
       if (onJobSubmitted && insertedJob) {
@@ -233,10 +261,32 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
               )}
             />
 
+            {/* Credit Cost Info */}
+            {!balanceLoading && (
+              <div className="flex items-center justify-between text-sm text-muted-foreground bg-muted/30 rounded-lg px-4 py-2">
+                <div className="flex items-center gap-2">
+                  <Coins className="h-4 w-4 text-primary" />
+                  <span>本次扫描消耗：<span className="font-medium text-foreground">{creditCost} 积分</span></span>
+                </div>
+                <span>余额：<span className={`font-medium ${canAfford ? 'text-foreground' : 'text-destructive'}`}>{balance} 积分</span></span>
+              </div>
+            )}
+
+            {/* Insufficient Credits Alert */}
+            {!balanceLoading && !canAfford && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>积分不足</AlertTitle>
+                <AlertDescription>
+                  本次操作需要 {creditCost} 积分，当前余额 {balance} 积分。请先升级套餐或购买积分。
+                </AlertDescription>
+              </Alert>
+            )}
+
             <Button 
               type="submit" 
               size="lg"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !canAfford || balanceLoading}
               className="w-full relative overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] transition-all duration-300"
             >
               <span className="relative z-10 flex items-center gap-2">
