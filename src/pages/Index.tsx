@@ -1,10 +1,14 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import QuickTry from "@/components/QuickTry";
 import Services from "@/components/Services";
+import ProductDemo from "@/components/ProductDemo";
 import Cases from "@/components/Cases";
+import Testimonials from "@/components/Testimonials";
 import Advantages from "@/components/Advantages";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import FloatingCTA from "@/components/FloatingCTA";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
@@ -65,12 +69,16 @@ const Index = () => {
         <Header />
         <main>
           <Hero />
+          <QuickTry />
           <Services />
+          <ProductDemo />
           <Cases />
+          <Testimonials />
           <Advantages />
           <Contact />
         </main>
         <Footer />
+        <FloatingCTA />
       </div>
     </>
   );

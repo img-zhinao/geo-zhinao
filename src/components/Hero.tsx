@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Brain, Search, TrendingUp } from "lucide-react";
+import { ArrowRight, Brain, Search, TrendingUp, Sparkles, CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -32,16 +33,33 @@ const Hero = () => {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6 animate-fade-in">
             <Button size="lg" asChild className="group">
-              <a href="#contact">
-                获取免费诊断
+              <Link to="/login">
+                <Sparkles className="mr-2 w-4 h-4" />
+                免费开始使用
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <a href="#services">了解服务流程</a>
             </Button>
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-16 animate-fade-in">
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <CheckCircle2 className="w-4 h-4 text-green-500" />
+              <span>免费10积分体验</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <CheckCircle2 className="w-4 h-4 text-green-500" />
+              <span>无需绑定支付方式</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <CheckCircle2 className="w-4 h-4 text-green-500" />
+              <span>30秒完成注册</span>
+            </div>
           </div>
 
           {/* Stats */}
