@@ -1,6 +1,6 @@
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -44,13 +44,10 @@ const Header = () => {
             ) : (
               <div className="flex items-center gap-3">
                 <Button variant="ghost" asChild>
-                  <Link to="/login">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    登录
-                  </Link>
+                  <Link to="/login">登录</Link>
                 </Button>
                 <Button asChild>
-                  <Link to="/login">免费注册</Link>
+                  <Link to="/login">免费试用</Link>
                 </Button>
               </div>
             )}
@@ -92,7 +89,7 @@ const Header = () => {
                   <Link to="/login">登录</Link>
                 </Button>
                 <Button asChild className="w-full">
-                  <Link to="/login">免费注册</Link>
+                  <Link to="/login">免费试用</Link>
                 </Button>
               </div>
             )}
