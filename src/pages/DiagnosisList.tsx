@@ -26,6 +26,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRealtimeNotification } from '@/hooks/useRealtimeNotification';
 import { callN8nWebhook } from '@/lib/webhook';
 import { useCreditsBalance, CREDIT_COSTS, hasEnoughCredits } from '@/hooks/useCredits';
+import { InsufficientCreditsDialog } from '@/components/billing/InsufficientCreditsDialog';
 
 // Strategy definitions
 const strategyLabels: Record<string, { label: string; description: string }> = {
@@ -68,6 +69,7 @@ export default function DiagnosisList() {
   const { user } = useAuth();
   const [selectedResultId, setSelectedResultId] = useState<string | null>(null);
   const [isDiagnosing, setIsDiagnosing] = useState<string | null>(null);
+  const [showCreditsDialog, setShowCreditsDialog] = useState(false);
   const { balance, isLoading: balanceLoading, refetch: refetchBalance } = useCreditsBalance();
   
   const diagnosisCost = CREDIT_COSTS.diagnosis;
@@ -406,14 +408,26 @@ export default function DiagnosisList() {
 
                   {/* Insufficient Credits Alert */}
                   {!balanceLoading && !canAffordDiagnosis && (
-                    <Alert variant="destructive" className="mb-4 max-w-md">
+                    <Alert 
+                      variant="destructive" 
+                      className="mb-4 max-w-md cursor-pointer hover:bg-destructive/10 transition-colors"
+                      onClick={() => setShowCreditsDialog(true)}
+                    >
                       <AlertCircle className="h-4 w-4" />
                       <AlertTitle>积分不足</AlertTitle>
                       <AlertDescription>
-                        归因诊断需要 {diagnosisCost} 积分，当前余额 {balance} 积分。
+                        归因诊断需要 {diagnosisCost} 积分，当前余额 {balance} 积分。<span className="underline">点击充值</span>
                       </AlertDescription>
                     </Alert>
                   )}
+
+                  <InsufficientCreditsDialog
+                    open={showCreditsDialog}
+                    onOpenChange={setShowCreditsDialog}
+                    requiredCredits={diagnosisCost}
+                    currentBalance={balance}
+                    operationType="归因诊断分析"
+                  />
 
                   <Button
                     size="lg"

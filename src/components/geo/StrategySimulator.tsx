@@ -31,6 +31,7 @@ import {
   SimulationTriggerPayload
 } from '@/lib/simulation';
 import { useCreditsBalance, CREDIT_COSTS, hasEnoughCredits } from '@/hooks/useCredits';
+import { InsufficientCreditsDialog } from '@/components/billing/InsufficientCreditsDialog';
 
 interface StrategySimulatorProps {
   diagnosisId: string;
@@ -94,6 +95,7 @@ export function StrategySimulator({
   const [simulation, setSimulation] = useState<SimulationResult | null>(null);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
   const [timeoutReached, setTimeoutReached] = useState(false);
+  const [showCreditsDialog, setShowCreditsDialog] = useState(false);
   const { balance, isLoading: balanceLoading, refetch: refetchBalance } = useCreditsBalance();
   
   const simulationCost = CREDIT_COSTS.simulation;
@@ -253,14 +255,26 @@ export function StrategySimulator({
 
             {/* Insufficient Credits Alert */}
             {!balanceLoading && !canAfford && (
-              <Alert variant="destructive" className="max-w-md mx-auto">
+              <Alert 
+                variant="destructive" 
+                className="max-w-md mx-auto cursor-pointer hover:bg-destructive/10 transition-colors"
+                onClick={() => setShowCreditsDialog(true)}
+              >
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>积分不足</AlertTitle>
                 <AlertDescription>
-                  策略模拟需要 {simulationCost} 积分，当前余额 {balance} 积分。
+                  策略模拟需要 {simulationCost} 积分，当前余额 {balance} 积分。<span className="underline">点击充值</span>
                 </AlertDescription>
               </Alert>
             )}
+
+            <InsufficientCreditsDialog
+              open={showCreditsDialog}
+              onOpenChange={setShowCreditsDialog}
+              requiredCredits={simulationCost}
+              currentBalance={balance}
+              operationType="策略模拟预测"
+            />
 
             <Button
               onClick={handleTriggerSimulation}

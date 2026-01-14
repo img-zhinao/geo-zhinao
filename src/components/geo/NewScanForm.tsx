@@ -16,6 +16,7 @@ import { toast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { callN8nWebhook } from '@/lib/webhook';
 import { useCreditsBalance, CREDIT_COSTS, calculateCreditCost, hasEnoughCredits } from '@/hooks/useCredits';
+import { InsufficientCreditsDialog } from '@/components/billing/InsufficientCreditsDialog';
 
 const formSchema = z.object({
   brandName: z.string()
@@ -46,6 +47,7 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCreditsDialog, setShowCreditsDialog] = useState(false);
   const { balance, isLoading: balanceLoading, refetch: refetchBalance } = useCreditsBalance();
 
   // Calculate cost for 1 model
@@ -274,14 +276,26 @@ export function NewScanForm({ onJobSubmitted }: NewScanFormProps) {
 
             {/* Insufficient Credits Alert */}
             {!balanceLoading && !canAfford && (
-              <Alert variant="destructive">
+              <Alert 
+                variant="destructive" 
+                className="cursor-pointer hover:bg-destructive/10 transition-colors"
+                onClick={() => setShowCreditsDialog(true)}
+              >
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>积分不足</AlertTitle>
                 <AlertDescription>
-                  本次操作需要 {creditCost} 积分，当前余额 {balance} 积分。请先升级套餐或购买积分。
+                  本次操作需要 {creditCost} 积分，当前余额 {balance} 积分。<span className="underline">点击充值</span>
                 </AlertDescription>
               </Alert>
             )}
+
+            <InsufficientCreditsDialog
+              open={showCreditsDialog}
+              onOpenChange={setShowCreditsDialog}
+              requiredCredits={creditCost}
+              currentBalance={balance}
+              operationType="AI 可见性监测"
+            />
 
             <Button 
               type="submit" 
