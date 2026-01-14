@@ -162,6 +162,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          last_reset_date: string | null
+          monthly_free_quota: number | null
           tier_level: string | null
           updated_at: string
         }
@@ -172,6 +174,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          last_reset_date?: string | null
+          monthly_free_quota?: number | null
           tier_level?: string | null
           updated_at?: string
         }
@@ -182,6 +186,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          last_reset_date?: string | null
+          monthly_free_quota?: number | null
           tier_level?: string | null
           updated_at?: string
         }
@@ -340,6 +346,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      top_up_requests: {
+        Row: {
+          amount_cny: number
+          created_at: string
+          credits_requested: number
+          id: string
+          notes: string | null
+          processed_at: string | null
+          status: string
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_cny: number
+          created_at?: string
+          credits_requested: number
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          status?: string
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_cny?: number
+          created_at?: string
+          credits_requested?: number
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          status?: string
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
