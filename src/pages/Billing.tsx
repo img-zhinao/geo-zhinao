@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { useProfile } from "@/hooks/useProfile";
-import { useCreditTransactions } from "@/hooks/useCredits";
+import { useCreditTransactions, useMonthlyUsage } from "@/hooks/useCredits";
 import { Loader2 } from "lucide-react";
 import { CreditsOverviewCard } from "@/components/billing/CreditsOverviewCard";
 import { TopUpDialog } from "@/components/billing/TopUpDialog";
@@ -11,6 +11,7 @@ import { PricingInfo } from "@/components/billing/PricingInfo";
 export default function Billing() {
   const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useProfile();
   const { data: transactions = [], isLoading: transactionsLoading } = useCreditTransactions(50);
+  const { data: monthlyUsage = 0 } = useMonthlyUsage();
   const [topUpOpen, setTopUpOpen] = useState(false);
 
   const handleTopUpSuccess = () => {
@@ -41,6 +42,7 @@ export default function Billing() {
         <CreditsOverviewCard
           creditsBalance={profile?.credits_balance ?? 0}
           monthlyFreeQuota={10}
+          monthlyUsage={monthlyUsage}
           onTopUp={() => setTopUpOpen(true)}
         />
 
