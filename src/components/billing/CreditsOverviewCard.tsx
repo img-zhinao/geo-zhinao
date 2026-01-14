@@ -6,18 +6,22 @@ import { Coins, Zap, Plus, Gift, TrendingUp } from "lucide-react";
 interface CreditsOverviewCardProps {
   creditsBalance: number;
   monthlyFreeQuota: number;
+  monthlyUsage: number;
   onTopUp: () => void;
 }
 
 export function CreditsOverviewCard({
   creditsBalance,
   monthlyFreeQuota,
+  monthlyUsage,
   onTopUp,
 }: CreditsOverviewCardProps) {
-  // Calculate free credits usage (assuming free credits are used first)
-  const freeCreditsUsed = Math.max(0, monthlyFreeQuota - Math.min(creditsBalance, monthlyFreeQuota));
-  const freeCreditsRemaining = Math.min(creditsBalance, monthlyFreeQuota);
-  const paidCredits = Math.max(0, creditsBalance - monthlyFreeQuota);
+  // 免费积分优先使用逻辑：
+  // 本月用量先扣免费额度，超出部分才扣付费积分
+  const freeCreditsUsed = Math.min(monthlyUsage, monthlyFreeQuota);
+  const freeCreditsRemaining = monthlyFreeQuota - freeCreditsUsed;
+  // 付费积分 = 总余额 - 剩余免费积分
+  const paidCredits = Math.max(0, creditsBalance - freeCreditsRemaining);
   const freeUsagePercentage = (freeCreditsUsed / monthlyFreeQuota) * 100;
 
   return (
