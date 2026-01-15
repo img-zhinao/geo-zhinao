@@ -36,7 +36,7 @@ type FormData = z.infer<typeof formSchema>;
 const models = [
   { value: 'DeepSeek-V3', label: 'DeepSeek-V3', icon: '🧠' },
   { value: 'Doubao-Pro', label: 'Doubao-Pro', icon: '🤖' },
-  { value: 'Qwen-Max', label: 'Qwen-Max', icon: '⚡' },
+  { value: 'OpenAI', label: 'OpenAI', icon: '⚡' },
 ];
 
 interface NewScanFormProps {
