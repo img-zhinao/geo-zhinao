@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import {
-  Brain,
   LayoutDashboard,
   Search,
   Compass,
@@ -11,6 +10,7 @@ import {
   Stethoscope,
   FlaskConical,
 } from "lucide-react";
+import zhinaoLogo from "@/assets/zhinao-logo.png";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -74,8 +74,8 @@ export function DashboardSidebar() {
     <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar-background">
       <SidebarHeader className="p-4">
         <Link to="/dashboard" className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-primary/10 shrink-0">
-            <Brain className="h-6 w-6 text-primary" />
+          <div className="shrink-0">
+            <img src={zhinaoLogo} alt="智脑时代" className="h-8 w-8" />
           </div>
           {!isCollapsed && <span className="font-bold text-lg whitespace-nowrap">智脑时代 GEO</span>}
         </Link>
