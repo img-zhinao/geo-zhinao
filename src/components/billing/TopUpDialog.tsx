@@ -10,10 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { MessageCircle, Coins, ArrowRight, Copy, Check } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { MessageCircle, Coins, ArrowRight, Copy, Check, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
 import wechatQRCode from "@/assets/wechat-payment-qrcode.jpg";
 
 interface TopUpDialogProps {
@@ -26,10 +28,13 @@ export function TopUpDialog({ open, onOpenChange, onSuccess }: TopUpDialogProps)
   const [amount, setAmount] = useState<string>("100");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const { data: profile } = useProfile();
 
   const credits = parseInt(amount) || 0;
+  const userEmail = profile?.email || user?.email || "";
 
   const quickAmounts = [50, 100, 200, 500, 1000];
 
@@ -43,13 +48,14 @@ export function TopUpDialog({ open, onOpenChange, onSuccess }: TopUpDialogProps)
         amount_cny: credits,
         credits_requested: credits,
         status: "pending",
+        notes: `用户邮箱: ${userEmail}`,
       });
 
       if (error) throw error;
 
       toast({
         title: "充值请求已提交",
-        description: "请完成扫码支付后联系客服确认入账。",
+        description: "请完成扫码支付后等待客服确认入账。",
       });
       onSuccess?.();
       onOpenChange(false);
@@ -63,6 +69,16 @@ export function TopUpDialog({ open, onOpenChange, onSuccess }: TopUpDialogProps)
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(userEmail);
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 2000);
+    toast({
+      title: "已复制",
+      description: "邮箱已复制到剪贴板",
+    });
   };
 
   const handleCopyWechat = () => {
@@ -149,6 +165,43 @@ export function TopUpDialog({ open, onOpenChange, onSuccess }: TopUpDialogProps)
                 />
               </div>
             </div>
+
+            {/* User Email Identification */}
+            <Alert className="bg-amber-500/10 border-amber-500/30">
+              <Info className="h-4 w-4 text-amber-500" />
+              <AlertDescription className="space-y-2">
+                <p className="font-medium text-foreground">
+                  请在微信转账时备注您的账号邮箱：
+                </p>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-1.5 bg-background rounded border text-sm font-mono truncate">
+                    {userEmail || "未设置邮箱"}
+                  </code>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopyEmail}
+                    disabled={!userEmail}
+                    className="shrink-0"
+                  >
+                    {emailCopied ? (
+                      <>
+                        <Check className="h-3 w-3 mr-1" />
+                        已复制
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3 mr-1" />
+                        复制
+                      </>
+                    )}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  这将帮助客服快速识别您的账号并为您入账
+                </p>
+              </AlertDescription>
+            </Alert>
 
             {/* Instructions */}
             <div className="text-center space-y-2">
