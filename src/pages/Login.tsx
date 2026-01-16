@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Brain, Github, Loader2, Mail, ArrowLeft } from 'lucide-react';
+import { Github, Loader2, Mail, ArrowLeft } from 'lucide-react';
+import zhinaoLogo from '@/assets/zhinao-logo-login.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -112,11 +113,8 @@ export default function Login() {
           返回首页
         </Link>
 
-        {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="p-2 rounded-xl bg-primary/10">
-            <Brain className="h-8 w-8 text-primary" />
-          </div>
+          <img src={zhinaoLogo} alt="智脑时代" className="h-10 w-10" />
           <span className="text-2xl font-bold">智脑时代 GEO</span>
         </div>
 
