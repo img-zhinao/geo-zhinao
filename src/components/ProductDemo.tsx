@@ -65,30 +65,6 @@ const ProductDemo = () => {
           ))}
         </div>
 
-        {/* Dashboard preview placeholder */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <div className="relative rounded-2xl overflow-hidden border border-border bg-gradient-to-br from-muted/50 to-muted shadow-2xl">
-            <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
-              <div className="text-center p-8">
-                <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                  <BarChart3 className="w-10 h-10 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  数据驱动的决策平台
-                </h3>
-                <p className="text-muted-foreground max-w-md mx-auto">
-                  直观的仪表盘，实时展示品牌 AI 可见度评分、情感分析、竞品对比等核心指标
-                </p>
-              </div>
-            </div>
-            {/* Decorative elements */}
-            <div className="absolute top-4 left-4 flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-400" />
-              <div className="w-3 h-3 rounded-full bg-yellow-400" />
-              <div className="w-3 h-3 rounded-full bg-green-400" />
-            </div>
-          </div>
-        </div>
 
         {/* CTA */}
         <div className="text-center">
