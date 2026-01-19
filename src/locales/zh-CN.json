@@ -1,0 +1,267 @@
+{
+  "nav": {
+    "services": "服务流程",
+    "cases": "行业案例",
+    "advantages": "核心优势",
+    "contact": "联系我们",
+    "login": "登录",
+    "freeTrial": "免费试用",
+    "dashboard": "进入控制台"
+  },
+  "hero": {
+    "badge": "全链路 GEO 服务专家",
+    "title": "让品牌在",
+    "titleHighlight": " AI 搜索 ",
+    "titleEnd": "中脱颖而出",
+    "subtitle": "从诊断到迭代的品牌 AI 搜索增长方案，覆盖「诊断 - 规划 - 内容 - 布局 - 监测 - 迭代」全链路服务体系",
+    "cta": "免费开始使用",
+    "learnMore": "了解服务流程",
+    "trust1": "免费10积分体验",
+    "trust2": "无需绑定支付方式",
+    "trust3": "30秒完成注册",
+    "stat1Value": "2000+",
+    "stat1Label": "服务企业",
+    "stat2Value": "30+",
+    "stat2Label": "覆盖行业",
+    "stat3Value": "10+",
+    "stat3Label": "主流AI平台",
+    "stat4Value": "3x",
+    "stat4Label": "响应速度提升"
+  },
+  "quickTry": {
+    "badge": "30秒快速体验",
+    "title": "免费体验 AI 搜索诊断",
+    "subtitle": "输入您的品牌名称，立即查看品牌在各大AI平台的可见度表现",
+    "placeholder": "输入您的品牌名称...",
+    "button": "立即体验",
+    "socialProof": "已有",
+    "socialProofEnd": "个品牌完成诊断"
+  },
+  "services": {
+    "title": "全链路 GEO 服务体系",
+    "subtitle": "从诊断到迭代，八步打造品牌AI搜索增长闭环",
+    "step": "第{{number}}步",
+    "items": [
+      {
+        "title": "AI 生态位诊断",
+        "description": "战略起点的深度扫描",
+        "details": ["品牌提及与情感极性分析", "核心竞品占位分析", "高价值问题库挖掘", "答案质量与机会评估"]
+      },
+      {
+        "title": "战略蓝图规划",
+        "description": "精准锚定的顶层设计",
+        "details": ["锁定20-30个战略级问题", "品牌声音定义", "内容工程规划", "KPI目标设定"]
+      },
+      {
+        "title": "核心答案工程",
+        "description": "抢占话语权的内容弹药",
+        "details": ["深度科普内容创作", "品牌故事自然融入", "AI友好格式优化", "多模态内容适配"]
+      },
+      {
+        "title": "多平台答案优化",
+        "description": "精准覆盖主流AI阵地",
+        "details": ["DeepSeek、豆包、Kimi等", "GEMINI、OpenAI等", "多平台同步优化", "实时内容更新"]
+      },
+      {
+        "title": "舆情监测与公关",
+        "description": "AI时代的品牌声誉守护",
+        "details": ["7×24小时全天候监测", "负面提及实时预警", "负面内容归因分析", "危机快速响应"]
+      },
+      {
+        "title": "效果追踪与迭代",
+        "description": "数据驱动的增长闭环",
+        "details": ["核心指标定期汇报", "转化线索追踪", "ROI分析", "策略迭代优化"]
+      },
+      {
+        "title": "技术引擎支撑",
+        "description": "AI友好的底层架构优化",
+        "details": ["RAG架构适配", "多模态内容处理", "信源权威度强化", "实时数据同步"]
+      },
+      {
+        "title": "行业定制方案",
+        "description": "适配不同场景的精准突破",
+        "details": ["消费电子行业", "新能源汽车行业", "B2B制造业", "本地生活服务"]
+      }
+    ]
+  },
+  "productDemo": {
+    "title": "强大的 GEO 分析平台",
+    "subtitle": "从诊断到优化，全方位提升品牌在 AI 搜索中的竞争力",
+    "cta": "立即创建账号，获取专属报告",
+    "features": [
+      {
+        "title": "AI 搜索诊断",
+        "description": "一键分析品牌在 DeepSeek、豆包、Kimi 等平台的可见度"
+      },
+      {
+        "title": "竞品对比分析",
+        "description": "可视化对比竞争对手的 AI 搜索表现"
+      },
+      {
+        "title": "趋势追踪",
+        "description": "实时监测品牌可见度变化，把握优化时机"
+      },
+      {
+        "title": "策略模拟",
+        "description": "智能预测优化策略效果，科学决策"
+      }
+    ]
+  },
+  "cases": {
+    "title": "行业成功案例",
+    "subtitle": "覆盖30+垂直行业，助力2000+企业实现AI搜索增长",
+    "optimizationScenario": "优化场景：",
+    "items": [
+      {
+        "industry": "消费电子",
+        "company": "某头部手机品牌",
+        "scenario": "\"2025拍照最好的手机\"",
+        "metrics": [
+          { "label": "品牌提及率", "before": "12%", "after": "48%" },
+          { "label": "官网跳转量", "increase": "+210%" }
+        ]
+      },
+      {
+        "industry": "新能源汽车",
+        "company": "某新能源车企",
+        "scenario": "\"纯电车冬季续航怎么选\"",
+        "metrics": [
+          { "label": "答案占位率", "after": "63%" },
+          { "label": "潜在客户留资", "increase": "+185%" }
+        ]
+      },
+      {
+        "industry": "B2B制造业",
+        "company": "某工业机器人企业",
+        "scenario": "\"制造业自动化生产线解决方案\"",
+        "metrics": [
+          { "label": "品牌推荐率", "before": "8%", "after": "35%" },
+          { "label": "商务咨询线索", "increase": "+150%" }
+        ]
+      },
+      {
+        "industry": "本地生活服务",
+        "company": "某连锁餐饮品牌",
+        "scenario": "\"北京朝阳区性价比高的火锅\"",
+        "metrics": [
+          { "label": "门店推荐率", "after": "52%" },
+          { "label": "到店核销率", "increase": "+90%" }
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "客户真实评价",
+    "subtitle": "听听合作品牌怎么说",
+    "items": [
+      {
+        "content": "使用智脑时代的GEO服务后，我们品牌在DeepSeek的推荐频率提升了3倍，转化率明显改善。",
+        "author": "张经理",
+        "role": "市场总监",
+        "company": "某头部电商品牌"
+      },
+      {
+        "content": "诊断报告非常专业，清晰指出了我们内容在AI搜索中的短板，优化建议很有针对性。",
+        "author": "李总",
+        "role": "创始人",
+        "company": "新锐美妆品牌"
+      },
+      {
+        "content": "策略模拟功能很实用，让我们在执行前就能预判效果，节省了大量试错成本。",
+        "author": "王总监",
+        "role": "数字营销负责人",
+        "company": "知名快消企业"
+      },
+      {
+        "content": "全链路服务从诊断到落地执行，团队专业度高，沟通效率也很好，值得推荐。",
+        "author": "陈经理",
+        "role": "品牌运营",
+        "company": "科技创业公司"
+      }
+    ]
+  },
+  "advantages": {
+    "title": "核心差异化优势",
+    "subtitle": "战略 + 内容 + 技术 + 数据 四维驱动，建立长期竞争优势",
+    "items": [
+      {
+        "title": "技术自研壁垒",
+        "description": "自主研发AI生态监测引擎、NLP语义分析模型和多平台优化工具，响应速度比行业平均快3倍"
+      },
+      {
+        "title": "全链路闭环服务",
+        "description": "从战略诊断到技术落地，再到效果迭代，\"一站式\" AI搜索增长解决方案"
+      },
+      {
+        "title": "数据驱动决策",
+        "description": "基于全网AI平台数据，覆盖10+主流AI模型、百万级行业问题库，避免盲目投入"
+      },
+      {
+        "title": "行业深耕经验",
+        "description": "累计服务2000+企业，覆盖30+垂直行业，形成可复用的行业模板库"
+      },
+      {
+        "title": "透明化效果呈现",
+        "description": "专属数据看板实时展示核心指标，每两周输出详细分析报告，服务价值可视化"
+      }
+    ]
+  },
+  "contact": {
+    "title": "获取定制化GEO解决方案",
+    "subtitle": "立即联系我们，获取免费AI生态位诊断报告",
+    "formTitle": "免费咨询",
+    "formSubtitle": "填写表单，专业顾问将在24小时内与您联系",
+    "name": "姓名",
+    "namePlaceholder": "您的姓名",
+    "company": "公司",
+    "companyPlaceholder": "公司名称",
+    "phone": "联系电话",
+    "phonePlaceholder": "您的联系电话",
+    "message": "咨询内容",
+    "messagePlaceholder": "请简要描述您的需求...",
+    "submit": "提交咨询",
+    "submitting": "提交中...",
+    "contactInfo": "联系方式",
+    "address": "地址",
+    "addressValue": "深圳市南山区高新技术产业园粤美特大厦7楼710",
+    "phoneLabel": "电话",
+    "phoneValue": "13828710020",
+    "email": "邮箱",
+    "emailValue": "93510890@qq.com",
+    "companyName": "深圳智脑时代科技有限公司",
+    "companyDescription": "专注于AI搜索生态优化(GEO)服务，帮助品牌在AI时代建立长期、稳定的竞争优势，实现从「被AI提及」到「被AI优先推荐」，再到「引导用户转化」的完整增长闭环。",
+    "successTitle": "提交成功",
+    "successMessage": "感谢您的咨询，我们会在24小时内与您联系！",
+    "errorTitle": "提交失败",
+    "errorMessage": "请稍后重试或直接拨打电话联系我们",
+    "networkError": "网络错误，请稍后重试",
+    "validation": {
+      "nameRequired": "请输入您的姓名",
+      "nameMax": "姓名不能超过100个字符",
+      "companyRequired": "请输入公司名称",
+      "companyMax": "公司名称不能超过200个字符",
+      "phoneRequired": "请输入联系电话",
+      "phoneMax": "电话号码不能超过50个字符",
+      "phoneInvalid": "请输入有效的电话号码",
+      "messageMax": "咨询内容不能超过2000个字符"
+    }
+  },
+  "footer": {
+    "scanWechat": "扫码添加微信",
+    "copyright": "© {{year}} 深圳智脑时代科技有限公司 版权所有"
+  },
+  "floatingCta": {
+    "title": "🚀 免费体验 AI 搜索诊断，提升品牌可见度",
+    "titleMobile": "🚀 免费体验 AI 搜索诊断",
+    "subtitle": "10积分免费体验 · 无需绑卡 · 即刻开始",
+    "button": "免费开始",
+    "close": "关闭"
+  },
+  "language": {
+    "current": "简体中文",
+    "zhCN": "简体中文",
+    "en": "English",
+    "pt": "Português",
+    "vi": "Tiếng Việt"
+  }
+}

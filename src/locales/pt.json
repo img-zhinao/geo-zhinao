@@ -1,0 +1,267 @@
+{
+  "nav": {
+    "services": "Serviços",
+    "cases": "Casos de Sucesso",
+    "advantages": "Vantagens",
+    "contact": "Contato",
+    "login": "Entrar",
+    "freeTrial": "Teste Grátis",
+    "dashboard": "Painel"
+  },
+  "hero": {
+    "badge": "Especialista em Serviços GEO Completos",
+    "title": "Faça Sua Marca",
+    "titleHighlight": " Se Destacar ",
+    "titleEnd": "na Busca por IA",
+    "subtitle": "Do diagnóstico à iteração, uma solução completa de crescimento em busca por IA cobrindo diagnóstico, planejamento, conteúdo, distribuição, monitoramento e otimização",
+    "cta": "Comece Grátis",
+    "learnMore": "Saiba Mais Sobre Serviços",
+    "trust1": "10 Créditos Grátis",
+    "trust2": "Sem Cartão Necessário",
+    "trust3": "Cadastro em 30 Seg",
+    "stat1Value": "2000+",
+    "stat1Label": "Clientes Atendidos",
+    "stat2Value": "30+",
+    "stat2Label": "Indústrias",
+    "stat3Value": "10+",
+    "stat3Label": "Plataformas de IA",
+    "stat4Value": "3x",
+    "stat4Label": "Resposta Mais Rápida"
+  },
+  "quickTry": {
+    "badge": "Teste Rápido de 30 Segundos",
+    "title": "Experimente o Diagnóstico de Busca por IA Grátis",
+    "subtitle": "Digite o nome da sua marca para ver sua visibilidade nas principais plataformas de IA",
+    "placeholder": "Digite o nome da sua marca...",
+    "button": "Experimentar Agora",
+    "socialProof": "",
+    "socialProofEnd": " marcas completaram o diagnóstico"
+  },
+  "services": {
+    "title": "Sistema de Serviços GEO Completo",
+    "subtitle": "Do diagnóstico à iteração, 8 passos para construir seu ciclo de crescimento em busca por IA",
+    "step": "Passo {{number}}",
+    "items": [
+      {
+        "title": "Diagnóstico do Ecossistema de IA",
+        "description": "Varredura profunda como ponto de partida estratégico",
+        "details": ["Análise de menções e sentimentos da marca", "Posicionamento de concorrentes principais", "Mineração de perguntas de alto valor", "Avaliação da qualidade das respostas"]
+      },
+      {
+        "title": "Plano Estratégico",
+        "description": "Design de alto nível com precisão",
+        "details": ["Definir 20-30 perguntas estratégicas", "Definição da voz da marca", "Planejamento de engenharia de conteúdo", "Definição de metas de KPI"]
+      },
+      {
+        "title": "Engenharia de Respostas Principais",
+        "description": "Munição de conteúdo para capturar o discurso",
+        "details": ["Conteúdo educacional aprofundado", "Integração natural da história da marca", "Otimização de formato amigável para IA", "Adaptação de conteúdo multimodal"]
+      },
+      {
+        "title": "Otimização Multi-Plataforma",
+        "description": "Cobertura precisa das principais plataformas de IA",
+        "details": ["DeepSeek, Doubao, Kimi, etc.", "GEMINI, OpenAI, etc.", "Sincronização entre plataformas", "Atualizações de conteúdo em tempo real"]
+      },
+      {
+        "title": "Monitoramento de Sentimentos e RP",
+        "description": "Proteção da reputação da marca na era da IA",
+        "details": ["Monitoramento 24/7", "Alertas de menções negativas em tempo real", "Atribuição de conteúdo negativo", "Resposta rápida a crises"]
+      },
+      {
+        "title": "Rastreamento de Desempenho e Iteração",
+        "description": "Ciclo fechado de crescimento orientado por dados",
+        "details": ["Relatórios regulares de KPI", "Rastreamento de leads de conversão", "Análise de ROI", "Otimização de estratégia iterativa"]
+      },
+      {
+        "title": "Suporte de Motor Técnico",
+        "description": "Arquitetura subjacente amigável para IA",
+        "details": ["Adaptação de arquitetura RAG", "Processamento de conteúdo multimodal", "Fortalecimento da autoridade da fonte", "Sincronização de dados em tempo real"]
+      },
+      {
+        "title": "Personalização por Indústria",
+        "description": "Avanços precisos para diferentes cenários",
+        "details": ["Eletrônicos de Consumo", "Veículos de Nova Energia", "Manufatura B2B", "Serviços de Vida Local"]
+      }
+    ]
+  },
+  "productDemo": {
+    "title": "Poderosa Plataforma de Análise GEO",
+    "subtitle": "Do diagnóstico à otimização, melhore abrangentemente a competitividade de busca por IA da sua marca",
+    "cta": "Crie Sua Conta Agora e Obtenha Seu Relatório",
+    "features": [
+      {
+        "title": "Diagnóstico de Busca por IA",
+        "description": "Análise com um clique da visibilidade da marca no DeepSeek, Doubao, Kimi, etc."
+      },
+      {
+        "title": "Análise de Concorrentes",
+        "description": "Visualize o desempenho dos concorrentes na busca por IA"
+      },
+      {
+        "title": "Rastreamento de Tendências",
+        "description": "Monitoramento em tempo real das mudanças de visibilidade da marca"
+      },
+      {
+        "title": "Simulação de Estratégia",
+        "description": "Preveja inteligentemente os resultados da estratégia de otimização"
+      }
+    ]
+  },
+  "cases": {
+    "title": "Histórias de Sucesso do Setor",
+    "subtitle": "Cobrindo mais de 30 setores, ajudando mais de 2000 empresas a alcançar crescimento em busca por IA",
+    "optimizationScenario": "Cenário de Otimização: ",
+    "items": [
+      {
+        "industry": "Eletrônicos de Consumo",
+        "company": "Marca Líder de Smartphones",
+        "scenario": "\"Melhor câmera de celular em 2025\"",
+        "metrics": [
+          { "label": "Taxa de Menção da Marca", "before": "12%", "after": "48%" },
+          { "label": "Tráfego do Site", "increase": "+210%" }
+        ]
+      },
+      {
+        "industry": "Veículos de Nova Energia",
+        "company": "Fabricante de VE",
+        "scenario": "\"Melhor VE para autonomia no inverno\"",
+        "metrics": [
+          { "label": "Taxa de Posicionamento de Resposta", "after": "63%" },
+          { "label": "Geração de Leads", "increase": "+185%" }
+        ]
+      },
+      {
+        "industry": "Manufatura B2B",
+        "company": "Empresa de Robôs Industriais",
+        "scenario": "\"Soluções de automação de manufatura\"",
+        "metrics": [
+          { "label": "Recomendação da Marca", "before": "8%", "after": "35%" },
+          { "label": "Consultas Comerciais", "increase": "+150%" }
+        ]
+      },
+      {
+        "industry": "Serviços de Vida Local",
+        "company": "Rede de Restaurantes",
+        "scenario": "\"Melhor custo-benefício de hotpot em Chaoyang\"",
+        "metrics": [
+          { "label": "Recomendação de Loja", "after": "52%" },
+          { "label": "Taxa de Visita à Loja", "increase": "+90%" }
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Avaliações de Clientes",
+    "subtitle": "Ouça nossas marcas parceiras",
+    "items": [
+      {
+        "content": "Após usar o serviço GEO da ZhiNao, a frequência de recomendação da nossa marca no DeepSeek aumentou 3x e as taxas de conversão melhoraram significativamente.",
+        "author": "Gerente Zhang",
+        "role": "Diretor de Marketing",
+        "company": "Marca Líder de E-commerce"
+      },
+      {
+        "content": "O relatório de diagnóstico é muito profissional, identificando claramente nossas fraquezas de conteúdo na busca por IA com sugestões de otimização direcionadas.",
+        "author": "Diretor Li",
+        "role": "Fundador",
+        "company": "Marca de Beleza Emergente"
+      },
+      {
+        "content": "O recurso de simulação de estratégia é muito prático, permitindo prever resultados antes da execução, economizando muitos custos de tentativa e erro.",
+        "author": "Diretor Wang",
+        "role": "Líder de Marketing Digital",
+        "company": "Empresa de Bens de Consumo Conhecida"
+      },
+      {
+        "content": "Serviço completo do diagnóstico à execução, equipe altamente profissional com excelente eficiência de comunicação, altamente recomendado.",
+        "author": "Gerente Chen",
+        "role": "Operações de Marca",
+        "company": "Startup de Tecnologia"
+      }
+    ]
+  },
+  "advantages": {
+    "title": "Vantagens Competitivas Principais",
+    "subtitle": "Estratégia + Conteúdo + Tecnologia + Dados, quatro dimensões impulsionando vantagem competitiva de longo prazo",
+    "items": [
+      {
+        "title": "Tecnologia Proprietária",
+        "description": "Motor de monitoramento de ecossistema de IA desenvolvido internamente, modelo de análise semântica NLP e ferramentas de otimização multi-plataforma, 3x mais rápido que a média do setor"
+      },
+      {
+        "title": "Serviço Ponta a Ponta",
+        "description": "Do diagnóstico estratégico à implementação técnica e iteração de desempenho, solução completa de crescimento em busca por IA"
+      },
+      {
+        "title": "Decisões Orientadas por Dados",
+        "description": "Baseado em dados de plataformas de IA de toda a rede, cobrindo mais de 10 modelos de IA principais e milhões de perguntas do setor"
+      },
+      {
+        "title": "Experiência Profunda no Setor",
+        "description": "Atendeu mais de 2000 empresas em mais de 30 setores, formando modelos de setor reutilizáveis"
+      },
+      {
+        "title": "Resultados Transparentes",
+        "description": "Painel dedicado exibindo métricas principais em tempo real, relatórios de análise detalhados quinzenais"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Obtenha Solução GEO Personalizada",
+    "subtitle": "Entre em contato agora para um relatório gratuito de diagnóstico do ecossistema de IA",
+    "formTitle": "Consulta Gratuita",
+    "formSubtitle": "Preencha o formulário, nosso consultor entrará em contato em 24 horas",
+    "name": "Nome",
+    "namePlaceholder": "Seu nome",
+    "company": "Empresa",
+    "companyPlaceholder": "Nome da empresa",
+    "phone": "Telefone",
+    "phonePlaceholder": "Seu número de telefone",
+    "message": "Mensagem",
+    "messagePlaceholder": "Por favor, descreva brevemente suas necessidades...",
+    "submit": "Enviar",
+    "submitting": "Enviando...",
+    "contactInfo": "Informações de Contato",
+    "address": "Endereço",
+    "addressValue": "Sala 710, 7º Andar, Edifício Yuemet, Parque Industrial de Alta Tecnologia, Distrito de Nanshan, Shenzhen",
+    "phoneLabel": "Telefone",
+    "phoneValue": "13828710020",
+    "email": "E-mail",
+    "emailValue": "93510890@qq.com",
+    "companyName": "Shenzhen ZhiNao Era Technology Co., Ltd.",
+    "companyDescription": "Focado em serviços de Otimização de Ecossistema de Busca por IA (GEO), ajudando marcas a estabelecer vantagens competitivas de longo prazo e estáveis na era da IA, alcançando um ciclo completo de crescimento de \"ser mencionado pela IA\" para \"ser priorizado pela IA\" até \"impulsionar a conversão do usuário\".",
+    "successTitle": "Enviado com Sucesso",
+    "successMessage": "Obrigado pela sua consulta, entraremos em contato em 24 horas!",
+    "errorTitle": "Falha no Envio",
+    "errorMessage": "Por favor, tente novamente mais tarde ou ligue diretamente para nós",
+    "networkError": "Erro de rede, por favor tente novamente mais tarde",
+    "validation": {
+      "nameRequired": "Por favor, digite seu nome",
+      "nameMax": "Nome não pode exceder 100 caracteres",
+      "companyRequired": "Por favor, digite o nome da empresa",
+      "companyMax": "Nome da empresa não pode exceder 200 caracteres",
+      "phoneRequired": "Por favor, digite o número de telefone",
+      "phoneMax": "Número de telefone não pode exceder 50 caracteres",
+      "phoneInvalid": "Por favor, digite um número de telefone válido",
+      "messageMax": "Mensagem não pode exceder 2000 caracteres"
+    }
+  },
+  "footer": {
+    "scanWechat": "Escaneie para Adicionar WeChat",
+    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. Todos os Direitos Reservados"
+  },
+  "floatingCta": {
+    "title": "🚀 Diagnóstico Gratuito de Busca por IA, Aumente a Visibilidade da Marca",
+    "titleMobile": "🚀 Diagnóstico Gratuito de Busca por IA",
+    "subtitle": "10 Créditos Grátis · Sem Cartão · Comece Agora",
+    "button": "Comece Grátis",
+    "close": "Fechar"
+  },
+  "language": {
+    "current": "Português",
+    "zhCN": "简体中文",
+    "en": "English",
+    "pt": "Português",
+    "vi": "Tiếng Việt"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "nav": {
+    "services": "Dịch vụ",
+    "cases": "Câu chuyện thành công",
+    "advantages": "Lợi thế",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "freeTrial": "Dùng thử miễn phí",
+    "dashboard": "Bảng điều khiển"
+  },
+  "hero": {
+    "badge": "Chuyên gia Dịch vụ GEO Toàn diện",
+    "title": "Giúp Thương hiệu",
+    "titleHighlight": " Nổi bật ",
+    "titleEnd": "trong Tìm kiếm AI",
+    "subtitle": "Từ chẩn đoán đến lặp lại, giải pháp tăng trưởng tìm kiếm AI toàn diện bao gồm chẩn đoán, lập kế hoạch, nội dung, phân phối, giám sát và tối ưu hóa",
+    "cta": "Bắt đầu Miễn phí",
+    "learnMore": "Tìm hiểu về Dịch vụ",
+    "trust1": "10 Tín dụng Miễn phí",
+    "trust2": "Không cần Thẻ",
+    "trust3": "Đăng ký 30 Giây",
+    "stat1Value": "2000+",
+    "stat1Label": "Khách hàng",
+    "stat2Value": "30+",
+    "stat2Label": "Ngành công nghiệp",
+    "stat3Value": "10+",
+    "stat3Label": "Nền tảng AI",
+    "stat4Value": "3x",
+    "stat4Label": "Phản hồi Nhanh hơn"
+  },
+  "quickTry": {
+    "badge": "Dùng thử Nhanh 30 Giây",
+    "title": "Thử Chẩn đoán Tìm kiếm AI Miễn phí",
+    "subtitle": "Nhập tên thương hiệu để xem khả năng hiển thị trên các nền tảng AI chính",
+    "placeholder": "Nhập tên thương hiệu...",
+    "button": "Thử Ngay",
+    "socialProof": "",
+    "socialProofEnd": " thương hiệu đã hoàn thành chẩn đoán"
+  },
+  "services": {
+    "title": "Hệ thống Dịch vụ GEO Toàn diện",
+    "subtitle": "Từ chẩn đoán đến lặp lại, 8 bước xây dựng vòng lặp tăng trưởng tìm kiếm AI",
+    "step": "Bước {{number}}",
+    "items": [
+      {
+        "title": "Chẩn đoán Hệ sinh thái AI",
+        "description": "Quét sâu như điểm khởi đầu chiến lược",
+        "details": ["Phân tích đề cập & cảm xúc thương hiệu", "Định vị đối thủ cạnh tranh chính", "Khai thác câu hỏi giá trị cao", "Đánh giá chất lượng câu trả lời"]
+      },
+      {
+        "title": "Kế hoạch Chiến lược",
+        "description": "Thiết kế cấp cao với độ chính xác",
+        "details": ["Xác định 20-30 câu hỏi chiến lược", "Định nghĩa tiếng nói thương hiệu", "Lập kế hoạch kỹ thuật nội dung", "Đặt mục tiêu KPI"]
+      },
+      {
+        "title": "Kỹ thuật Câu trả lời Cốt lõi",
+        "description": "Đạn dược nội dung để chiếm lĩnh diễn đàn",
+        "details": ["Nội dung giáo dục chuyên sâu", "Tích hợp câu chuyện thương hiệu tự nhiên", "Tối ưu hóa định dạng thân thiện AI", "Thích ứng nội dung đa phương thức"]
+      },
+      {
+        "title": "Tối ưu hóa Đa Nền tảng",
+        "description": "Bao phủ chính xác các nền tảng AI chính",
+        "details": ["DeepSeek, Doubao, Kimi, v.v.", "GEMINI, OpenAI, v.v.", "Đồng bộ hóa đa nền tảng", "Cập nhật nội dung thời gian thực"]
+      },
+      {
+        "title": "Giám sát Cảm xúc & PR",
+        "description": "Bảo vệ danh tiếng thương hiệu trong kỷ nguyên AI",
+        "details": ["Giám sát 24/7", "Cảnh báo đề cập tiêu cực thời gian thực", "Quy kết nội dung tiêu cực", "Phản ứng khủng hoảng nhanh"]
+      },
+      {
+        "title": "Theo dõi Hiệu suất & Lặp lại",
+        "description": "Vòng lặp tăng trưởng dựa trên dữ liệu",
+        "details": ["Báo cáo KPI định kỳ", "Theo dõi khách hàng tiềm năng chuyển đổi", "Phân tích ROI", "Tối ưu hóa chiến lược lặp lại"]
+      },
+      {
+        "title": "Hỗ trợ Động cơ Kỹ thuật",
+        "description": "Kiến trúc nền tảng thân thiện AI",
+        "details": ["Thích ứng kiến trúc RAG", "Xử lý nội dung đa phương thức", "Tăng cường quyền hạn nguồn", "Đồng bộ dữ liệu thời gian thực"]
+      },
+      {
+        "title": "Tùy chỉnh Ngành",
+        "description": "Đột phá chính xác cho các kịch bản khác nhau",
+        "details": ["Điện tử Tiêu dùng", "Xe Năng lượng Mới", "Sản xuất B2B", "Dịch vụ Cuộc sống Địa phương"]
+      }
+    ]
+  },
+  "productDemo": {
+    "title": "Nền tảng Phân tích GEO Mạnh mẽ",
+    "subtitle": "Từ chẩn đoán đến tối ưu hóa, nâng cao toàn diện khả năng cạnh tranh tìm kiếm AI của thương hiệu",
+    "cta": "Tạo Tài khoản Ngay, Nhận Báo cáo",
+    "features": [
+      {
+        "title": "Chẩn đoán Tìm kiếm AI",
+        "description": "Phân tích một nhấp chuột khả năng hiển thị thương hiệu trên DeepSeek, Doubao, Kimi, v.v."
+      },
+      {
+        "title": "Phân tích Đối thủ",
+        "description": "Trực quan hóa hiệu suất đối thủ trong tìm kiếm AI"
+      },
+      {
+        "title": "Theo dõi Xu hướng",
+        "description": "Giám sát thời gian thực các thay đổi khả năng hiển thị thương hiệu"
+      },
+      {
+        "title": "Mô phỏng Chiến lược",
+        "description": "Dự đoán thông minh kết quả chiến lược tối ưu hóa"
+      }
+    ]
+  },
+  "cases": {
+    "title": "Câu chuyện Thành công Ngành",
+    "subtitle": "Bao phủ hơn 30 ngành, giúp hơn 2000 doanh nghiệp đạt được tăng trưởng tìm kiếm AI",
+    "optimizationScenario": "Kịch bản Tối ưu hóa: ",
+    "items": [
+      {
+        "industry": "Điện tử Tiêu dùng",
+        "company": "Thương hiệu Smartphone Hàng đầu",
+        "scenario": "\"Điện thoại camera tốt nhất năm 2025\"",
+        "metrics": [
+          { "label": "Tỷ lệ Đề cập Thương hiệu", "before": "12%", "after": "48%" },
+          { "label": "Lưu lượng Website", "increase": "+210%" }
+        ]
+      },
+      {
+        "industry": "Xe Năng lượng Mới",
+        "company": "Nhà sản xuất Xe điện",
+        "scenario": "\"Xe điện tốt nhất cho quãng đường mùa đông\"",
+        "metrics": [
+          { "label": "Tỷ lệ Vị trí Câu trả lời", "after": "63%" },
+          { "label": "Tạo Khách hàng Tiềm năng", "increase": "+185%" }
+        ]
+      },
+      {
+        "industry": "Sản xuất B2B",
+        "company": "Công ty Robot Công nghiệp",
+        "scenario": "\"Giải pháp tự động hóa sản xuất\"",
+        "metrics": [
+          { "label": "Đề xuất Thương hiệu", "before": "8%", "after": "35%" },
+          { "label": "Yêu cầu Kinh doanh", "increase": "+150%" }
+        ]
+      },
+      {
+        "industry": "Dịch vụ Cuộc sống Địa phương",
+        "company": "Chuỗi Nhà hàng",
+        "scenario": "\"Lẩu giá trị tốt nhất ở Chaoyang\"",
+        "metrics": [
+          { "label": "Đề xuất Cửa hàng", "after": "52%" },
+          { "label": "Tỷ lệ Ghé thăm Cửa hàng", "increase": "+90%" }
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Đánh giá Khách hàng",
+    "subtitle": "Lắng nghe từ các thương hiệu đối tác",
+    "items": [
+      {
+        "content": "Sau khi sử dụng dịch vụ GEO của ZhiNao, tần suất đề xuất thương hiệu của chúng tôi trên DeepSeek tăng gấp 3 lần và tỷ lệ chuyển đổi cải thiện đáng kể.",
+        "author": "Quản lý Zhang",
+        "role": "Giám đốc Marketing",
+        "company": "Thương hiệu E-commerce Hàng đầu"
+      },
+      {
+        "content": "Báo cáo chẩn đoán rất chuyên nghiệp, xác định rõ ràng điểm yếu nội dung của chúng tôi trong tìm kiếm AI với các đề xuất tối ưu hóa có mục tiêu.",
+        "author": "Giám đốc Li",
+        "role": "Nhà sáng lập",
+        "company": "Thương hiệu Làm đẹp Mới nổi"
+      },
+      {
+        "content": "Tính năng mô phỏng chiến lược rất thực tế, cho phép chúng tôi dự đoán kết quả trước khi thực hiện, tiết kiệm nhiều chi phí thử nghiệm.",
+        "author": "Giám đốc Wang",
+        "role": "Trưởng Marketing Số",
+        "company": "Doanh nghiệp FMCG Nổi tiếng"
+      },
+      {
+        "content": "Dịch vụ toàn diện từ chẩn đoán đến thực hiện, đội ngũ chuyên nghiệp cao với hiệu quả giao tiếp xuất sắc, rất khuyến khích.",
+        "author": "Quản lý Chen",
+        "role": "Vận hành Thương hiệu",
+        "company": "Startup Công nghệ"
+      }
+    ]
+  },
+  "advantages": {
+    "title": "Lợi thế Cạnh tranh Cốt lõi",
+    "subtitle": "Chiến lược + Nội dung + Công nghệ + Dữ liệu, bốn chiều thúc đẩy lợi thế cạnh tranh dài hạn",
+    "items": [
+      {
+        "title": "Công nghệ Độc quyền",
+        "description": "Động cơ giám sát hệ sinh thái AI tự phát triển, mô hình phân tích ngữ nghĩa NLP và công cụ tối ưu hóa đa nền tảng, nhanh hơn 3 lần so với trung bình ngành"
+      },
+      {
+        "title": "Dịch vụ Đầu cuối",
+        "description": "Từ chẩn đoán chiến lược đến triển khai kỹ thuật và lặp lại hiệu suất, giải pháp tăng trưởng tìm kiếm AI một cửa"
+      },
+      {
+        "title": "Quyết định Dựa trên Dữ liệu",
+        "description": "Dựa trên dữ liệu nền tảng AI toàn mạng, bao phủ hơn 10 mô hình AI chính và hàng triệu câu hỏi ngành"
+      },
+      {
+        "title": "Kinh nghiệm Ngành Sâu",
+        "description": "Phục vụ hơn 2000 doanh nghiệp trên hơn 30 ngành, hình thành các mẫu ngành có thể tái sử dụng"
+      },
+      {
+        "title": "Kết quả Minh bạch",
+        "description": "Bảng điều khiển chuyên dụng hiển thị các chỉ số cốt lõi thời gian thực, báo cáo phân tích chi tiết hai tuần một lần"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Nhận Giải pháp GEO Tùy chỉnh",
+    "subtitle": "Liên hệ ngay để nhận báo cáo chẩn đoán hệ sinh thái AI miễn phí",
+    "formTitle": "Tư vấn Miễn phí",
+    "formSubtitle": "Điền vào biểu mẫu, tư vấn viên sẽ liên hệ trong 24 giờ",
+    "name": "Tên",
+    "namePlaceholder": "Tên của bạn",
+    "company": "Công ty",
+    "companyPlaceholder": "Tên công ty",
+    "phone": "Điện thoại",
+    "phonePlaceholder": "Số điện thoại của bạn",
+    "message": "Tin nhắn",
+    "messagePlaceholder": "Vui lòng mô tả ngắn gọn nhu cầu của bạn...",
+    "submit": "Gửi",
+    "submitting": "Đang gửi...",
+    "contactInfo": "Thông tin Liên hệ",
+    "address": "Địa chỉ",
+    "addressValue": "Phòng 710, Tầng 7, Tòa nhà Yuemet, Khu Công nghiệp Công nghệ Cao, Quận Nanshan, Thâm Quyến",
+    "phoneLabel": "Điện thoại",
+    "phoneValue": "13828710020",
+    "email": "Email",
+    "emailValue": "93510890@qq.com",
+    "companyName": "Shenzhen ZhiNao Era Technology Co., Ltd.",
+    "companyDescription": "Tập trung vào dịch vụ Tối ưu hóa Hệ sinh thái Tìm kiếm AI (GEO), giúp thương hiệu thiết lập lợi thế cạnh tranh dài hạn, ổn định trong kỷ nguyên AI, đạt được vòng lặp tăng trưởng hoàn chỉnh từ \"được AI đề cập\" đến \"được AI ưu tiên\" đến \"thúc đẩy chuyển đổi người dùng\".",
+    "successTitle": "Gửi Thành công",
+    "successMessage": "Cảm ơn yêu cầu của bạn, chúng tôi sẽ liên hệ trong 24 giờ!",
+    "errorTitle": "Gửi Thất bại",
+    "errorMessage": "Vui lòng thử lại sau hoặc gọi trực tiếp cho chúng tôi",
+    "networkError": "Lỗi mạng, vui lòng thử lại sau",
+    "validation": {
+      "nameRequired": "Vui lòng nhập tên của bạn",
+      "nameMax": "Tên không được vượt quá 100 ký tự",
+      "companyRequired": "Vui lòng nhập tên công ty",
+      "companyMax": "Tên công ty không được vượt quá 200 ký tự",
+      "phoneRequired": "Vui lòng nhập số điện thoại",
+      "phoneMax": "Số điện thoại không được vượt quá 50 ký tự",
+      "phoneInvalid": "Vui lòng nhập số điện thoại hợp lệ",
+      "messageMax": "Tin nhắn không được vượt quá 2000 ký tự"
+    }
+  },
+  "footer": {
+    "scanWechat": "Quét để Thêm WeChat",
+    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. Bảo lưu Mọi Quyền"
+  },
+  "floatingCta": {
+    "title": "🚀 Chẩn đoán Tìm kiếm AI Miễn phí, Tăng Khả năng Hiển thị Thương hiệu",
+    "titleMobile": "🚀 Chẩn đoán Tìm kiếm AI Miễn phí",
+    "subtitle": "10 Tín dụng Miễn phí · Không cần Thẻ · Bắt đầu Ngay",
+    "button": "Bắt đầu Miễn phí",
+    "close": "Đóng"
+  },
+  "language": {
+    "current": "Tiếng Việt",
+    "zhCN": "简体中文",
+    "en": "English",
+    "pt": "Português",
+    "vi": "Tiếng Việt"
+  }
+}
