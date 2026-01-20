@@ -4,16 +4,19 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const navItems = [
-    { label: "服务流程", href: "#services" },
-    { label: "行业案例", href: "#cases" },
-    { label: "核心优势", href: "#advantages" },
-    { label: "联系我们", href: "#contact" },
+    { label: t('nav.services'), href: "#services" },
+    { label: t('nav.cases'), href: "#cases" },
+    { label: t('nav.advantages'), href: "#advantages" },
+    { label: t('nav.contact'), href: "#contact" },
   ];
 
   return (
@@ -37,17 +40,19 @@ const Header = () => {
               </a>
             ))}
             
+            <LanguageSwitcher />
+            
             {user ? (
               <Button asChild>
-                <Link to="/dashboard">进入控制台</Link>
+                <Link to="/dashboard">{t('nav.dashboard')}</Link>
               </Button>
             ) : (
               <div className="flex items-center gap-3">
                 <Button variant="ghost" asChild>
-                  <Link to="/login">登录</Link>
+                  <Link to="/login">{t('nav.login')}</Link>
                 </Button>
                 <Button asChild>
-                  <Link to="/login">免费试用</Link>
+                  <Link to="/login">{t('nav.freeTrial')}</Link>
                 </Button>
               </div>
             )}
@@ -79,17 +84,20 @@ const Header = () => {
                 {item.label}
               </a>
             ))}
+            <div className="py-2">
+              <LanguageSwitcher />
+            </div>
             {user ? (
               <Button asChild className="w-full">
-                <Link to="/dashboard">进入控制台</Link>
+                <Link to="/dashboard">{t('nav.dashboard')}</Link>
               </Button>
             ) : (
               <div className="flex flex-col gap-2">
                 <Button variant="outline" asChild className="w-full">
-                  <Link to="/login">登录</Link>
+                  <Link to="/login">{t('nav.login')}</Link>
                 </Button>
                 <Button asChild className="w-full">
-                  <Link to="/login">免费试用</Link>
+                  <Link to="/login">{t('nav.freeTrial')}</Link>
                 </Button>
               </div>
             )}

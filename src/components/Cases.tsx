@@ -1,59 +1,62 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Users, MousePointer, Phone } from "lucide-react";
-
-const cases = [
-  {
-    industry: "消费电子",
-    company: "某头部手机品牌",
-    scenario: "\"2025拍照最好的手机\"",
-    metrics: [
-      { label: "品牌提及率", before: "12%", after: "48%", icon: TrendingUp },
-      { label: "官网跳转量", increase: "+210%", icon: MousePointer }
-    ],
-    color: "from-blue-500 to-blue-600"
-  },
-  {
-    industry: "新能源汽车",
-    company: "某新能源车企",
-    scenario: "\"纯电车冬季续航怎么选\"",
-    metrics: [
-      { label: "答案占位率", after: "63%", icon: TrendingUp },
-      { label: "潜在客户留资", increase: "+185%", icon: Users }
-    ],
-    color: "from-green-500 to-green-600"
-  },
-  {
-    industry: "B2B制造业",
-    company: "某工业机器人企业",
-    scenario: "\"制造业自动化生产线解决方案\"",
-    metrics: [
-      { label: "品牌推荐率", before: "8%", after: "35%", icon: TrendingUp },
-      { label: "商务咨询线索", increase: "+150%", icon: Phone }
-    ],
-    color: "from-purple-500 to-purple-600"
-  },
-  {
-    industry: "本地生活服务",
-    company: "某连锁餐饮品牌",
-    scenario: "\"北京朝阳区性价比高的火锅\"",
-    metrics: [
-      { label: "门店推荐率", after: "52%", icon: TrendingUp },
-      { label: "到店核销率", increase: "+90%", icon: Users }
-    ],
-    color: "from-orange-500 to-orange-600"
-  }
-];
+import { useTranslation } from "react-i18next";
 
 const Cases = () => {
+  const { t } = useTranslation();
+
+  const cases = [
+    {
+      industry: t('cases.items.electronics.industry'),
+      company: t('cases.items.electronics.company'),
+      scenario: t('cases.items.electronics.scenario'),
+      metrics: [
+        { label: t('cases.metrics.mentionRate'), before: "12%", after: "48%", icon: TrendingUp },
+        { label: t('cases.metrics.websiteTraffic'), increase: "+210%", icon: MousePointer }
+      ],
+      color: "from-blue-500 to-blue-600"
+    },
+    {
+      industry: t('cases.items.automotive.industry'),
+      company: t('cases.items.automotive.company'),
+      scenario: t('cases.items.automotive.scenario'),
+      metrics: [
+        { label: t('cases.metrics.answerRate'), after: "63%", icon: TrendingUp },
+        { label: t('cases.metrics.leads'), increase: "+185%", icon: Users }
+      ],
+      color: "from-green-500 to-green-600"
+    },
+    {
+      industry: t('cases.items.manufacturing.industry'),
+      company: t('cases.items.manufacturing.company'),
+      scenario: t('cases.items.manufacturing.scenario'),
+      metrics: [
+        { label: t('cases.metrics.recommendRate'), before: "8%", after: "35%", icon: TrendingUp },
+        { label: t('cases.metrics.inquiries'), increase: "+150%", icon: Phone }
+      ],
+      color: "from-purple-500 to-purple-600"
+    },
+    {
+      industry: t('cases.items.localServices.industry'),
+      company: t('cases.items.localServices.company'),
+      scenario: t('cases.items.localServices.scenario'),
+      metrics: [
+        { label: t('cases.metrics.storeRecommend'), after: "52%", icon: TrendingUp },
+        { label: t('cases.metrics.visitRate'), increase: "+90%", icon: Users }
+      ],
+      color: "from-orange-500 to-orange-600"
+    }
+  ];
+
   return (
     <section id="cases" className="py-24">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            行业成功案例
+            {t('cases.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            覆盖30+垂直行业，助力2000+企业实现AI搜索增长
+            {t('cases.subtitle')}
           </p>
         </div>
 
@@ -69,7 +72,7 @@ const Cases = () => {
                 </div>
                 <CardTitle className="text-xl">{caseItem.company}</CardTitle>
                 <p className="text-muted-foreground">
-                  优化场景：<span className="text-foreground font-medium">{caseItem.scenario}</span>
+                  {t('cases.optimizationScenario')}：<span className="text-foreground font-medium">{caseItem.scenario}</span>
                 </p>
               </CardHeader>
               <CardContent>
