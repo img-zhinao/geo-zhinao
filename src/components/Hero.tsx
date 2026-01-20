@@ -1,8 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Brain, Search, TrendingUp, Sparkles, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Hero = () => {
+  const { t } = useTranslation();
+
+  const stats = [
+    { value: "2000+", label: t('hero.stats.enterprises') },
+    { value: "30+", label: t('hero.stats.industries') },
+    { value: "10+", label: t('hero.stats.platforms') },
+    { value: "3x", label: t('hero.stats.speedUp') },
+  ];
+
   return (
     <section className="relative flex items-center justify-center pt-24 pb-8 overflow-hidden">
       {/* Background gradient */}
@@ -17,19 +27,19 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-8 animate-fade-in">
             <Brain className="w-4 h-4" />
-            <span className="text-sm font-medium">全链路 GEO 服务专家</span>
+            <span className="text-sm font-medium">{t('hero.badge')}</span>
           </div>
 
           {/* Main heading */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight animate-fade-in">
-            让品牌在
-            <span className="text-primary"> AI 搜索 </span>
-            中脱颖而出
+            {t('hero.title')}
+            <span className="text-primary">{t('hero.titleHighlight')}</span>
+            {t('hero.titleEnd')}
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in">
-            从诊断到迭代的品牌 AI 搜索增长方案，覆盖"诊断 - 规划 - 内容 - 布局 - 监测 - 迭代"全链路服务体系
+            {t('hero.subtitle')}
           </p>
 
           {/* CTA Buttons */}
@@ -37,12 +47,12 @@ const Hero = () => {
             <Button size="lg" asChild className="group">
               <Link to="/login">
                 <Sparkles className="mr-2 w-4 h-4" />
-                免费开始使用
+                {t('hero.cta.primary')}
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="#services">了解服务流程</a>
+              <a href="#services">{t('hero.cta.secondary')}</a>
             </Button>
           </div>
 
@@ -50,26 +60,21 @@ const Hero = () => {
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-16 animate-fade-in">
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-green-500" />
-              <span>免费10积分体验</span>
+              <span>{t('hero.trust.freeCredits')}</span>
             </div>
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-green-500" />
-              <span>无需绑定支付方式</span>
+              <span>{t('hero.trust.noPayment')}</span>
             </div>
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <CheckCircle2 className="w-4 h-4 text-green-500" />
-              <span>30秒完成注册</span>
+              <span>{t('hero.trust.quickStart')}</span>
             </div>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto animate-fade-in">
-            {[
-              { value: "2000+", label: "服务企业" },
-              { value: "30+", label: "覆盖行业" },
-              { value: "10+", label: "主流AI平台" },
-              { value: "3x", label: "响应速度提升" },
-            ].map((stat, index) => (
+            {stats.map((stat, index) => (
               <div key={index} className="text-center p-4 rounded-xl bg-card shadow-sm border border-border">
                 <div className="text-2xl md:text-3xl font-bold text-primary mb-1">{stat.value}</div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>

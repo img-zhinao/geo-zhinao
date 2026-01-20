@@ -9,108 +9,73 @@ import {
   Settings
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
-const services = [
-  {
-    icon: Search,
-    title: "AI 生态位诊断",
-    description: "战略起点的深度扫描",
-    details: [
-      "品牌提及与情感极性分析",
-      "核心竞品占位分析",
-      "高价值问题库挖掘",
-      "答案质量与机会评估"
-    ]
-  },
-  {
-    icon: Target,
-    title: "战略蓝图规划",
-    description: "精准锚定的顶层设计",
-    details: [
-      "锁定20-30个战略级问题",
-      "品牌声音定义",
-      "内容工程规划",
-      "KPI目标设定"
-    ]
-  },
-  {
-    icon: FileText,
-    title: "核心答案工程",
-    description: "抢占话语权的内容弹药",
-    details: [
-      "深度科普内容创作",
-      "品牌故事自然融入",
-      "AI友好格式优化",
-      "多模态内容适配"
-    ]
-  },
-  {
-    icon: Globe,
-    title: "多平台答案优化",
-    description: "精准覆盖主流AI阵地",
-    details: [
-      "DeepSeek、豆包、Kimi等",
-      "GEMINI、OpenAI等",
-      "多平台同步优化",
-      "实时内容更新"
-    ]
-  },
-  {
-    icon: Shield,
-    title: "舆情监测与公关",
-    description: "AI时代的品牌声誉守护",
-    details: [
-      "7×24小时全天候监测",
-      "负面提及实时预警",
-      "负面内容归因分析",
-      "危机快速响应"
-    ]
-  },
-  {
-    icon: BarChart3,
-    title: "效果追踪与迭代",
-    description: "数据驱动的增长闭环",
-    details: [
-      "核心指标定期汇报",
-      "转化线索追踪",
-      "ROI分析",
-      "策略迭代优化"
-    ]
-  },
-  {
-    icon: Cpu,
-    title: "技术引擎支撑",
-    description: "AI友好的底层架构优化",
-    details: [
-      "RAG架构适配",
-      "多模态内容处理",
-      "信源权威度强化",
-      "实时数据同步"
-    ]
-  },
-  {
-    icon: Settings,
-    title: "行业定制方案",
-    description: "适配不同场景的精准突破",
-    details: [
-      "消费电子行业",
-      "新能源汽车行业",
-      "B2B制造业",
-      "本地生活服务"
-    ]
-  }
-];
+const serviceIcons = [Search, Target, FileText, Globe, Shield, BarChart3, Cpu, Settings];
 
 const Services = () => {
+  const { t } = useTranslation();
+
+  const services = [
+    {
+      icon: Search,
+      title: t('services.items.diagnosis.title'),
+      description: t('services.items.diagnosis.description'),
+      details: t('services.items.diagnosis.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: Target,
+      title: t('services.items.strategy.title'),
+      description: t('services.items.strategy.description'),
+      details: t('services.items.strategy.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: FileText,
+      title: t('services.items.content.title'),
+      description: t('services.items.content.description'),
+      details: t('services.items.content.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: Globe,
+      title: t('services.items.optimization.title'),
+      description: t('services.items.optimization.description'),
+      details: t('services.items.optimization.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: Shield,
+      title: t('services.items.monitoring.title'),
+      description: t('services.items.monitoring.description'),
+      details: t('services.items.monitoring.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: BarChart3,
+      title: t('services.items.tracking.title'),
+      description: t('services.items.tracking.description'),
+      details: t('services.items.tracking.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: Cpu,
+      title: t('services.items.technology.title'),
+      description: t('services.items.technology.description'),
+      details: t('services.items.technology.details', { returnObjects: true }) as string[]
+    },
+    {
+      icon: Settings,
+      title: t('services.items.custom.title'),
+      description: t('services.items.custom.description'),
+      details: t('services.items.custom.details', { returnObjects: true }) as string[]
+    }
+  ];
+
   return (
     <section id="services" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            全链路 GEO 服务体系
+            {t('services.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            从诊断到迭代，八步打造品牌AI搜索增长闭环
+            {t('services.subtitle')}
           </p>
         </div>
 
@@ -126,7 +91,7 @@ const Services = () => {
                 </div>
                 <div className="inline-flex items-center gap-2 mb-2">
                   <span className="text-xs font-medium text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
-                    第{index + 1}步
+                    {t('services.step', { number: index + 1 })}
                   </span>
                 </div>
                 <CardTitle className="text-lg">{service.title}</CardTitle>

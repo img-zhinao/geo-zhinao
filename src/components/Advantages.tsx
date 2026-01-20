@@ -1,34 +1,39 @@
 import { Zap, Link2, BarChart2, Building, Eye } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-const advantages = [
-  {
-    icon: Zap,
-    title: "技术自研壁垒",
-    description: "自主研发AI生态监测引擎、NLP语义分析模型和多平台优化工具，响应速度比行业平均快3倍"
-  },
-  {
-    icon: Link2,
-    title: "全链路闭环服务",
-    description: "从战略诊断到技术落地，再到效果迭代，\"一站式\" AI搜索增长解决方案"
-  },
-  {
-    icon: BarChart2,
-    title: "数据驱动决策",
-    description: "基于全网AI平台数据，覆盖10+主流AI模型、百万级行业问题库，避免盲目投入"
-  },
-  {
-    icon: Building,
-    title: "行业深耕经验",
-    description: "累计服务2000+企业，覆盖30+垂直行业，形成可复用的行业模板库"
-  },
-  {
-    icon: Eye,
-    title: "透明化效果呈现",
-    description: "专属数据看板实时展示核心指标，每两周输出详细分析报告，服务价值可视化"
-  }
-];
+const advantageIcons = [Zap, Link2, BarChart2, Building, Eye];
 
 const Advantages = () => {
+  const { t } = useTranslation();
+
+  const advantages = [
+    {
+      icon: Zap,
+      title: t('advantages.items.technology.title'),
+      description: t('advantages.items.technology.description')
+    },
+    {
+      icon: Link2,
+      title: t('advantages.items.fullChain.title'),
+      description: t('advantages.items.fullChain.description')
+    },
+    {
+      icon: BarChart2,
+      title: t('advantages.items.dataDriven.title'),
+      description: t('advantages.items.dataDriven.description')
+    },
+    {
+      icon: Building,
+      title: t('advantages.items.industry.title'),
+      description: t('advantages.items.industry.description')
+    },
+    {
+      icon: Eye,
+      title: t('advantages.items.transparent.title'),
+      description: t('advantages.items.transparent.description')
+    }
+  ];
+
   return (
     <section id="advantages" className="py-24 bg-primary text-primary-foreground relative overflow-hidden">
       {/* Background decoration */}
@@ -40,10 +45,10 @@ const Advantages = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            核心差异化优势
+            {t('advantages.title')}
           </h2>
           <p className="text-lg opacity-80 max-w-2xl mx-auto">
-            战略 + 内容 + 技术 + 数据 四维驱动，建立长期竞争优势
+            {t('advantages.subtitle')}
           </p>
         </div>
 

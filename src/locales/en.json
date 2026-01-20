@@ -14,254 +14,181 @@
     "titleHighlight": " Stand Out ",
     "titleEnd": "in AI Search",
     "subtitle": "From diagnosis to iteration, a comprehensive AI search growth solution covering diagnosis, planning, content, distribution, monitoring, and optimization",
-    "cta": "Get Started Free",
-    "learnMore": "Learn About Services",
-    "trust1": "10 Free Credits",
-    "trust2": "No Card Required",
-    "trust3": "30 Sec Sign Up",
-    "stat1Value": "2000+",
-    "stat1Label": "Clients Served",
-    "stat2Value": "30+",
-    "stat2Label": "Industries",
-    "stat3Value": "10+",
-    "stat3Label": "AI Platforms",
-    "stat4Value": "3x",
-    "stat4Label": "Faster Response"
-  },
-  "quickTry": {
-    "badge": "30-Second Quick Trial",
-    "title": "Try AI Search Diagnosis Free",
-    "subtitle": "Enter your brand name to see its visibility across major AI platforms",
-    "placeholder": "Enter your brand name...",
-    "button": "Try Now",
-    "socialProof": "",
-    "socialProofEnd": " brands have completed diagnosis"
+    "cta": {
+      "primary": "Get Started Free",
+      "secondary": "Learn About Services"
+    },
+    "trust": {
+      "freeCredits": "10 Free Credits",
+      "noPayment": "No Card Required",
+      "quickStart": "30 Sec Sign Up"
+    },
+    "stats": {
+      "enterprises": "Clients Served",
+      "industries": "Industries",
+      "platforms": "AI Platforms",
+      "speedUp": "Faster Response"
+    }
   },
   "services": {
     "title": "Full-Stack GEO Service System",
     "subtitle": "From diagnosis to iteration, 8 steps to build your AI search growth loop",
     "step": "Step {{number}}",
-    "items": [
-      {
+    "items": {
+      "diagnosis": {
         "title": "AI Ecosystem Diagnosis",
         "description": "Deep scanning as strategic starting point",
         "details": ["Brand mention & sentiment analysis", "Core competitor positioning", "High-value question mining", "Answer quality assessment"]
       },
-      {
+      "strategy": {
         "title": "Strategic Blueprint",
         "description": "Precision-targeted top-level design",
         "details": ["Lock in 20-30 strategic questions", "Brand voice definition", "Content engineering planning", "KPI goal setting"]
       },
-      {
+      "content": {
         "title": "Core Answer Engineering",
         "description": "Content ammunition to capture discourse",
         "details": ["In-depth educational content", "Natural brand story integration", "AI-friendly format optimization", "Multi-modal content adaptation"]
       },
-      {
+      "optimization": {
         "title": "Multi-Platform Optimization",
         "description": "Precise coverage of mainstream AI platforms",
         "details": ["DeepSeek, Doubao, Kimi, etc.", "GEMINI, OpenAI, etc.", "Cross-platform synchronization", "Real-time content updates"]
       },
-      {
+      "monitoring": {
         "title": "Sentiment Monitoring & PR",
         "description": "Brand reputation protection in AI era",
         "details": ["24/7 monitoring", "Real-time negative mention alerts", "Negative content attribution", "Rapid crisis response"]
       },
-      {
+      "tracking": {
         "title": "Performance Tracking & Iteration",
         "description": "Data-driven growth closed loop",
         "details": ["Regular KPI reporting", "Conversion lead tracking", "ROI analysis", "Strategy iteration optimization"]
       },
-      {
+      "technology": {
         "title": "Technical Engine Support",
         "description": "AI-friendly underlying architecture",
         "details": ["RAG architecture adaptation", "Multi-modal content processing", "Source authority enhancement", "Real-time data sync"]
       },
-      {
+      "custom": {
         "title": "Industry Customization",
         "description": "Precise breakthroughs for different scenarios",
         "details": ["Consumer Electronics", "New Energy Vehicles", "B2B Manufacturing", "Local Life Services"]
       }
-    ]
-  },
-  "productDemo": {
-    "title": "Powerful GEO Analysis Platform",
-    "subtitle": "From diagnosis to optimization, comprehensively improve your brand's AI search competitiveness",
-    "cta": "Create Account Now, Get Your Report",
-    "features": [
-      {
-        "title": "AI Search Diagnosis",
-        "description": "One-click analysis of brand visibility on DeepSeek, Doubao, Kimi, etc."
-      },
-      {
-        "title": "Competitor Analysis",
-        "description": "Visualize competitor performance in AI search"
-      },
-      {
-        "title": "Trend Tracking",
-        "description": "Real-time monitoring of brand visibility changes"
-      },
-      {
-        "title": "Strategy Simulation",
-        "description": "Intelligently predict optimization strategy results"
-      }
-    ]
+    }
   },
   "cases": {
     "title": "Industry Success Stories",
     "subtitle": "Covering 30+ industries, helping 2000+ enterprises achieve AI search growth",
-    "optimizationScenario": "Optimization Scenario: ",
-    "items": [
-      {
+    "optimizationScenario": "Optimization Scenario",
+    "items": {
+      "electronics": {
         "industry": "Consumer Electronics",
         "company": "Leading Smartphone Brand",
-        "scenario": "\"Best camera phone in 2025\"",
-        "metrics": [
-          { "label": "Brand Mention Rate", "before": "12%", "after": "48%" },
-          { "label": "Website Traffic", "increase": "+210%" }
-        ]
+        "scenario": "\"Best camera phone in 2025\""
       },
-      {
+      "automotive": {
         "industry": "New Energy Vehicles",
         "company": "NEV Manufacturer",
-        "scenario": "\"Best EV for winter range\"",
-        "metrics": [
-          { "label": "Answer Placement Rate", "after": "63%" },
-          { "label": "Lead Generation", "increase": "+185%" }
-        ]
+        "scenario": "\"Best EV for winter range\""
       },
-      {
+      "manufacturing": {
         "industry": "B2B Manufacturing",
         "company": "Industrial Robot Company",
-        "scenario": "\"Manufacturing automation solutions\"",
-        "metrics": [
-          { "label": "Brand Recommendation", "before": "8%", "after": "35%" },
-          { "label": "Business Inquiries", "increase": "+150%" }
-        ]
+        "scenario": "\"Manufacturing automation solutions\""
       },
-      {
+      "localServices": {
         "industry": "Local Life Services",
         "company": "Restaurant Chain Brand",
-        "scenario": "\"Best value hotpot in Chaoyang\"",
-        "metrics": [
-          { "label": "Store Recommendation", "after": "52%" },
-          { "label": "Store Visit Rate", "increase": "+90%" }
-        ]
+        "scenario": "\"Best value hotpot in Chaoyang\""
       }
-    ]
-  },
-  "testimonials": {
-    "title": "Customer Reviews",
-    "subtitle": "Hear from our partner brands",
-    "items": [
-      {
-        "content": "After using ZhiNao's GEO service, our brand's recommendation frequency on DeepSeek increased 3x, and conversion rates improved significantly.",
-        "author": "Manager Zhang",
-        "role": "Marketing Director",
-        "company": "Leading E-commerce Brand"
-      },
-      {
-        "content": "The diagnosis report is very professional, clearly identifying our content weaknesses in AI search with targeted optimization suggestions.",
-        "author": "Director Li",
-        "role": "Founder",
-        "company": "Emerging Beauty Brand"
-      },
-      {
-        "content": "The strategy simulation feature is very practical, allowing us to predict results before execution, saving a lot of trial and error costs.",
-        "author": "Director Wang",
-        "role": "Digital Marketing Lead",
-        "company": "Well-known FMCG Enterprise"
-      },
-      {
-        "content": "Full-stack service from diagnosis to execution, highly professional team with excellent communication efficiency, highly recommended.",
-        "author": "Manager Chen",
-        "role": "Brand Operations",
-        "company": "Tech Startup"
-      }
-    ]
+    },
+    "metrics": {
+      "mentionRate": "Brand Mention Rate",
+      "websiteTraffic": "Website Traffic",
+      "answerRate": "Answer Placement Rate",
+      "leads": "Lead Generation",
+      "recommendRate": "Brand Recommendation",
+      "inquiries": "Business Inquiries",
+      "storeRecommend": "Store Recommendation",
+      "visitRate": "Store Visit Rate"
+    }
   },
   "advantages": {
     "title": "Core Competitive Advantages",
     "subtitle": "Strategy + Content + Technology + Data, four dimensions driving long-term competitive advantage",
-    "items": [
-      {
+    "items": {
+      "technology": {
         "title": "Proprietary Technology",
         "description": "Self-developed AI ecosystem monitoring engine, NLP semantic analysis model, and multi-platform optimization tools, 3x faster than industry average"
       },
-      {
+      "fullChain": {
         "title": "End-to-End Service",
         "description": "From strategic diagnosis to technical implementation to performance iteration, one-stop AI search growth solution"
       },
-      {
+      "dataDriven": {
         "title": "Data-Driven Decisions",
         "description": "Based on full-network AI platform data, covering 10+ mainstream AI models and millions of industry questions"
       },
-      {
+      "industry": {
         "title": "Deep Industry Experience",
         "description": "Served 2000+ enterprises across 30+ industries, forming reusable industry templates"
       },
-      {
+      "transparent": {
         "title": "Transparent Results",
         "description": "Dedicated dashboard displaying core metrics in real-time, bi-weekly detailed analysis reports"
       }
-    ]
+    }
   },
   "contact": {
     "title": "Get Customized GEO Solution",
     "subtitle": "Contact us now for a free AI ecosystem diagnosis report",
-    "formTitle": "Free Consultation",
-    "formSubtitle": "Fill out the form, our consultant will contact you within 24 hours",
-    "name": "Name",
-    "namePlaceholder": "Your name",
-    "company": "Company",
-    "companyPlaceholder": "Company name",
-    "phone": "Phone",
-    "phonePlaceholder": "Your phone number",
-    "message": "Message",
-    "messagePlaceholder": "Please briefly describe your needs...",
-    "submit": "Submit",
-    "submitting": "Submitting...",
-    "contactInfo": "Contact Information",
-    "address": "Address",
-    "addressValue": "Room 710, 7th Floor, Yuemet Building, High-tech Industrial Park, Nanshan District, Shenzhen",
-    "phoneLabel": "Phone",
-    "phoneValue": "13828710020",
-    "email": "Email",
-    "emailValue": "93510890@qq.com",
-    "companyName": "Shenzhen ZhiNao Era Technology Co., Ltd.",
-    "companyDescription": "Focused on AI Search Ecosystem Optimization (GEO) services, helping brands establish long-term, stable competitive advantages in the AI era, achieving a complete growth loop from \"being mentioned by AI\" to \"being prioritized by AI\" to \"driving user conversion\".",
-    "successTitle": "Submitted Successfully",
-    "successMessage": "Thank you for your inquiry, we will contact you within 24 hours!",
-    "errorTitle": "Submission Failed",
-    "errorMessage": "Please try again later or call us directly",
-    "networkError": "Network error, please try again later",
-    "validation": {
-      "nameRequired": "Please enter your name",
-      "nameMax": "Name cannot exceed 100 characters",
-      "companyRequired": "Please enter company name",
-      "companyMax": "Company name cannot exceed 200 characters",
-      "phoneRequired": "Please enter phone number",
-      "phoneMax": "Phone number cannot exceed 50 characters",
-      "phoneInvalid": "Please enter a valid phone number",
-      "messageMax": "Message cannot exceed 2000 characters"
+    "form": {
+      "title": "Free Consultation",
+      "description": "Fill out the form, our consultant will contact you within 24 hours",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "company": "Company",
+      "companyPlaceholder": "Company name",
+      "phone": "Phone",
+      "phonePlaceholder": "Your phone number",
+      "message": "Message",
+      "messagePlaceholder": "Please briefly describe your needs...",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "validation": {
+        "nameRequired": "Please enter your name",
+        "nameMax": "Name cannot exceed 100 characters",
+        "companyRequired": "Please enter company name",
+        "companyMax": "Company name cannot exceed 200 characters",
+        "phoneRequired": "Please enter phone number",
+        "phoneMax": "Phone number cannot exceed 50 characters",
+        "phoneInvalid": "Please enter a valid phone number",
+        "messageMax": "Message cannot exceed 2000 characters"
+      }
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "addressValue": "Room 710, 7th Floor, Yuemet Building, High-tech Industrial Park, Nanshan District, Shenzhen",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "company": {
+      "name": "Shenzhen ZhiNao Era Technology Co., Ltd.",
+      "description": "Focused on AI Search Ecosystem Optimization (GEO) services, helping brands establish long-term, stable competitive advantages in the AI era, achieving a complete growth loop from being mentioned by AI to being prioritized by AI to driving user conversion."
+    },
+    "toast": {
+      "successTitle": "Submitted Successfully",
+      "successDescription": "Thank you for your inquiry, we will contact you within 24 hours!",
+      "errorTitle": "Submission Failed",
+      "errorDescription": "Please try again later or call us directly",
+      "networkError": "Network error, please try again later"
     }
   },
   "footer": {
+    "wechatAlt": "WeChat QR Code",
     "scanWechat": "Scan to Add WeChat",
-    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. All Rights Reserved"
-  },
-  "floatingCta": {
-    "title": "🚀 Free AI Search Diagnosis, Boost Brand Visibility",
-    "titleMobile": "🚀 Free AI Search Diagnosis",
-    "subtitle": "10 Free Credits · No Card Required · Start Now",
-    "button": "Start Free",
-    "close": "Close"
-  },
-  "language": {
-    "current": "English",
-    "zhCN": "简体中文",
-    "en": "English",
-    "pt": "Português",
-    "vi": "Tiếng Việt"
+    "copyright": "Shenzhen ZhiNao Era Technology Co., Ltd. All Rights Reserved"
   }
 }
