@@ -23,6 +23,7 @@ export type Database = {
           name: string
           phone: string
           status: string
+          website: string | null
         }
         Insert: {
           company: string
@@ -32,6 +33,7 @@ export type Database = {
           name: string
           phone: string
           status?: string
+          website?: string | null
         }
         Update: {
           company?: string
@@ -41,6 +43,7 @@ export type Database = {
           name?: string
           phone?: string
           status?: string
+          website?: string | null
         }
         Relationships: []
       }
