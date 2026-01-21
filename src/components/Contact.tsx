@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2, Globe } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +35,14 @@ const Contact = () => {
       .trim()
       .min(1, { message: t('contact.form.validation.companyRequired') })
       .max(200, { message: t('contact.form.validation.companyMax') }),
+    website: z
+      .string()
+      .max(500, { message: t('contact.form.validation.websiteMax') })
+      .refine((val) => !val || val.startsWith('http://') || val.startsWith('https://'), {
+        message: t('contact.form.validation.websiteInvalid'),
+      })
+      .optional()
+      .or(z.literal("")),
     phone: z
       .string()
       .trim()
@@ -55,6 +63,7 @@ const Contact = () => {
     defaultValues: {
       name: "",
       company: "",
+      website: "",
       phone: "",
       message: "",
     },
@@ -64,9 +73,11 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
+      // 保存到数据库
       const { error } = await supabase.from("contact_inquiries").insert({
         name: data.name.trim(),
         company: data.company.trim(),
+        website: data.website?.trim() || null,
         phone: data.phone.trim(),
         message: data.message?.trim() || null,
       });
@@ -79,6 +90,26 @@ const Contact = () => {
           variant: "destructive",
         });
         return;
+      }
+
+      // 发送邮件通知
+      try {
+        const { error: emailError } = await supabase.functions.invoke('send-inquiry-notification', {
+          body: {
+            name: data.name.trim(),
+            company: data.company.trim(),
+            website: data.website?.trim() || undefined,
+            phone: data.phone.trim(),
+            message: data.message?.trim() || undefined,
+          },
+        });
+
+        if (emailError) {
+          console.error("Error sending email notification:", emailError);
+          // 邮件发送失败不影响用户体验，只记录日志
+        }
+      } catch (emailErr) {
+        console.error("Email notification error:", emailErr);
       }
 
       toast({
@@ -168,6 +199,23 @@ const Contact = () => {
                       )}
                     />
                   </div>
+                  <FormField
+                    control={form.control}
+                    name="website"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1">
+                          <Globe className="w-4 h-4" />
+                          {t('contact.form.website')}
+                          <span className="text-muted-foreground text-xs ml-1">({t('contact.form.validation.websiteMax').includes('可选') ? '可选' : 'Optional'})</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder={t('contact.form.websitePlaceholder')} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="phone"
