@@ -21,8 +21,18 @@ const Footer = () => {
           </nav>
         </div>
 
-        <div className="border-t border-background/10 mt-8 pt-8 text-center text-background/60 text-sm">
+        <div className="border-t border-background/10 mt-8 pt-8 text-center text-background/60 text-sm space-y-2">
           <p>© {new Date().getFullYear()} {t('footer.copyright')}</p>
+          <p>
+            <a 
+              href="https://beian.miit.gov.cn/#/Integrated/index" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-background transition-colors"
+            >
+              粤ICP备2023101390号
+            </a>
+          </p>
         </div>
       </div>
     </footer>
