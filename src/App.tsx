@@ -18,6 +18,9 @@ import Diagnosis from "./pages/Diagnosis";
 import DiagnosisList from "./pages/DiagnosisList";
 import Simulation from "./pages/Simulation";
 import SimulationList from "./pages/SimulationList";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import Sitemap from "./pages/Sitemap";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/sitemap" element={<Sitemap />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/dashboard/settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
               <Route path="/dashboard/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />

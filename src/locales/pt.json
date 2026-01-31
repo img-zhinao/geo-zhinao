@@ -258,7 +258,10 @@
   },
   "footer": {
     "scanWechat": "Escaneie para Adicionar WeChat",
-    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. Todos os Direitos Reservados"
+    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. Todos os Direitos Reservados",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço",
+    "sitemap": "Mapa do Site"
   },
   "floatingCta": {
     "title": "🚀 Diagnóstico Gratuito de Busca por IA, Aumente a Visibilidade da Marca",
@@ -273,5 +276,136 @@
     "en": "English",
     "pt": "Português",
     "vi": "Tiếng Việt"
+  },
+  "legal": {
+    "backToHome": "Voltar para Início",
+    "privacy": {
+      "title": "Política de Privacidade",
+      "metaDescription": "Saiba como a ZhiNao Era coleta, usa e protege suas informações pessoais",
+      "lastUpdated": "Última Atualização",
+      "sections": {
+        "intro": {
+          "title": "Introdução",
+          "content": "A Shenzhen ZhiNao Era Technology Co., Ltd. (\"nós\") valoriza sua privacidade. Esta Política de Privacidade explica como coletamos, usamos, armazenamos e protegemos suas informações pessoais."
+        },
+        "collection": {
+          "title": "Coleta de Informações",
+          "content": "Podemos coletar os seguintes tipos de informações:",
+          "items": {
+            "name": "Nome e informações de contato (telefone, e-mail)",
+            "contact": "Informações da empresa e cargo",
+            "company": "Endereço do site da empresa",
+            "usage": "Dados de uso do serviço e análises"
+          }
+        },
+        "usage": {
+          "title": "Uso de Informações",
+          "content": "Usamos as informações coletadas para os seguintes propósitos:",
+          "items": {
+            "service": "Fornecer e melhorar nossos serviços GEO",
+            "improve": "Analisar e otimizar a experiência do usuário",
+            "communicate": "Comunicar sobre assuntos relacionados ao serviço",
+            "legal": "Cumprir requisitos legais"
+          }
+        },
+        "protection": {
+          "title": "Proteção de Informações",
+          "content": "Empregamos medidas de segurança padrão da indústria para proteger suas informações pessoais, incluindo criptografia de dados, controles de acesso e auditorias de segurança."
+        },
+        "sharing": {
+          "title": "Compartilhamento de Informações",
+          "content": "Não vendemos suas informações pessoais. Compartilhamos informações apenas quando: você dá consentimento explícito, exigido por lei, ou trabalhando com provedores de serviços (vinculados por acordos de confidencialidade)."
+        },
+        "rights": {
+          "title": "Seus Direitos",
+          "content": "Você tem os seguintes direitos sobre suas informações pessoais:",
+          "items": {
+            "access": "Acessar e obter uma cópia de suas informações pessoais",
+            "correct": "Corrigir informações imprecisas",
+            "delete": "Solicitar exclusão de suas informações pessoais",
+            "withdraw": "Retirar consentimento (sem afetar o processamento legal anterior)"
+          }
+        },
+        "contact": {
+          "title": "Entre em Contato",
+          "content": "Se você tiver dúvidas sobre esta Política de Privacidade ou precisar exercer seus direitos, entre em contato conosco:"
+        }
+      }
+    },
+    "terms": {
+      "title": "Termos de Serviço",
+      "metaDescription": "Termos e condições para usar os serviços GEO da ZhiNao Era",
+      "lastUpdated": "Última Atualização",
+      "sections": {
+        "acceptance": {
+          "title": "Aceitação dos Termos",
+          "content": "Ao usar os serviços fornecidos pela Shenzhen ZhiNao Era Technology Co., Ltd. (\"nós\"), você concorda com estes Termos de Serviço. Se você não concordar com estes termos, não use nossos serviços."
+        },
+        "services": {
+          "title": "Descrição do Serviço",
+          "content": "Fornecemos serviços relacionados à Otimização de Ecossistema de Busca por IA (GEO), incluindo: diagnóstico de ecossistema de IA da marca, planejamento estratégico, otimização de conteúdo, otimização de respostas multi-plataforma, monitoramento de sentimentos, etc."
+        },
+        "account": {
+          "title": "Responsabilidade da Conta",
+          "content": "Usar nossos serviços requer criar uma conta. Você deve:",
+          "items": {
+            "accurate": "Fornecer informações de registro precisas e completas",
+            "security": "Proteger suas credenciais de conta e ser responsável pelas atividades da conta",
+            "notify": "Notificar-nos imediatamente sobre qualquer uso não autorizado"
+          }
+        },
+        "usage": {
+          "title": "Diretrizes de Uso",
+          "content": "Ao usar nossos serviços, você concorda em:",
+          "items": {
+            "lawful": "Usar apenas para propósitos legais",
+            "noHarm": "Não realizar atividades que possam prejudicar o serviço ou outros usuários",
+            "noInfringe": "Não infringir propriedade intelectual ou outros direitos de terceiros",
+            "noMisuse": "Não abusar ou tentar acesso não autorizado aos sistemas"
+          }
+        },
+        "ip": {
+          "title": "Propriedade Intelectual",
+          "content": "Todo conteúdo, marcas registradas, software e tecnologia no serviço são propriedade nossa ou de nossos licenciantes. Sem permissão por escrito, você não pode copiar, modificar, distribuir ou criar trabalhos derivados."
+        },
+        "payment": {
+          "title": "Termos de Pagamento",
+          "content": "Serviços pagos são executados de acordo com preços e métodos de pagamento acordados. Créditos não são reembolsáveis após a compra. Reservamos o direito de ajustar preços com aviso prévio."
+        },
+        "limitation": {
+          "title": "Limitação de Responsabilidade",
+          "content": "Na medida permitida por lei, não somos responsáveis por danos indiretos, incidentais, especiais ou consequenciais decorrentes do uso dos serviços. Nossa responsabilidade total não excederá as taxas de serviço que você pagou."
+        },
+        "termination": {
+          "title": "Rescisão do Serviço",
+          "content": "Reservamos o direito de suspender ou encerrar sua conta por violações de termos ou outros motivos. Após a rescisão, seu acesso aos serviços cessará imediatamente."
+        },
+        "changes": {
+          "title": "Alterações nos Termos",
+          "content": "Podemos atualizar estes termos. Alterações significativas serão notificadas por meio de anúncios no site ou e-mail. O uso contínuo dos serviços indica aceitação dos termos atualizados."
+        },
+        "contact": {
+          "title": "Entre em Contato",
+          "content": "Se você tiver dúvidas sobre estes Termos de Serviço, entre em contato conosco:"
+        }
+      }
+    }
+  },
+  "sitemap": {
+    "title": "Mapa do Site",
+    "metaDescription": "Navegue pela estrutura completa de páginas do site ZhiNao Era",
+    "description": "Navegue por todas as páginas e conteúdo em nosso site",
+    "sections": {
+      "main": "Páginas Principais",
+      "legal": "Informações Legais",
+      "account": "Conta"
+    },
+    "pages": {
+      "home": "Início"
+    },
+    "xmlSitemap": {
+      "title": "Mapa do Site XML",
+      "description": "Mapa do site em formato XML para mecanismos de busca:"
+    }
   }
 }

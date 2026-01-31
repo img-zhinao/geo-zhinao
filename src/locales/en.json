@@ -193,6 +193,140 @@
   "footer": {
     "wechatAlt": "WeChat QR Code",
     "scanWechat": "Scan to Add WeChat",
-    "copyright": "Shenzhen ZhiNao Era Technology Co., Ltd. All Rights Reserved"
+    "copyright": "Shenzhen ZhiNao Era Technology Co., Ltd. All Rights Reserved",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "sitemap": "Sitemap"
+  },
+  "legal": {
+    "backToHome": "Back to Home",
+    "privacy": {
+      "title": "Privacy Policy",
+      "metaDescription": "Learn how ZhiNao Era collects, uses, and protects your personal information",
+      "lastUpdated": "Last Updated",
+      "sections": {
+        "intro": {
+          "title": "Introduction",
+          "content": "Shenzhen ZhiNao Era Technology Co., Ltd. (\"we\", \"us\", or \"our\") values your privacy. This Privacy Policy explains how we collect, use, store, and protect your personal information."
+        },
+        "collection": {
+          "title": "Information Collection",
+          "content": "We may collect the following types of information:",
+          "items": {
+            "name": "Name and contact information (phone, email)",
+            "contact": "Company information and position",
+            "company": "Company website address",
+            "usage": "Service usage data and analytics"
+          }
+        },
+        "usage": {
+          "title": "Use of Information",
+          "content": "We use the collected information for the following purposes:",
+          "items": {
+            "service": "Providing and improving our GEO services",
+            "improve": "Analyzing and optimizing user experience",
+            "communicate": "Communicating with you about service matters",
+            "legal": "Complying with legal requirements"
+          }
+        },
+        "protection": {
+          "title": "Information Protection",
+          "content": "We employ industry-standard security measures to protect your personal information, including data encryption, access controls, and security audits. We regularly review our security practices to ensure your information remains safe."
+        },
+        "sharing": {
+          "title": "Information Sharing",
+          "content": "We do not sell your personal information. We only share information when: you give explicit consent, required by law, or working with service providers (who are bound by confidentiality agreements)."
+        },
+        "rights": {
+          "title": "Your Rights",
+          "content": "You have the following rights regarding your personal information:",
+          "items": {
+            "access": "Access and obtain a copy of your personal information",
+            "correct": "Correct inaccurate information",
+            "delete": "Request deletion of your personal information",
+            "withdraw": "Withdraw consent (without affecting prior lawful processing)"
+          }
+        },
+        "contact": {
+          "title": "Contact Us",
+          "content": "If you have any questions about this Privacy Policy or need to exercise your rights, please contact us:"
+        }
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "metaDescription": "Terms and conditions for using ZhiNao Era GEO services",
+      "lastUpdated": "Last Updated",
+      "sections": {
+        "acceptance": {
+          "title": "Acceptance of Terms",
+          "content": "By using the services provided by Shenzhen ZhiNao Era Technology Co., Ltd. (\"we\", \"us\", or \"our\"), you agree to these Terms of Service. If you do not agree to these terms, please do not use our services."
+        },
+        "services": {
+          "title": "Service Description",
+          "content": "We provide AI Search Ecosystem Optimization (GEO) related services, including but not limited to: brand AI ecosystem diagnosis, strategic planning, content optimization, multi-platform answer optimization, sentiment monitoring, etc. The specific content of services is subject to the signed service agreement."
+        },
+        "account": {
+          "title": "Account Responsibility",
+          "content": "Using our services requires creating an account. You must:",
+          "items": {
+            "accurate": "Provide accurate and complete registration information",
+            "security": "Safeguard your account credentials and be responsible for account activities",
+            "notify": "Notify us immediately of any unauthorized use"
+          }
+        },
+        "usage": {
+          "title": "Usage Guidelines",
+          "content": "When using our services, you agree to:",
+          "items": {
+            "lawful": "Use only for lawful purposes",
+            "noHarm": "Not engage in any activities that may harm the service or other users",
+            "noInfringe": "Not infringe on intellectual property or other rights of others",
+            "noMisuse": "Not abuse or attempt unauthorized access to systems"
+          }
+        },
+        "ip": {
+          "title": "Intellectual Property",
+          "content": "All content, trademarks, software, and technology in the service are the property of us or our licensors. Without written permission, you may not copy, modify, distribute, or create derivative works."
+        },
+        "payment": {
+          "title": "Payment Terms",
+          "content": "Paid services are executed according to agreed prices and payment methods. Credits are non-refundable after purchase. We reserve the right to adjust prices with prior notice."
+        },
+        "limitation": {
+          "title": "Limitation of Liability",
+          "content": "To the extent permitted by law, we are not liable for indirect, incidental, special, or consequential damages arising from use of the services. Our total liability shall not exceed the service fees you have paid."
+        },
+        "termination": {
+          "title": "Service Termination",
+          "content": "We reserve the right to suspend or terminate your account for violations of terms or other reasons. Upon termination, your access to the services will cease immediately."
+        },
+        "changes": {
+          "title": "Changes to Terms",
+          "content": "We may update these terms. Significant changes will be notified through website announcements or email. Continued use of services indicates acceptance of updated terms."
+        },
+        "contact": {
+          "title": "Contact Us",
+          "content": "If you have any questions about these Terms of Service, please contact us:"
+        }
+      }
+    }
+  },
+  "sitemap": {
+    "title": "Sitemap",
+    "metaDescription": "Browse the complete page structure of ZhiNao Era website",
+    "description": "Browse all pages and content on our website",
+    "sections": {
+      "main": "Main Pages",
+      "legal": "Legal Information",
+      "account": "Account"
+    },
+    "pages": {
+      "home": "Home"
+    },
+    "xmlSitemap": {
+      "title": "XML Sitemap",
+      "description": "XML format sitemap for search engines:"
+    }
   }
 }

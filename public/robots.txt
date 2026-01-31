@@ -12,3 +12,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemap location
+Sitemap: https://geo-zhinao.lovable.app/sitemap.xml

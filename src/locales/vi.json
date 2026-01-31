@@ -258,7 +258,10 @@
   },
   "footer": {
     "scanWechat": "Quét để Thêm WeChat",
-    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. Bảo lưu Mọi Quyền"
+    "copyright": "© {{year}} Shenzhen ZhiNao Era Technology Co., Ltd. Bảo lưu Mọi Quyền",
+    "privacy": "Chính sách Bảo mật",
+    "terms": "Điều khoản Dịch vụ",
+    "sitemap": "Sơ đồ Trang web"
   },
   "floatingCta": {
     "title": "🚀 Chẩn đoán Tìm kiếm AI Miễn phí, Tăng Khả năng Hiển thị Thương hiệu",
@@ -273,5 +276,136 @@
     "en": "English",
     "pt": "Português",
     "vi": "Tiếng Việt"
+  },
+  "legal": {
+    "backToHome": "Quay lại Trang chủ",
+    "privacy": {
+      "title": "Chính sách Bảo mật",
+      "metaDescription": "Tìm hiểu cách ZhiNao Era thu thập, sử dụng và bảo vệ thông tin cá nhân của bạn",
+      "lastUpdated": "Cập nhật Lần cuối",
+      "sections": {
+        "intro": {
+          "title": "Giới thiệu",
+          "content": "Shenzhen ZhiNao Era Technology Co., Ltd. (\"chúng tôi\") coi trọng quyền riêng tư của bạn. Chính sách Bảo mật này giải thích cách chúng tôi thu thập, sử dụng, lưu trữ và bảo vệ thông tin cá nhân của bạn."
+        },
+        "collection": {
+          "title": "Thu thập Thông tin",
+          "content": "Chúng tôi có thể thu thập các loại thông tin sau:",
+          "items": {
+            "name": "Tên và thông tin liên hệ (điện thoại, email)",
+            "contact": "Thông tin công ty và chức vụ",
+            "company": "Địa chỉ website công ty",
+            "usage": "Dữ liệu sử dụng dịch vụ và phân tích"
+          }
+        },
+        "usage": {
+          "title": "Sử dụng Thông tin",
+          "content": "Chúng tôi sử dụng thông tin thu thập cho các mục đích sau:",
+          "items": {
+            "service": "Cung cấp và cải thiện dịch vụ GEO",
+            "improve": "Phân tích và tối ưu hóa trải nghiệm người dùng",
+            "communicate": "Giao tiếp về các vấn đề liên quan đến dịch vụ",
+            "legal": "Tuân thủ yêu cầu pháp lý"
+          }
+        },
+        "protection": {
+          "title": "Bảo vệ Thông tin",
+          "content": "Chúng tôi sử dụng các biện pháp bảo mật tiêu chuẩn ngành để bảo vệ thông tin cá nhân của bạn, bao gồm mã hóa dữ liệu, kiểm soát truy cập và kiểm toán bảo mật."
+        },
+        "sharing": {
+          "title": "Chia sẻ Thông tin",
+          "content": "Chúng tôi không bán thông tin cá nhân của bạn. Chúng tôi chỉ chia sẻ thông tin khi: bạn cho phép rõ ràng, theo yêu cầu pháp luật, hoặc làm việc với nhà cung cấp dịch vụ (ràng buộc bởi thỏa thuận bảo mật)."
+        },
+        "rights": {
+          "title": "Quyền của Bạn",
+          "content": "Bạn có các quyền sau đối với thông tin cá nhân:",
+          "items": {
+            "access": "Truy cập và nhận bản sao thông tin cá nhân",
+            "correct": "Sửa thông tin không chính xác",
+            "delete": "Yêu cầu xóa thông tin cá nhân",
+            "withdraw": "Rút lại sự đồng ý (không ảnh hưởng đến xử lý hợp pháp trước đó)"
+          }
+        },
+        "contact": {
+          "title": "Liên hệ Chúng tôi",
+          "content": "Nếu bạn có câu hỏi về Chính sách Bảo mật này hoặc cần thực hiện quyền của mình, vui lòng liên hệ:"
+        }
+      }
+    },
+    "terms": {
+      "title": "Điều khoản Dịch vụ",
+      "metaDescription": "Điều khoản và điều kiện sử dụng dịch vụ GEO của ZhiNao Era",
+      "lastUpdated": "Cập nhật Lần cuối",
+      "sections": {
+        "acceptance": {
+          "title": "Chấp nhận Điều khoản",
+          "content": "Bằng cách sử dụng dịch vụ của Shenzhen ZhiNao Era Technology Co., Ltd. (\"chúng tôi\"), bạn đồng ý với các Điều khoản Dịch vụ này. Nếu bạn không đồng ý, vui lòng không sử dụng dịch vụ của chúng tôi."
+        },
+        "services": {
+          "title": "Mô tả Dịch vụ",
+          "content": "Chúng tôi cung cấp các dịch vụ liên quan đến Tối ưu hóa Hệ sinh thái Tìm kiếm AI (GEO), bao gồm: chẩn đoán hệ sinh thái AI thương hiệu, lập kế hoạch chiến lược, tối ưu hóa nội dung, tối ưu hóa câu trả lời đa nền tảng, giám sát cảm xúc, v.v."
+        },
+        "account": {
+          "title": "Trách nhiệm Tài khoản",
+          "content": "Sử dụng dịch vụ của chúng tôi yêu cầu tạo tài khoản. Bạn phải:",
+          "items": {
+            "accurate": "Cung cấp thông tin đăng ký chính xác và đầy đủ",
+            "security": "Bảo vệ thông tin đăng nhập và chịu trách nhiệm về hoạt động tài khoản",
+            "notify": "Thông báo ngay cho chúng tôi về bất kỳ sử dụng trái phép nào"
+          }
+        },
+        "usage": {
+          "title": "Hướng dẫn Sử dụng",
+          "content": "Khi sử dụng dịch vụ, bạn đồng ý:",
+          "items": {
+            "lawful": "Chỉ sử dụng cho mục đích hợp pháp",
+            "noHarm": "Không thực hiện hoạt động có thể gây hại cho dịch vụ hoặc người dùng khác",
+            "noInfringe": "Không xâm phạm sở hữu trí tuệ hoặc quyền của người khác",
+            "noMisuse": "Không lạm dụng hoặc cố gắng truy cập trái phép vào hệ thống"
+          }
+        },
+        "ip": {
+          "title": "Sở hữu Trí tuệ",
+          "content": "Tất cả nội dung, thương hiệu, phần mềm và công nghệ trong dịch vụ là tài sản của chúng tôi hoặc người cấp phép. Không có sự cho phép bằng văn bản, bạn không được sao chép, sửa đổi, phân phối hoặc tạo tác phẩm phái sinh."
+        },
+        "payment": {
+          "title": "Điều khoản Thanh toán",
+          "content": "Dịch vụ trả phí được thực hiện theo giá và phương thức thanh toán đã thỏa thuận. Tín dụng không được hoàn lại sau khi mua. Chúng tôi có quyền điều chỉnh giá với thông báo trước."
+        },
+        "limitation": {
+          "title": "Giới hạn Trách nhiệm",
+          "content": "Trong phạm vi pháp luật cho phép, chúng tôi không chịu trách nhiệm về thiệt hại gián tiếp, ngẫu nhiên, đặc biệt hoặc hậu quả phát sinh từ việc sử dụng dịch vụ. Trách nhiệm tổng thể của chúng tôi không vượt quá phí dịch vụ bạn đã thanh toán."
+        },
+        "termination": {
+          "title": "Chấm dứt Dịch vụ",
+          "content": "Chúng tôi có quyền tạm ngừng hoặc chấm dứt tài khoản của bạn vì vi phạm điều khoản hoặc lý do khác. Sau khi chấm dứt, quyền truy cập dịch vụ của bạn sẽ ngừng ngay lập tức."
+        },
+        "changes": {
+          "title": "Thay đổi Điều khoản",
+          "content": "Chúng tôi có thể cập nhật các điều khoản này. Thay đổi quan trọng sẽ được thông báo qua thông báo website hoặc email. Tiếp tục sử dụng dịch vụ cho thấy bạn chấp nhận các điều khoản cập nhật."
+        },
+        "contact": {
+          "title": "Liên hệ Chúng tôi",
+          "content": "Nếu bạn có câu hỏi về các Điều khoản Dịch vụ này, vui lòng liên hệ:"
+        }
+      }
+    }
+  },
+  "sitemap": {
+    "title": "Sơ đồ Trang web",
+    "metaDescription": "Duyệt cấu trúc trang đầy đủ của website ZhiNao Era",
+    "description": "Duyệt tất cả các trang và nội dung trên website của chúng tôi",
+    "sections": {
+      "main": "Trang Chính",
+      "legal": "Thông tin Pháp lý",
+      "account": "Tài khoản"
+    },
+    "pages": {
+      "home": "Trang chủ"
+    },
+    "xmlSitemap": {
+      "title": "Sơ đồ XML",
+      "description": "Sơ đồ trang web định dạng XML cho công cụ tìm kiếm:"
+    }
   }
 }
