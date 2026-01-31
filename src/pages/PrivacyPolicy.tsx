@@ -12,36 +12,32 @@ const PrivacyPolicy = () => {
   return (
     <>
       <Helmet>
-        <title>{t("legal.privacy.title")} - {t("contact.company.name")}</title>
+        <title>
+          {t("legal.privacy.title")} - {t("contact.company.name")}
+        </title>
         <meta name="description" content={t("legal.privacy.metaDescription")} />
         <html lang={i18n.language} />
       </Helmet>
 
       <Header />
-      
+
       <main className="min-h-screen bg-background pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="h-4 w-4" />
             {t("legal.backToHome")}
           </Link>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-            {t("legal.privacy.title")}
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8">{t("legal.privacy.title")}</h1>
 
           <div className="prose prose-lg max-w-none text-muted-foreground">
-            <p className="text-sm text-muted-foreground mb-8">
-              {t("legal.privacy.lastUpdated")}: 2026-01-31
-            </p>
+            <p className="text-sm text-muted-foreground mb-8">{t("legal.privacy.lastUpdated")}: 2026-01-31</p>
 
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {t("legal.privacy.sections.intro.title")}
-              </h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t("legal.privacy.sections.intro.title")}</h2>
               <p>{t("legal.privacy.sections.intro.content")}</p>
             </section>
 
@@ -59,9 +55,7 @@ const PrivacyPolicy = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {t("legal.privacy.sections.usage.title")}
-              </h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t("legal.privacy.sections.usage.title")}</h2>
               <p>{t("legal.privacy.sections.usage.content")}</p>
               <ul className="list-disc pl-6 mt-4 space-y-2">
                 <li>{t("legal.privacy.sections.usage.items.service")}</li>
@@ -86,9 +80,7 @@ const PrivacyPolicy = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {t("legal.privacy.sections.rights.title")}
-              </h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t("legal.privacy.sections.rights.title")}</h2>
               <p>{t("legal.privacy.sections.rights.content")}</p>
               <ul className="list-disc pl-6 mt-4 space-y-2">
                 <li>{t("legal.privacy.sections.rights.items.access")}</li>
@@ -103,9 +95,7 @@ const PrivacyPolicy = () => {
                 {t("legal.privacy.sections.contact.title")}
               </h2>
               <p>{t("legal.privacy.sections.contact.content")}</p>
-              <p className="mt-4">
-                {t("contact.info.email")}: contact@geo-zhinao.com
-              </p>
+              <p className="mt-4">{t("contact.info.email")}: 93510890@qq.com</p>
             </section>
           </div>
         </div>
