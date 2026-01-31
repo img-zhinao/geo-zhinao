@@ -1,5 +1,6 @@
 import wechatQrcode from "@/assets/wechat-qrcode.png";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -21,18 +22,47 @@ const Footer = () => {
           </nav>
         </div>
 
-        <div className="border-t border-background/10 mt-8 pt-8 text-center text-background/60 text-sm space-y-2">
-          <p>© {new Date().getFullYear()} {t('footer.copyright')}</p>
-          <p>
-            <a 
-              href="https://beian.miit.gov.cn/#/Integrated/index" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-background transition-colors"
-            >
-              粤ICP备2023101390号
-            </a>
-          </p>
+        <div className="border-t border-background/10 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            {/* Left: Copyright and ICP */}
+            <div className="text-center md:text-left text-background/60 text-sm space-y-1">
+              <p>© {new Date().getFullYear()} {t('footer.copyright')}</p>
+              <p>
+                <a 
+                  href="https://beian.miit.gov.cn/#/Integrated/index" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-background transition-colors"
+                >
+                  粤ICP备2023101390号
+                </a>
+              </p>
+            </div>
+
+            {/* Right: Legal links */}
+            <nav className="flex flex-wrap justify-center gap-4 text-sm">
+              <Link 
+                to="/privacy" 
+                className="text-background/60 hover:text-background transition-colors"
+              >
+                {t('footer.privacy')}
+              </Link>
+              <span className="text-background/30">|</span>
+              <Link 
+                to="/terms" 
+                className="text-background/60 hover:text-background transition-colors"
+              >
+                {t('footer.terms')}
+              </Link>
+              <span className="text-background/30">|</span>
+              <Link 
+                to="/sitemap" 
+                className="text-background/60 hover:text-background transition-colors"
+              >
+                {t('footer.sitemap')}
+              </Link>
+            </nav>
+          </div>
         </div>
       </div>
     </footer>
